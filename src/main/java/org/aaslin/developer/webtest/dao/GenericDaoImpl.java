@@ -32,12 +32,14 @@ public abstract class GenericDaoImpl<T extends GenericEntity<T>> implements Gene
 		entityClass = (Class<?>) genericSuperclass.getActualTypeArguments()[0];
 	}
 	
+	@Override
 	public void persist(T entity) {
 		entity.setCreated(Calendar.getInstance().getTime());
 		entityManager.persist(entity);
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public void update(T entity){
 		entity.setModified(Calendar.getInstance().getTime());
 		T managedEntity = (T) entityManager.find(entityClass, entity.getId());
@@ -45,12 +47,14 @@ public abstract class GenericDaoImpl<T extends GenericEntity<T>> implements Gene
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Override
 	public void remove(Object id) {
 		T entity = (T) entityManager.find(entityClass, id);
 		entityManager.remove(entity);
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public T findById(Object id) {
 		return (T) entityManager.find(entityClass, id);
 	}

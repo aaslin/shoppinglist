@@ -3,6 +3,7 @@ package org.aaslin.developer.webtest.entity;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +13,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Cascade;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
@@ -27,10 +31,10 @@ public class ShoppingList extends GenericEntity<ShoppingList>{
 	@OneToMany(mappedBy="id")
 	private List<ShoppingItem> items;
 	@ManyToOne
-	@JoinColumn
 	private User owner;
 	@ManyToMany
 	private Set<User> members;
+	private String name;
 
 	public Object getId() {
 		return id;
@@ -62,6 +66,15 @@ public class ShoppingList extends GenericEntity<ShoppingList>{
 
 	public void setMembers(Set<User> members) {
 		this.members = members;
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

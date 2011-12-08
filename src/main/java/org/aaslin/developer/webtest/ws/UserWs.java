@@ -18,7 +18,6 @@ import org.aaslin.developer.webtest.entity.User;
 import com.sun.jersey.api.core.InjectParam;
 
 @Path("/userservice")
-
 public class UserWs extends GenericWs{
 
 	@InjectParam

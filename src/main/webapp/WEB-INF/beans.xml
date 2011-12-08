@@ -34,6 +34,7 @@
 
 	<bean id="userDao" class="org.aaslin.developer.webtest.dao.UserDaoImpl"
 		name="UserDao" />
+	<bean id="shoppingListDao" class="org.aaslin.developer.webtest.dao.ShoppingListDaoImpl" />
 
 	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="myEntityManagerFactory" />
