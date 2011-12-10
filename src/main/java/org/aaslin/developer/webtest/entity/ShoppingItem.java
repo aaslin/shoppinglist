@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class ShoppingItem extends GenericEntity<ShoppingItem> {
 	
+	private static final long serialVersionUID = 687696414711466510L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;

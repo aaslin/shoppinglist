@@ -3,14 +3,12 @@ package org.aaslin.developer.webtest.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class GenericEntity<T> implements Serializable{
-	
+
+	private static final long serialVersionUID = -1534704826424623691L;
 	private Date created;
 	private Date modified;	
 	

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 public class User extends GenericEntity<User>{
 
+	private static final long serialVersionUID = 6897471406900567051L;
 	@Id
 	private String username;
 	@XmlTransient
