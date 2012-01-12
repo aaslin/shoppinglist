@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,21 +15,23 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @Entity
-public class ShoppingList extends GenericEntity<ShoppingList>{
+public class ShoppingList extends GenericEntity<ShoppingList> {
 
 	private static final long serialVersionUID = 6974932042588901114L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@OneToMany(mappedBy="id", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ShoppingItem> items;
 	@ManyToOne
 	private User owner;
-	@ManyToMany
+	@XmlTransient
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<User> members;
 	private String name;
 
@@ -39,7 +42,7 @@ public class ShoppingList extends GenericEntity<ShoppingList>{
 	public final void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public List<ShoppingItem> getItems() {
 		return items;
 	}
@@ -64,7 +67,6 @@ public class ShoppingList extends GenericEntity<ShoppingList>{
 		this.members = members;
 	}
 
-	
 	public String getName() {
 		return name;
 	}
