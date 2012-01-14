@@ -1,34 +1,58 @@
 package se.aaslin.developer.shoppinglist.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-public class ShoppingItem extends GenericEntity<ShoppingItem> {
+@Table(name = "shopping_item", uniqueConstraints = @UniqueConstraint(columnNames = {"`shopping_listID`"}))
+public class ShoppingItem {
 	
-	private static final long serialVersionUID = 687696414711466510L;
 	@Id
+	@Column(name = "`ID`", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	private String name;
-	private String amount;
-	private String comment;
-	@OneToOne
-	@JoinColumn(name="id")
-	private ShoppingList parent;
+	private int id;
 	
-	public Object getId(){
+	@Column(name = "`name`", nullable = false, length = 255)
+	private String name;
+	
+	@Column(name = "`amount`", nullable = false, length = 255)
+	private String amount;
+	
+	@Column(name = "`comment`", nullable = false, length = 255)
+	private String comment;
+	
+	@ManyToOne
+	@JoinColumn(name="`shopping_listID`", nullable = false)
+	private ShoppingList shoppingList;
+	
+	@OneToOne
+	@JoinColumn(name = "`time_stampID`", nullable = false)
+	private TimeStamp timeStamp;
+
+	public int getId() {
 		return id;
 	}
 
-	public final void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getAmount() {
 		return amount;
 	}
@@ -45,27 +69,20 @@ public class ShoppingItem extends GenericEntity<ShoppingItem> {
 		this.comment = comment;
 	}
 
-	public ShoppingList getParent() {
-		return parent;
+	public ShoppingList getShoppingList() {
+		return shoppingList;
 	}
 
-	public void setParent(ShoppingList parent) {
-		this.parent = parent;
+	public void setShoppingList(ShoppingList shoppingList) {
+		this.shoppingList = shoppingList;
 	}
 
-	public String getName() {
-		return name;
+	public TimeStamp getTimeStamp() {
+		return timeStamp;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTimeStamp(TimeStamp timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
-	@Override
-	public void set(ShoppingItem t) {
-		this.amount = t.amount;
-		this.comment = t.comment;
-		this.name = t.name;
-		this.parent = t.parent;
-	}
 }

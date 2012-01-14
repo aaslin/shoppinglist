@@ -107,7 +107,7 @@
 					</components>
 					<componentProperties>
 						<persistenceunit>shoppinglist</persistenceunit>
-						<outputfilename>../../../shoppinglist.ddl</outputfilename>
+						<outputfilename>shoppinglist.ddl</outputfilename>
 						<drop>false</drop>
 						<create>true</create>
 						<export>false</export>

@@ -1,43 +1,54 @@
 package se.aaslin.developer.shoppinglist.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 @Entity
-public class User extends GenericEntity<User>{
+@Table(name = "`user`", uniqueConstraints = @UniqueConstraint(columnNames = {"`username`"}))
+public class User implements Serializable{
 
 	private static final long serialVersionUID = 6897471406900567051L;
-	@Id
-	private String username;
-	@XmlTransient
-	private String password;
 	
-	@Override
-	public Object getId() {
-		return username;
+	@Id
+	@Column(name = "`ID`", nullable = false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int ID;
+	
+	@Column(name = "`username`", nullable = false)
+	private String username;
+	
+	@Column(name = "`password`", nullable = false)
+	private String password;
+
+	public int getID() {
+		return ID;
 	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 	
-	@Override
-	public void set(User user) {
-		this.password = user.password;
-		this.username = user.username;
-	}
 }

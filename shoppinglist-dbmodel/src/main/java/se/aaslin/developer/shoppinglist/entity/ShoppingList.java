@@ -1,46 +1,55 @@
 package se.aaslin.developer.shoppinglist.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @Entity
-public class ShoppingList extends GenericEntity<ShoppingList> {
+@Table(name="`shopping_list`", uniqueConstraints = @UniqueConstraint(columnNames = {"`name`", "`userID`"}))
+public class ShoppingList implements Serializable{
 
-	private static final long serialVersionUID = 6974932042588901114L;
+	private static final long serialVersionUID = -5708566252461176384L;
+
 	@Id
+	@Column(name = "`ID`", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private int ID;
+	
+	@OneToMany(mappedBy = "shoppingList", targetEntity = ShoppingItem.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ShoppingItem> items;
+	
 	@ManyToOne
+	@JoinColumn(name = "`userID`", nullable = false)
 	private User owner;
-	@XmlTransient
-	@ManyToMany(fetch = FetchType.EAGER)
+
+	@ManyToMany(targetEntity = User.class, cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JoinTable(name = "`shopping_list_user`", joinColumns = { @JoinColumn(name = "`shopping_listID`") }, inverseJoinColumns = { @JoinColumn(name = "`userID`")})
 	private Set<User> members;
+	
+	@Column(name = "`name`", nullable = false, length=255)
 	private String name;
 
-	public Object getId() {
-		return id;
+	public int getID() {
+		return ID;
 	}
 
-	public final void setId(long id) {
-		this.id = id;
+	public void setID(int iD) {
+		ID = iD;
 	}
 
 	public List<ShoppingItem> getItems() {
@@ -75,10 +84,4 @@ public class ShoppingList extends GenericEntity<ShoppingList> {
 		this.name = name;
 	}
 
-	@Override
-	public void set(ShoppingList t) {
-		this.items = t.items;
-		this.members = t.members;
-		this.owner = t.owner;
-	}
 }
