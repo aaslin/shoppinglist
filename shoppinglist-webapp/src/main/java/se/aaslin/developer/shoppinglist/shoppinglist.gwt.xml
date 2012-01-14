@@ -9,10 +9,10 @@
 	<entry-point class='se.aaslin.developer.shoppinglist.client.shoppinglist.ShoppingList' />
 
 	<source path='client/shoppinglist' />
-	<source path='client/shoppinglist/presenter' />
-	<source path='client/shoppinglist/view' />
-	<source path='client/shoppinglist/view/resources' />
-	<source path='client/shoppinglist/service' />
+<!-- 	<source path='client/shoppinglist/presenter' /> -->
+<!-- 	<source path='client/shoppinglist/view' /> -->
+<!-- 	<source path='client/shoppinglist/view/resources' /> -->
+<!-- 	<source path='client/shoppinglist/service' /> -->
 <!-- 	<source path='client/common' /> -->
 <!-- 	<source path='client/service' /> -->
 <!-- 	<source path='client/event' /> -->

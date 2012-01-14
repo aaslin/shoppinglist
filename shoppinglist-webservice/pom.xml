@@ -7,8 +7,6 @@
 		<groupId>se.aaslin.developer</groupId>
 		<version>1.0</version>
 	</parent>
-
-	<packaging>war</packaging>
 	
 	<artifactId>shoppinglist-webservice</artifactId>
 
