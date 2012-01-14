@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-@SuppressWarnings("serial")
 @Service("shoppingList")
 public class ShoppingListServiceImpl extends RemoteServiceServlet implements ShoppingListService{
+
+	private static final long serialVersionUID = -4526714440078975823L;
 
 	@Autowired
 	private ShoppingListDao shoppingListDao;

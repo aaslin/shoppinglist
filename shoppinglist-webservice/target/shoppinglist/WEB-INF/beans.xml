@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <beans xmlns="http://www.springframework.org/schema/beans" -->
+<!-- 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" -->
+<!-- 	xmlns:context="http://www.springframework.org/schema/context" -->
+<!-- 	xsi:schemaLocation="http://www.springframework.org/schema/beans  -->
+<!-- 		http://www.springframework.org/schema/beans/spring-beans.xsd -->
+<!-- 		http://www.springframework.org/schema/tx -->
+<!-- 		http://www.springframework.org/schema/tx/spring-tx.xsd -->
+<!-- 		http://www.springframework.org/schema/context -->
+<!--         http://www.springframework.org/schema/context/spring-context-2.5.xsd" -->
+<!-- 	default-autowire="byName"> -->
+
+<!-- 	<context:annotation-config /> -->
+<!-- 	<context:component-scan -->
+<!-- 		base-package="se.aaslin.developer.shoppinglist.dao, se.aaslin.developer.shoppinglist.ws" /> -->
+
+<!-- 	<tx:annotation-driven transaction-manager="txManager" /> -->
+
+<!-- 	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" -->
+<!-- 		destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://localhost:3306/webtest" /> -->
+<!-- 		<property name="username" value="root" /> -->
+<!-- 		<property name="password" value="liden1" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="myEntityManagerFactory" -->
+<!-- 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> -->
+<!-- 		<property name="dataSource" ref="myDataSource" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean -->
+<!-- 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> -->
+
+<!-- 	<bean id="userDao" class="se.aaslin.developer.shoppinglist.dao.UserDaoImpl" -->
+<!-- 		name="UserDao" /> -->
+<!-- 	<bean id="shoppingListDao" class="se.aaslin.developer.shoppinglist.dao.ShoppingListDaoImpl" /> -->
+
+<!-- 	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
+<!-- 		<property name="entityManagerFactory" ref="myEntityManagerFactory" /> -->
+<!-- 	</bean> -->
+	
+<!-- 	<!-- <bean id="txManager" --> -->
+<!-- 	<!-- class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> --> -->
+<!-- 	<!-- <property name="dataSource" ref="myDataSource" /> --> -->
+<!-- 	<!-- </bean> --> -->
+
+</beans>
