@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>shoppinglist</artifactId>
+		<groupId>se.aaslin.developer</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>shoppinglist-webapp</artifactId>
+
+	<packaging>war</packaging>
+
+	<name>Shopping List Maven Webapp</name>
+
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.encoding>UTF-8</project.encoding>
+		<gwt.maven.plugin.version>2.4.0</gwt.maven.plugin.version>
+		<jetty.version>6.1.26</jetty.version>
+
+		<!-- GWT needs at least java 1.5 -->
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
+
+		<gwt.style>PRETTY</gwt.style> <!-- PRETTY style during development -->
+
+		<webappDirectory>target/gwt</webappDirectory>
+
+	</properties>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>se.aaslin.developer</groupId>
+			<artifactId>shoppinglist-server</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>se.aaslin.developer</groupId>
+			<artifactId>shoppinglist-webservice</artifactId>
+			<version>1.0</version>
+		</dependency>
+	
+		<!-- GWT dependencies -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		
+	</dependencies>
+	<build>
+		<finalName>shoppinglist-webapp</finalName>
+
+		<plugins>
+			<!-- Standard Maven plugins -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>${project.encoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>WEB-INF/log4j.properties</include>
+							</includes>
+						</resource>
+					</webResources>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- GWT configuration -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.maven.plugin.version}</version>
+				<configuration>
+					<logLevel>INFO</logLevel>
+					<style>${gwt.style}</style>
+					<hostedWebapp>${webappDirectory}</hostedWebapp>
+					<runTarget>thecube.html</runTarget>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

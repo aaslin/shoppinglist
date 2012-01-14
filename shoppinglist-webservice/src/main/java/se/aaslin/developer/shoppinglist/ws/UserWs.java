@@ -27,7 +27,7 @@ public class UserWs extends GenericWs{
 	@Path("user")
 	@Consumes(APPLICATION_XML)
 	public void add(JAXBElement<User> userJAX){
-		userDao.persist(userJAX.getValue());
+		userDao.create(userJAX.getValue());
 	}
 	
 	@PUT
@@ -38,22 +38,25 @@ public class UserWs extends GenericWs{
 	}
 	
 	@GET
-	@Path("user/{id}")
+	@Path("user/{username}")
 	@Produces({APPLICATION_XML, APPLICATION_JSON})
-	public User findById(@PathParam("id") String id){
-		return userDao.findById(id);
+	public User findById(@PathParam("username") String username){
+		return userDao.findByUsername(username);
 	}
 	
 	@GET
 	@Path("users")
 	@Produces({APPLICATION_XML, APPLICATION_JSON})
 	public List<User> getAll(){
-		return userDao.getAll();
+		return userDao.list();
 	}
 	
 	@DELETE
-	@Path("user/{id}")
-	public void delete(@PathParam("id") String id){
-		userDao.remove(id);
+	@Path("user/{username}")
+	public void delete(@PathParam("username") String username){
+		User user = userDao.findByUsername(username);
+		if(user != null){
+			userDao.delete(user);
+		}
 	}
 }

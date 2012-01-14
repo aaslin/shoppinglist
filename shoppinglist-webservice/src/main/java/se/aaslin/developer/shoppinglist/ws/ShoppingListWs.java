@@ -11,50 +11,49 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElement;
 
-import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
-import se.aaslin.developer.shoppinglist.entity.ShoppingList;
+import se.aaslin.developer.shoppinglist.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.service.shoppinglist.ShoppingListServiceImpl;
 
 import com.sun.jersey.api.core.InjectParam;
 
-@Path("/shoppinglistservice")
-public class ShoppingListWs extends GenericWs{
-	
+@Path("/shoppinglist")
+public class ShoppingListWs extends GenericWs {
+
 	@InjectParam
-	private ShoppingListDAO shoppingListDao;
-	
+	private ShoppingListServiceImpl shoppingListService;
+
 	@POST
-	@Path("shoppinglist")
 	@Consumes(APPLICATION_XML)
-	public void add(JAXBElement<ShoppingList> shoppingListJAX){
-		shoppingListDao.persist(shoppingListJAX.getValue());
+	public void add(JAXBElement<ShoppingListDTO> shoppingListJAX) {
+		shoppingListService.add(shoppingListJAX.getValue());
 	}
-	
+
 	@PUT
-	@Path("shoppinglists")
 	@Consumes(APPLICATION_XML)
-	public void update(JAXBElement<ShoppingList> shoppingListJAX){
-		shoppingListDao.update(shoppingListJAX.getValue());
+	public void update(JAXBElement<ShoppingListDTO> shoppingListJAX) {
+		shoppingListService.update(shoppingListJAX.getValue());
 	}
-	
+
 	@GET
-	@Path("shoppinglist/{id}")
-	@Produces({APPLICATION_XML, APPLICATION_JSON})
-	public ShoppingList findById(@PathParam("id") Long id){
-		return shoppingListDao.findById(id);
+	@Path("{id}")
+	@Produces({ APPLICATION_XML, APPLICATION_JSON })
+	public ShoppingListDTO findById(@PathParam("id") Integer id) {
+		return shoppingListService.findById(id);
 	}
-	
+
 	@GET
-	@Path("shoppinglists")
-	@Produces({APPLICATION_XML, APPLICATION_JSON})
-	public List<ShoppingList> getAll(){
-		return shoppingListDao.getAll();
+	@Produces({ APPLICATION_XML, APPLICATION_JSON })
+	public List<ShoppingListDTO> getAll() {
+		return shoppingListService.getAll();
 	}
-	
+
 	@DELETE
-	@Path("shoppinglist/{id}")
-	public void delete(@PathParam("id") Long id){
-		shoppingListDao.remove(id);
+	@Path("{id}")
+	public void delete(@PathParam("id") Integer id) {
+		shoppingListService.remove(id);
+
 	}
 
 }

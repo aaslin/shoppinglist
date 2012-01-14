@@ -2,14 +2,16 @@ package se.aaslin.developer.shoppinglist.service;
 
 import java.util.List;
 
-import se.aaslin.developer.shoppinglist.entity.ShoppingList;
+import se.aaslin.developer.shoppinglist.dto.ShoppingListDTO;
 
 public interface ShoppingListService{
-	List<ShoppingList> getAll();
+	void add(ShoppingListDTO shoppingList);
 	
-	ShoppingList findById(long id);
+	List<ShoppingListDTO> getAll();
 	
-	void update(ShoppingList shoppingList);
+	ShoppingListDTO findById(int id);
 	
-	void remove(long id);
+	void update(ShoppingListDTO shoppingList);
+	
+	void remove(int shoppingList);
 }

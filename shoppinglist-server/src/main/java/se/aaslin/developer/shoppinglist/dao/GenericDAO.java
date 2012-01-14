@@ -2,15 +2,21 @@ package se.aaslin.developer.shoppinglist.dao;
 
 import java.util.List;
 
-
-public interface GenericDAO<T> {
-	void persist(T entity);
+/**
+ * 
+ * @author lars
+ *
+ * @param <PK> Primary Key
+ * @param <E> Entity
+ */
+public interface GenericDAO<PK, E> {
+	void create(E entity);
 	
-	void update(T entity);
+	void update(E entity);
     
-	void remove(Object id);
+	void delete(E entity);
     
-	T findById(Object id);
+	E findById(PK id);
     
-	List<T> getAll();
+	List<E> list();
 }

@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -43,6 +44,10 @@ public class ShoppingList implements Serializable{
 	
 	@Column(name = "`name`", nullable = false, length=255)
 	private String name;
+	
+	@OneToOne
+	@JoinColumn(name = "`time_stampID`", nullable = false)
+	private TimeStamp timeStamp;
 
 	public int getID() {
 		return ID;
@@ -82,6 +87,14 @@ public class ShoppingList implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public TimeStamp getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(TimeStamp timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
 }

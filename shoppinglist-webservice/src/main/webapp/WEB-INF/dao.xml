@@ -9,13 +9,17 @@
 		http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-2.5.xsd"
 	default-autowire="byName">
-
-
+	
+	<context:component-scan base-package="se.aaslin.developer.shoppinglist.dao">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	
+	
 	<!-- DAO Setup -->
 	
-	<bean id="userDAO" class="se.aaslin.developer.shoppinglist.dao.impl.UserDAOImpl" name="UserDAO" />
+<!-- 	<bean id="userDAO" class="se.aaslin.developer.shoppinglist.dao.impl.UserDAOImpl" name="UserDAO" /> -->
 	
-	<bean id="shoppingListDAO" class="se.aaslin.developer.shoppinglist.dao.impl.ShoppingListDAOImpl" />
+<!-- 	<bean id="shoppingListDAO" class="se.aaslin.developer.shoppinglist.dao.impl.ShoppingListDAOImpl" /> -->
 
 
 	<!-- JPA Setup -->
