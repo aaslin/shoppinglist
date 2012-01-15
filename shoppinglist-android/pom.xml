@@ -17,13 +17,12 @@
 			<id>snapshots</id>
 			<url>http://ll.homenet.org:8081/nexus/content/repositories/snapshots/</url>
 		</repository>
-<<<<<<< HEAD
-=======
+
 		<repository>
 			<id>releases</id>
 			<url>http://ll.homenet.org:8081/nexus/content/repositories/releases/</url>
 		</repository>
->>>>>>> GWT RPC for Android started
+
 	</repositories>
 
 	<dependencyManagement>
