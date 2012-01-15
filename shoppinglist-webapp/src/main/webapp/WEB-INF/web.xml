@@ -46,12 +46,26 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<!-- Servlets GWT -->
+	
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>se.aaslin.developer.shoppinglist.server.login.LoginServiceImpl</servlet-class>
+	</servlet>
 
 	<!-- Servlet Mappings -->
 	
 	<servlet-mapping>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Servlet Mappings GWT -->
+	
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/gwt.shoppinglist/login</url-pattern>
 	</servlet-mapping>
 
 </web-app>

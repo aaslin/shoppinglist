@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<module rename-to='shoppinglist'>
+<module rename-to='gwt.shoppinglist'>
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.resources.Resources" />
 	<!-- <inherits name="com.google.gwt.logging.Logging" /> -->
@@ -9,11 +9,15 @@
 	<entry-point class='se.aaslin.developer.shoppinglist.client.shoppinglist.ShoppingList' />
 
 	<source path='client/shoppinglist' />
-<!-- 	<source path='client/shoppinglist/presenter' /> -->
-<!-- 	<source path='client/shoppinglist/view' /> -->
-<!-- 	<source path='client/shoppinglist/view/resources' /> -->
-<!-- 	<source path='client/shoppinglist/service' /> -->
-<!-- 	<source path='client/common' /> -->
+	<source path='client/shoppinglist/presenter' />
+	<source path='client/shoppinglist/view' />
+	<source path='client/shoppinglist/service' />
+	
+	<source path='client/login/presenter' />
+	<source path='client/login/view' />
+	<source path='client/login/service' />
+	
+	<source path='client/common' />
 <!-- 	<source path='client/service' /> -->
 <!-- 	<source path='client/event' /> -->
 <!-- 	<source path='client/logging' /> -->

@@ -2,7 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
 
 	<g:HTMLPanel>
-		
+		<g:Label>Login</g:Label>
+		<g:Label>Username:</g:Label>
+		<g:TextBox ui:field="username"/>
+		<g:Label>Password:</g:Label>
+		<g:TextBox ui:field="password"/>
+		<g:Button ui:field="loginButton" text="Login"/>
+		<g:Label ui:field="info"/>
 	</g:HTMLPanel>
 
 </ui:UiBinder>

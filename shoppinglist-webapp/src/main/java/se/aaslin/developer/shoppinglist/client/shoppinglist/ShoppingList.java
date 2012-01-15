@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class ShoppingList implements EntryPoint {
@@ -15,12 +16,19 @@ public class ShoppingList implements EntryPoint {
 	
 	private String DIV_ID = "gwt_shoppingListPlaceHolder";
 	
+	private HTMLPanel outerPanel;
+	
 	@Override
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get(DIV_ID);
 		
-		HTMLPanel outerPanel = uiBinder.createAndBindUi(this);
+		outerPanel = uiBinder.createAndBindUi(this);
 		rootPanel.add(outerPanel);
+		
+		new ShoppingListController(this).initHistory();
 	}
 
+	public HasWidgets getContentPanel() {
+		return outerPanel;
+	}
 }

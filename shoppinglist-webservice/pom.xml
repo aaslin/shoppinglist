@@ -43,7 +43,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>shoppinglist</finalName>
+		<finalName>shoppinglist-webservice</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -65,41 +65,5 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>webapp-dev</id>
-			<activation>
-				<property>
-					<name>environment.type</name>
-					<value>dev</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.cargo</groupId>
-						<artifactId>cargo-maven2-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>deploy-webapp</id>
-								<phase>install</phase>
-								<goals>
-									<goal>deploy</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<container>
-								<containerId>tomcat6x</containerId>
-							</container>
-							<configuration>
-								<type>existing</type>
-								<home>${tomcat.home}</home>
-							</configuration>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	
 </project>

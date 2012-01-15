@@ -31,7 +31,7 @@
 	</properties>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>se.aaslin.developer</groupId>
 			<artifactId>shoppinglist-server</artifactId>
@@ -42,23 +42,28 @@
 			<artifactId>shoppinglist-webservice</artifactId>
 			<version>1.0</version>
 		</dependency>
-	
+		<dependency>
+			<groupId>se.aaslin.developer</groupId>
+			<artifactId>shoppinglist-dbmodel</artifactId>
+			<version>1.0</version>
+		</dependency>
+
 		<!-- GWT dependencies -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<version>2.4.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
+			<artifactId>gwt-servlet</artifactId>
 			<version>2.4.0</version>
+			<scope>runtime</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
-		<finalName>shoppinglist-webapp</finalName>
+		<finalName>shoppinglist</finalName>
 
 		<plugins>
 			<!-- Standard Maven plugins -->
@@ -111,4 +116,41 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>webapp-dev</id>
+			<activation>
+				<property>
+					<name>environment.type</name>
+					<value>dev</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.cargo</groupId>
+						<artifactId>cargo-maven2-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>deploy-webapp</id>
+								<phase>install</phase>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<container>
+								<containerId>tomcat6x</containerId>
+							</container>
+							<configuration>
+								<type>existing</type>
+								<home>${tomcat.home}</home>
+							</configuration>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
