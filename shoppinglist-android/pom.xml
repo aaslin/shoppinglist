@@ -12,6 +12,13 @@
 		<module>shoppinglist-androidapp-int</module>
 	</modules>
 
+	<repositories>
+		<repository>
+			<id>snapshots</id>
+			<url>http://ll.homenet.org:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
