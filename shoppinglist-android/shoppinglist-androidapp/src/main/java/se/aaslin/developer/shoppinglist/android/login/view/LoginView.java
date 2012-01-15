@@ -33,5 +33,4 @@ public class LoginView extends RoboDisplay implements LoginPresenter.ViewDisplay
 	public TextView getInfo() {
 		return info;
 	}
-	
 }

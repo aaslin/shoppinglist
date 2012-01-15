@@ -1,34 +1,18 @@
 package se.aaslin.developer.shoppinglist.android.login.service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.gdevelop.gwt.syncrpc.SyncProxy;
 
-public class LoginServiceImpl implements LoginService {
 
-	Map<String, String> users;
-	Set<String> sessions;
-	
-	public LoginServiceImpl() {
-		users = new HashMap<String, String>();
-		users.put("lars", "123");
-		users.put("linda", "123");
-		
-		sessions = new HashSet<String>();
-	}
+public class LoginServiceImpl implements LoginService{
+
+	LoginService loginService = (LoginService) SyncProxy.newProxyInstance(LoginService.class, "http://192.168.0.12:8080/shoppinglist/gwt.shoppinglist", "login");
 
 	public boolean login(String uname, String pass) {
-		if(users.containsKey(uname) && users.get(uname).equals(pass)){
-			sessions.add(uname);
-			return true;
-		}
-		
-		return false;
+		return loginService.login(uname, pass);
 	}
 
 	public boolean validateUserSession(String uname) {
-		return sessions.contains(uname);
+		return loginService.validateUserSession(uname);
 	}
 
 }

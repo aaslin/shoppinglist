@@ -20,5 +20,4 @@ public class ShoppingListApplication extends RoboMVPApplication {
 				}
 			});
 		}
-	
 }

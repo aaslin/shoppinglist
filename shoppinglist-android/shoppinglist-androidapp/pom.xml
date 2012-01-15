@@ -29,13 +29,18 @@
 			<artifactId>robomvp</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.gdevelop.gwt</groupId>
+			<artifactId>syncrpc</artifactId>
+			<version>0.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<version>2.4.0</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>

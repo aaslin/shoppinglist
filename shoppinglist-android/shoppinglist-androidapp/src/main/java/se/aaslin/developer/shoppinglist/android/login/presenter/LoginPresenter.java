@@ -19,21 +19,20 @@ import android.widget.Toast;
 
 public class LoginPresenter extends RoboPresenter{
 	public interface ViewDisplay {
-		
+
 		EditText getUsername();
-		
+
 		EditText getPassword();
-		
+
 		Button getLoginButton();
-		
+
 		TextView getInfo();
 	}
-	
+
 	@InjectDisplay ViewDisplay display;
 	@InjectActivity Activity activity;
 	@Inject LoginService srv;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		_bind();
@@ -41,7 +40,7 @@ public class LoginPresenter extends RoboPresenter{
 
 	private void _bind(){
 		display.getLoginButton().setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				String uname = display.getUsername().getEditableText().toString();
 				String password = display.getPassword().getEditableText().toString();
