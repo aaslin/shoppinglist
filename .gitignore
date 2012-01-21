@@ -2,6 +2,14 @@
 .project
 .settings
 .classpath
+shoppinglist-dbmodel/.settings
+shoppinglist-server/.settings
+shoppinglist-dbmodel/.classpath
+shoppinglist-server/.classpath
+shoppinglist-server/.settings/org.eclipse.m2e.core.prefs
+shoppinglist-webservice/.settings/org.eclipse.jdt.core.prefs
+shoppinglist-webservice/.classshoppinglist-webservice/.settings/org.eclipse.jdt.core.prefspath
+shoppinglist-webservice/.settings/org.eclipse.m2e.core.prefs
 target
 bin
 gen
