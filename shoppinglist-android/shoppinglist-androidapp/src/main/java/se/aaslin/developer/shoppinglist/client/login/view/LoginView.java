@@ -1,16 +1,16 @@
-package se.aaslin.developer.shoppinglist.android.login.view;
+package se.aaslin.developer.shoppinglist.client.login.view;
 
 import roboguice.inject.InjectView;
 import se.aaslin.developer.robomvp.annotation.ContentView;
-import se.aaslin.developer.robomvp.view.RoboDisplay;
-import se.aaslin.developer.shoppinglist.android.R;
-import se.aaslin.developer.shoppinglist.android.login.presenter.LoginPresenter;
+import se.aaslin.developer.robomvp.view.RoboView;
+import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.client.login.presenter.LoginPresenter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 @ContentView(view = R.layout.login)
-public class LoginView extends RoboDisplay implements LoginPresenter.ViewDisplay{
+public class LoginView extends RoboView implements LoginPresenter.ViewDisplay{
 
 	@InjectView(R.id.username) EditText username;
 	@InjectView(R.id.password) EditText password;
