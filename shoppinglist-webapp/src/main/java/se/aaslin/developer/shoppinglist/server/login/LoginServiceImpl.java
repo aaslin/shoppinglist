@@ -37,12 +37,5 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	public boolean validateUserSession(String uname) {
 		return loggedinUsers.contains(uname);
 	}
-
-	@Override
-	protected void checkPermutationStrongName() throws SecurityException {
-		return;
-	}
-	
-	
 	
 }

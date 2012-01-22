@@ -6,6 +6,7 @@ import se.aaslin.developer.robomvp.view.RoboDisplay;
 import se.aaslin.developer.robosync.SyncProxy;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -33,11 +34,13 @@ public class LoginPresenter extends RoboPresenter{
 
 	@InjectDisplay ViewDisplay display;
 	@Inject Activity activity;
+	@Inject Context context;
 	
-	LoginServiceAsync srv = (LoginServiceAsync) SyncProxy.newProxyInstance(LoginServiceAsync.class, "http://192.168.0.12:8080/shoppinglist/gwt.shoppinglist/", "login");
+	LoginServiceAsync srv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		srv = (LoginServiceAsync) SyncProxy.newProxyInstance(LoginServiceAsync.class, "http://192.168.0.12:8080/shoppinglist/gwt.shoppinglist/", "login", context);
 		_bind();
 	}
 
