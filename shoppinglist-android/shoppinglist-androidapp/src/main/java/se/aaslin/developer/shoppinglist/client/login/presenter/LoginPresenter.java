@@ -1,11 +1,15 @@
 package se.aaslin.developer.shoppinglist.client.login.presenter;
 
+import se.aaslin.developer.roboeventbus.RoboEventBus;
+import se.aaslin.developer.roboeventbus.event.RoboEvent;
 import se.aaslin.developer.robomvp.annotation.InjectDisplay;
 import se.aaslin.developer.robomvp.presenter.RoboPresenter;
 import se.aaslin.developer.robomvp.view.RoboDisplay;
 import se.aaslin.developer.roboproxy.RoboProxy;
 import se.aaslin.developer.shoppinglist.app.ShoppingListApplication;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.event.login.LoginEvent;
+import se.aaslin.developer.shoppinglist.event.login.LoginEventHandler;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -62,11 +66,13 @@ public class LoginPresenter extends RoboPresenter{
 							info.setText("Wrong username or password");
 							info.setTextColor(Color.RED);
 						}
+						RoboEventBus.getInstance().fireEvent(new LoginEvent(true));
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
 						Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+						RoboEventBus.getInstance().fireEvent(new LoginEvent(false));
 					}
 				});
 			}
