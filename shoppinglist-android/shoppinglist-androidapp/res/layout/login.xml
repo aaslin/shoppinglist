@@ -27,11 +27,14 @@
     <Button
         android:id="@+id/loginButtin"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:text="Login"/>
+        android:layout_height="wrap_content"
+        android:text="Login" />
 
-    <TextView android:id="@+id/info"
+    <TextView
+        android:id="@+id/info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
+
+    <include android:id="@+id/infoPanel" layout="@layout/info"/>
 
 </LinearLayout>

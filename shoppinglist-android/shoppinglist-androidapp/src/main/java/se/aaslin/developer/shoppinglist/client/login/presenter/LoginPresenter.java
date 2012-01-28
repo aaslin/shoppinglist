@@ -3,7 +3,8 @@ package se.aaslin.developer.shoppinglist.client.login.presenter;
 import se.aaslin.developer.robomvp.annotation.InjectDisplay;
 import se.aaslin.developer.robomvp.presenter.RoboPresenter;
 import se.aaslin.developer.robomvp.view.RoboDisplay;
-import se.aaslin.developer.robosync.SyncProxy;
+import se.aaslin.developer.roboproxy.RoboProxy;
+import se.aaslin.developer.shoppinglist.app.ShoppingListApplication;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
 import android.app.Activity;
 import android.content.Context;
@@ -28,8 +29,7 @@ public class LoginPresenter extends RoboPresenter{
 
 		Button getLoginButton();
 
-		TextView getInfo();
-		
+		TextView getInfo();	
 	}
 
 	@InjectDisplay ViewDisplay display;
@@ -40,11 +40,11 @@ public class LoginPresenter extends RoboPresenter{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		srv = (LoginServiceAsync) SyncProxy.newProxyInstance(LoginServiceAsync.class, "http://192.168.0.12:8080/shoppinglist/gwt.shoppinglist/", "login", context);
-		_bind();
+		srv = (LoginServiceAsync) RoboProxy.newProxyInstance(LoginServiceAsync.class, ShoppingListApplication.URL, context);
 	}
 
-	private void _bind(){
+	@Override
+	protected void onBind(){
 		display.getLoginButton().setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {

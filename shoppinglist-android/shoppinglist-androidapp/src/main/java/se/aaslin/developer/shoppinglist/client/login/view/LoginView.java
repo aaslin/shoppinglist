@@ -4,7 +4,9 @@ import roboguice.inject.InjectView;
 import se.aaslin.developer.robomvp.annotation.ContentView;
 import se.aaslin.developer.robomvp.view.RoboView;
 import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.client.info.view.InfoView;
 import se.aaslin.developer.shoppinglist.client.login.presenter.LoginPresenter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,5 +34,9 @@ public class LoginView extends RoboView implements LoginPresenter.ViewDisplay{
 	@Override
 	public TextView getInfo() {
 		return info;
+	}
+	@Override
+	protected void onInitView(View rootView) {
+		addComposite(InfoView.class);
 	}
 }

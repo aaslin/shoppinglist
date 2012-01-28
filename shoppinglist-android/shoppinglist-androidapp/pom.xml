@@ -22,7 +22,7 @@
 	<name>Shoppnig List Android App</name>
 
 	<dependencies>
-		<dependency>
+		<dependency>          
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 		</dependency>
@@ -36,12 +36,11 @@
 			<artifactId>robomvp</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>se.aaslin.developer</groupId> -->
-		<!-- <artifactId>robosync</artifactId> -->
-		<!-- <version>0.0.1-SNAPSHOT</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>se.aaslin.developer</groupId>
+			<artifactId>roboproxy</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>client</artifactId>
