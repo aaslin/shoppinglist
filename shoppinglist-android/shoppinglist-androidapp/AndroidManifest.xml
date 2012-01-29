@@ -3,10 +3,8 @@
     package="se.aaslin.developer.shoppinglist"
     android:versionCode="1"
     android:versionName="1.0" >
-    
-    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-sdk android:targetSdkVersion="15"/>
-    
     <application
         android:name=".app.ShoppingListApplication"
         android:icon="@drawable/icon"
@@ -19,5 +17,6 @@
         </activity>
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
