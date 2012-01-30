@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
-import se.aaslin.developer.shoppinglist.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.User;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
+import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
-@Service("shoppingList")
+@Service("shoppingListService")
 public class ShoppingListServiceImpl implements ShoppingListService {
 
-	@Autowired ShoppingListDAO shoppingListDao;
+	@Autowired ShoppingListDAO shoppingListDAO;
 
 	@Override
 	public List<ShoppingListDTO> getAll() {
-		List<ShoppingList> shoppingLists = shoppingListDao.list();
+		List<ShoppingList> shoppingLists = shoppingListDAO.list();
 		List<ShoppingListDTO> dtos = new ArrayList<ShoppingListDTO>();
 		for (ShoppingList list : shoppingLists) {
 			dtos.add(createShoppingListDTO(list));
@@ -29,7 +29,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
 	@Override
 	public ShoppingListDTO findById(int id) {
-		ShoppingList shoppingList = shoppingListDao.findById(id);
+		ShoppingList shoppingList = shoppingListDAO.findById(id);
 		if(shoppingList != null){
 			return createShoppingListDTO(shoppingList);
 		}
@@ -38,20 +38,20 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
 	@Override
 	public void update(ShoppingListDTO dto) {
-		shoppingListDao.update(createShoppingList(dto));
+		shoppingListDAO.update(createShoppingList(dto));
 	}
 
 	@Override
 	public void remove(int id) {
-		ShoppingList list = shoppingListDao.findById(id);
+		ShoppingList list = shoppingListDAO.findById(id);
 		if(list != null){
-			shoppingListDao.delete(list);
+			shoppingListDAO.delete(list);
 		}
 	}
 
 	@Override
 	public void add(ShoppingListDTO dto) {
-		shoppingListDao.create(createShoppingList(dto));
+		shoppingListDAO.create(createShoppingList(dto));
 	}
 
 	private ShoppingListDTO createShoppingListDTO(ShoppingList list) {
@@ -79,5 +79,20 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 		list.setOwner(user);
 		
 		return list;
+	}
+
+	@Override
+	public List<ShoppingListDTO> getAllShoppingListsForUser(int userId) {
+		List<ShoppingList> shoppingLists = shoppingListDAO.getShoppingListsForUser(userId);
+		List<ShoppingListDTO> dtos = new ArrayList<ShoppingListDTO>();
+		for(ShoppingList list : shoppingLists) {
+			ShoppingListDTO dto = new ShoppingListDTO();
+			dto.setID(list.getID());
+			dto.setName(list.getName());
+			dto.setOwnerID(userId);
+			dtos.add(dto);
+		}
+		
+		return dtos;
 	}
 }

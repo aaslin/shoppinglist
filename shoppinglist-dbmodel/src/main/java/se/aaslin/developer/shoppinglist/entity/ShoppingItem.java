@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "shopping_item", uniqueConstraints = @UniqueConstraint(columnNames = {"`shopping_listID`"}))
+@Table(name = "shopping_item")
 public class ShoppingItem {
 	
 	@Id
@@ -23,10 +23,10 @@ public class ShoppingItem {
 	@Column(name = "`name`", nullable = false, length = 255)
 	private String name;
 	
-	@Column(name = "`amount`", nullable = false, length = 255)
+	@Column(name = "`amount`", nullable = true, length = 255)
 	private String amount;
 	
-	@Column(name = "`comment`", nullable = false, length = 255)
+	@Column(name = "`comment`", nullable = true, length = 255)
 	private String comment;
 	
 	@ManyToOne

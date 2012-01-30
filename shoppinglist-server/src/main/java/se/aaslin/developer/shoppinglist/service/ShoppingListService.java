@@ -2,7 +2,8 @@ package se.aaslin.developer.shoppinglist.service;
 
 import java.util.List;
 
-import se.aaslin.developer.shoppinglist.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.entity.ShoppingList;
+import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
 public interface ShoppingListService{
 	void add(ShoppingListDTO shoppingList);
@@ -14,4 +15,6 @@ public interface ShoppingListService{
 	void update(ShoppingListDTO shoppingList);
 	
 	void remove(int shoppingList);
+	
+	List<ShoppingListDTO> getAllShoppingListsForUser(int userId);
 }

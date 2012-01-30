@@ -11,10 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElement;
 
-import se.aaslin.developer.shoppinglist.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.service.shoppinglist.ShoppingListServiceImpl;
+import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
 import com.sun.jersey.api.core.InjectParam;
 

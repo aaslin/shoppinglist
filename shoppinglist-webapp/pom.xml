@@ -44,7 +44,7 @@
 		</dependency>
 		<dependency>
 			<groupId>se.aaslin.developer</groupId>
-			<artifactId>shoppinglist-dbmodel</artifactId>
+			<artifactId>shoppinglist-dto</artifactId>
 			<version>1.0</version>
 		</dependency>
 

@@ -3,8 +3,7 @@
 <module rename-to='gwt.shoppinglist'>
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.resources.Resources" />
-	<!-- <inherits name="com.google.gwt.logging.Logging" /> -->
-	<inherits name="com.google.gwt.http.HTTP" />
+	<inherits name="se.aaslin.developer.shoppinglist.shareddto"/>
 	
 	<entry-point class='se.aaslin.developer.shoppinglist.client.shoppinglist.ShoppingList' />
 
@@ -12,15 +11,8 @@
 	<source path='client/shoppinglist/presenter' />
 	<source path='client/shoppinglist/view' />
 	<source path='client/shoppinglist/service' />
-	
 	<source path='client/login/presenter' />
 	<source path='client/login/view' />
 	<source path='client/login/service' />
-	
 	<source path='client/common' />
-<!-- 	<source path='client/service' /> -->
-<!-- 	<source path='client/event' /> -->
-<!-- 	<source path='client/logging' /> -->
-<!-- 	<source path='shared/logging' /> -->
-<!-- 	<source path='shared/exceptions' /> -->
 </module>

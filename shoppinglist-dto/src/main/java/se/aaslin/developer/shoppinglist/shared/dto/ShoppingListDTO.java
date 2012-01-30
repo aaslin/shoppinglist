@@ -1,5 +1,6 @@
-package se.aaslin.developer.shoppinglist.dto;
+package se.aaslin.developer.shoppinglist.shared.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "shoppinglist")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ShoppingListDTO {
+public class ShoppingListDTO implements Serializable{
+
+	private static final long serialVersionUID = -3112563693526623930L;
 
 	@XmlElement(name = "id", required = true)
 	private int ID;
