@@ -61,7 +61,7 @@ public class ShoppingListGridPresenter implements Presenter {
 		display.clearShoppingList();
 		int i = 0;
 		for (final ShoppingListDTO dto : shoppingListDTOs) {
-			DisclosurePanel disclosurePanel = display.addShoppingList(i++, dto.getName());
+			final DisclosurePanel disclosurePanel = display.addShoppingList(i++, dto.getName());
 			disclosurePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 				
 				@Override
@@ -77,12 +77,15 @@ public class ShoppingListGridPresenter implements Presenter {
 						public void onSuccess(List<ShoppingItemDTO> result) {
 							Grid grid = new Grid(1, 2);
 							grid.setWidget(0, 0, new Label("Name"));
-							grid.setWidget(0, 1, new Label("Comment"));
+							grid.setWidget(0, 1, new Label("Amount"));
 							int row = 1;
 							for(ShoppingItemDTO dto : result){
+								grid.resize(row + 1, 2);
 								grid.setWidget(row, 0, new Label(dto.getName()));
-								grid.setWidget(row, 1, new Label(dto.getComment()));
+								grid.setWidget(row, 1, new Label(dto.getAmount()));
+								row++;
 							}
+							disclosurePanel.add(grid);
 						}
 					});
 				}

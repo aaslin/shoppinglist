@@ -18,6 +18,7 @@
 		<param-value>
 			/WEB-INF/dao.xml
 			/WEB-INF/service.xml
+			/WEB-INF/security.xml
 		</param-value>
 	</context-param>
 
