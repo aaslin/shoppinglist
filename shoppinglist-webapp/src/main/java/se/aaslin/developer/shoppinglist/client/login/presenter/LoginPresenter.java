@@ -54,7 +54,7 @@ public class LoginPresenter implements Presenter{
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result){
-							redirectToShoppingList();
+							Window.alert("Login Succeeded");
 						}else{
 							Label info = display.getInfo();
 							info.setText("Wrong username or password");
@@ -69,9 +69,4 @@ public class LoginPresenter implements Presenter{
 			}
 		});
 	}
-	
-	private void redirectToShoppingList(){
-		History.newItem(ShoppingListID.SHOPPING_LIST.getToken());
-	}
-
 }

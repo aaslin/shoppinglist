@@ -1,10 +1,6 @@
 package se.aaslin.developer.shoppinglist.client.shoppinglist;
 
 import se.aaslin.developer.shoppinglist.client.common.Presenter;
-import se.aaslin.developer.shoppinglist.client.login.presenter.LoginPresenter;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginService;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
-import se.aaslin.developer.shoppinglist.client.login.view.LoginView;
 import se.aaslin.developer.shoppinglist.client.shoppinglist.presenter.ShoppingListGridPresenter;
 import se.aaslin.developer.shoppinglist.client.shoppinglist.service.ShoppingListGridService;
 import se.aaslin.developer.shoppinglist.client.shoppinglist.service.ShoppingListGridServiceAsync;
@@ -41,9 +37,6 @@ public class ShoppingListController implements ValueChangeHandler<String> {
 		this.entryPoint.getContentPanel().clear();
 
 		switch (token) {
-			case LOGIN:
-				goToLogin();
-				break;
 			case SHOPPING_LIST:
 			default:
 				ShoppingListGridServiceAsync srv = GWT.create(ShoppingListGridService.class);
@@ -52,12 +45,4 @@ public class ShoppingListController implements ValueChangeHandler<String> {
 				break;
 		}
 	}
-
-	private void goToLogin() {
-		LoginServiceAsync srv = GWT.create(LoginService.class);
-
-		Presenter presenter = new LoginPresenter(new LoginView(), srv);
-		presenter.initContainer(entryPoint.getContentPanel());
-	}
-
 }

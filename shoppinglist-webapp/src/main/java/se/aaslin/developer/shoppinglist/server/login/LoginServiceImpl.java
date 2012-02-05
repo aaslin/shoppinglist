@@ -1,41 +1,36 @@
 package se.aaslin.developer.shoppinglist.server.login;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
+
+import javax.servlet.http.Cookie;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import se.aaslin.developer.shoppinglist.client.login.service.LoginService;
+import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
 
 	private static final long serialVersionUID = -7220706604802765894L;
-
-	private Map<String, String> users;
-	private Set<String> loggedinUsers;
 	
-	public LoginServiceImpl() {
-		users = new HashMap<String, String>();
-		users.put("lars", "123");
-		users.put("linda", "123");
-		
-		loggedinUsers = new HashSet<String>();
-	}
-
+	@Autowired ShoppingListSessionManager shoppingListSessionManager;
+	
 	@Override
-	public boolean login(String uname, String pass) {
-		if(users.containsKey(uname) && users.get(uname).equals(pass)){
-			loggedinUsers.add(uname);
+	public Boolean login(String username, String password) {
+		if (shoppingListSessionManager.validateUser(username, password)) {
+			for (Cookie cookie : getThreadLocalRequest().getCookies()) {
+				if(cookie.getName().equals("auth")) {
+					shoppingListSessionManager.invalidateSession(cookie.getValue());
+				}
+			}
+			UUID uuid = shoppingListSessionManager.newSession(username);
+			getThreadLocalResponse().addCookie(new Cookie("auth", uuid.toString()));
+			
 			return true;
 		}
+		
 		return false;
 	}
-
-	@Override
-	public boolean validateUserSession(String uname) {
-		return loggedinUsers.contains(uname);
-	}
-	
 }

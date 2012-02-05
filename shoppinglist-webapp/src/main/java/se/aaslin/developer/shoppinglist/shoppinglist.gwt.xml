@@ -11,8 +11,5 @@
 	<source path='client/shoppinglist/presenter' />
 	<source path='client/shoppinglist/view' />
 	<source path='client/shoppinglist/service' />
-	<source path='client/login/presenter' />
-	<source path='client/login/view' />
-	<source path='client/login/service' />
 	<source path='client/common' />
 </module>

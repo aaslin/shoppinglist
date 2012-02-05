@@ -1,6 +1,7 @@
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http:/java.sun.com/dtd/web-app_2_3.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 	<display-name>Shopping List</display-name>
 	<welcome-file-list>
@@ -21,6 +22,18 @@
 			/WEB-INF/security.xml
 		</param-value>
 	</context-param>
+	
+	<!-- Filters -->
+	
+	<filter>
+		<filter-name>shoppingListSecurityFilter</filter-name>
+		<filter-class>se.aaslin.developer.shoppinglist.security.ShoppingListSecurityFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	    <filter-name>shoppingListSecurityFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+  	</filter-mapping>
 
 	<!-- Listeners -->
 
