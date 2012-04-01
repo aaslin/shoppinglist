@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import se.aaslin.developer.shoppinglist.client.login.service.LoginService;
 import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
+import se.aaslin.developer.shoppinglist.server.SpringRemoteServiceServlet;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
+public class LoginServiceImpl extends SpringRemoteServiceServlet implements LoginService{
 
 	private static final long serialVersionUID = -7220706604802765894L;
 	

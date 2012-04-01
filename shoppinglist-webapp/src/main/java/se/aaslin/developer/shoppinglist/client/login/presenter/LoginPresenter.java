@@ -5,6 +5,7 @@ import se.aaslin.developer.shoppinglist.client.common.Presenter;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.client.shoppinglist.ShoppingListID;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -54,7 +55,8 @@ public class LoginPresenter implements Presenter{
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result){
-							Window.alert("Login Succeeded");
+							String url = GWT.getHostPageBaseURL() + "index.jsp";
+							Window.Location.assign(url);
 						}else{
 							Label info = display.getInfo();
 							info.setText("Wrong username or password");

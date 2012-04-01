@@ -1,7 +1,6 @@
 package se.aaslin.developer.shoppinglist.security;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.UUID;
 
 import javax.servlet.Filter;
@@ -34,10 +33,12 @@ public class ShoppingListSecurityFilter implements Filter{
 		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 		String baseURL = httpServletRequest.getRequestURL().toString().replace(httpServletRequest.getRequestURI(), httpServletRequest.getContextPath());
 		String loginURL = baseURL + "/login.jsp";
+		String gwtLogin = baseURL + "/gwt.login";
+		String checkLogin = baseURL + "/security_check";
 		
 		String thisURL = httpServletRequest.getRequestURL().toString();
 		
-		if (thisURL.equals(loginURL) || isSessionValid(httpServletRequest)) {
+		if (thisURL.equals(loginURL) || thisURL.startsWith(gwtLogin) || thisURL.startsWith(checkLogin) || isSessionValid(httpServletRequest)) {
 			filterChain.doFilter(servletRequest, servletResponse);
 		} else {
 			HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
@@ -54,8 +55,11 @@ public class ShoppingListSecurityFilter implements Filter{
 	} 
 
 	private boolean isSessionValid(HttpServletRequest httpServletRequest) {
+		if (httpServletRequest.getCookies() == null) {
+			return false;
+		}
 		for (Cookie cookie : httpServletRequest.getCookies()) {
-			if (cookie.getName().equals("auth")) {
+			if (cookie.getName() != null && cookie.getName().equals("auth")) {
 				UUID sessionId = UUID.fromString(cookie.getValue());
 				if (shoppingListSessionManager.isSessionValid(sessionId)) {
 					return true;

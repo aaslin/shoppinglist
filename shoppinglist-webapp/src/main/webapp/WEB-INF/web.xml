@@ -61,6 +61,11 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Login Check</servlet-name>
+		<servlet-class>se.aaslin.developer.shoppinglist.security.ShoppingListLoginServlet</servlet-class>
+	</servlet>
+	
 	<!-- Servlets GWT -->
 	
 	<servlet>
@@ -80,11 +85,16 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>Login Check</servlet-name>
+		<url-pattern>/security_check</url-pattern>
+	</servlet-mapping>
+	
 	<!-- Servlet Mappings GWT -->
 	
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>
-		<url-pattern>/gwt.shoppinglist/login</url-pattern>
+		<url-pattern>/gwt.login/login</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+@Service("shoppingListSessionManager")
 public class ShoppingListSessionManager {
 	
 	private static final Map<UUID, String> loggedinUsers = new HashMap<UUID, String>();
@@ -34,6 +35,10 @@ public class ShoppingListSessionManager {
 		loggedinUsers.put(uuid, uname);
 		
 		return uuid;
+	}
+	
+	public void addSession(String uname, String jsessionid) {
+		loggedinUsers.put(UUID.fromString(jsessionid), uname);
 	}
 	
 	public boolean isSessionValid(UUID sessionId) {
