@@ -42,4 +42,40 @@ public class ShoppingListGridServiceImpl extends SpringRemoteServiceServlet impl
 		return shoppingItemService.getAllShoppingListItems(shoppingListId);
 	}
 
+	@Override
+	public List<ShoppingListDTO> addShoppingList(ShoppingListDTO dto) {
+		shoppingListService.add(dto);
+		return getShoppingLists();
+	}
+
+	@Override
+	public List<ShoppingItemDTO> addShoppingItem(ShoppingItemDTO itemDTO) {
+		shoppingItemService.addItemToShoppingList(itemDTO);
+		return getShoppingItems(itemDTO.getShoppingListId());
+	}
+
+	@Override
+	public List<ShoppingListDTO> removeShoppingList(ShoppingListDTO dto) {
+		shoppingListService.remove(dto.getID());
+		return getShoppingLists();
+	}
+
+	@Override
+	public List<ShoppingItemDTO> removeShoppingItem(ShoppingItemDTO itemDTO) {
+		shoppingItemService.remove(itemDTO);
+		return getShoppingItems(itemDTO.getShoppingListId());
+	}
+
+	@Override
+	public List<ShoppingListDTO> updateShoppingList(ShoppingListDTO dto) {
+		shoppingListService.update(dto);
+		return getShoppingLists();
+	}
+
+	@Override
+	public List<ShoppingItemDTO> updateShoppingItem(ShoppingItemDTO itemDTO) {
+		shoppingItemService.update(itemDTO);
+		return getShoppingItems(itemDTO.getShoppingListId());
+	}
+
 }

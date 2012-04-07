@@ -7,10 +7,20 @@ public class ShoppingItemDTO implements Serializable{
 
 	private static final long serialVersionUID = -2583911167795796148L;
 	
+	private Integer id;
+	private Integer shoppingListId;
 	private String name;
 	private String comment;
 	private String amount;
 	
+	public Integer getShoppingListId() {
+		return shoppingListId;
+	}
+
+	public void setShoppingListId(Integer shoppingListId) {
+		this.shoppingListId = shoppingListId;
+	}
+
 	public String getComment() {
 		return comment;
 	}
@@ -33,5 +43,13 @@ public class ShoppingItemDTO implements Serializable{
 
 	public void setAmount(String amount) {
 		this.amount = amount;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
