@@ -82,14 +82,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	}
 
 	@Override
-	public List<ShoppingListDTO> getAllShoppingListsForUser(int userId) {
-		List<ShoppingList> shoppingLists = shoppingListDAO.getShoppingListsForUser(userId);
+	public List<ShoppingListDTO> getAllShoppingListsForUser(User user) {
+		List<ShoppingList> shoppingLists = shoppingListDAO.getShoppingListsForUser(user.getID());
 		List<ShoppingListDTO> dtos = new ArrayList<ShoppingListDTO>();
 		for(ShoppingList list : shoppingLists) {
 			ShoppingListDTO dto = new ShoppingListDTO();
 			dto.setID(list.getID());
 			dto.setName(list.getName());
-			dto.setOwnerID(userId);
+			dto.setOwnerID(user.getID());
 			dtos.add(dto);
 		}
 		

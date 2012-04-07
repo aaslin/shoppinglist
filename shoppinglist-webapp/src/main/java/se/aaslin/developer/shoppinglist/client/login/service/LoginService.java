@@ -7,4 +7,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface LoginService extends RemoteService{
 
 	Boolean login(String uname, String pass);
+	
+	void logout();
 }

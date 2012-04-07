@@ -1,10 +1,10 @@
-package se.aaslin.developer.shoppinglist.client.shoppinglist.presenter;
+package se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter;
 
 import java.util.List;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.common.Presenter;
-import se.aaslin.developer.shoppinglist.client.shoppinglist.service.ShoppingListGridServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListGridServiceAsync;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
@@ -28,12 +28,10 @@ public class ShoppingListGridPresenter implements Presenter {
 
 	ShoppingListGridServiceAsync srv;
 	ViewDisplay display;
-	int userId;
 
-	public ShoppingListGridPresenter(ShoppingListGridServiceAsync srv, ViewDisplay display, int userId) {
+	public ShoppingListGridPresenter(ShoppingListGridServiceAsync srv, ViewDisplay display) {
 		this.srv = srv;
 		this.display = display;
-		this.userId = userId;
 		bind();
 	}
 
@@ -43,7 +41,7 @@ public class ShoppingListGridPresenter implements Presenter {
 	}
 
 	private void bind() {
-		srv.getShoppingLists(userId, new AsyncCallback<List<ShoppingListDTO>>() {
+		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
 
 			@Override
 			public void onSuccess(List<ShoppingListDTO> result) {

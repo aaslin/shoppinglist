@@ -3,9 +3,10 @@ package se.aaslin.developer.shoppinglist.service;
 import java.util.List;
 
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
+import se.aaslin.developer.shoppinglist.entity.User;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
-public interface ShoppingListService{
+public interface ShoppingListService {
 	void add(ShoppingListDTO shoppingList);
 	
 	List<ShoppingListDTO> getAll();
@@ -16,5 +17,5 @@ public interface ShoppingListService{
 	
 	void remove(int shoppingList);
 	
-	List<ShoppingListDTO> getAllShoppingListsForUser(int userId);
+	List<ShoppingListDTO> getAllShoppingListsForUser(User user);
 }

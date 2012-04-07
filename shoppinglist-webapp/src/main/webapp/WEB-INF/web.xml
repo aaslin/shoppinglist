@@ -75,7 +75,7 @@
 
 	<servlet>
 		<servlet-name>shoppingListService</servlet-name>
-		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglist.ShoppingListGridServiceImpl</servlet-class>
+		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglists.ShoppingListGridServiceImpl</servlet-class>
 	</servlet>
 	
 	<!-- Servlet Mappings -->
@@ -98,7 +98,12 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/gwt.shoppinglist/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
 		<servlet-name>shoppingListService</servlet-name>
-		<url-pattern>/gwt.shoppinglist/shoppinglist</url-pattern>
+		<url-pattern>/gwt.shoppinglist/shoppinglists</url-pattern>
 	</servlet-mapping>
 </web-app>

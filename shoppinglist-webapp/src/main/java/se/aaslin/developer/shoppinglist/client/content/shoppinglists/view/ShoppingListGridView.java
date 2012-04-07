@@ -1,6 +1,6 @@
-package se.aaslin.developer.shoppinglist.client.shoppinglist.view;
+package se.aaslin.developer.shoppinglist.client.content.shoppinglists.view;
 
-import se.aaslin.developer.shoppinglist.client.shoppinglist.presenter.ShoppingListGridPresenter;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter.ShoppingListGridPresenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

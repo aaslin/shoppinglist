@@ -1,9 +1,18 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
+	<ui:style>
+		.page {
+			width: 940px;
+			margin: 0 auto;
+			padding: 0;
+		}
 
-	<g:HTMLPanel>
-		<h1>Shopping List</h1>
-		<g:DecoratedStackPanel ui:field="shoppingListPanel"/>
+		.page-bgtop {
+			padding: 20px 0px;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.page}">
+		<g:HTMLPanel ui:field="contentPanel" styleName="{style.page-bgtop}"/>
 	</g:HTMLPanel>
 
 </ui:UiBinder>

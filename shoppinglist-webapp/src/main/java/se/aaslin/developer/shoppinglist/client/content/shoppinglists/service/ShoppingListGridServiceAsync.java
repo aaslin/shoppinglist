@@ -1,4 +1,4 @@
-package se.aaslin.developer.shoppinglist.client.shoppinglist.service;
+package se.aaslin.developer.shoppinglist.client.content.shoppinglists.service;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ public interface ShoppingListGridServiceAsync {
 
 	void getShoppingItems(int shoppingListID, AsyncCallback<List<ShoppingItemDTO>> callback);
 
-	void getShoppingLists(int userID, AsyncCallback<List<ShoppingListDTO>> callback);
+	void getShoppingLists(AsyncCallback<List<ShoppingListDTO>> callback);
 
 }

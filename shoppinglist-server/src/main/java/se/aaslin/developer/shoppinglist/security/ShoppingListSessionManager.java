@@ -15,7 +15,7 @@ public class ShoppingListSessionManager {
 	public ShoppingListSessionManager() {
 		users = new HashMap<String, String>();
 		users.put("lars", "123");
-		users.put("linda", "123");
+		users.put("linda", "123");	
 	}
 
 	public boolean validateUser(String username, String pass) {
@@ -43,5 +43,9 @@ public class ShoppingListSessionManager {
 	
 	public boolean isSessionValid(UUID sessionId) {
 		return loggedinUsers.containsKey(sessionId);
+	}
+	
+	public String getSessionUser(UUID sessionId) {
+		return loggedinUsers.get(sessionId);
 	}
 }

@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<module rename-to='gwt.shoppinglist'>
-	<inherits name='com.google.gwt.user.User' />
+<module rename-to="gwt.shoppinglist">
+	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.google.gwt.resources.Resources" />
+	<inherits name="com.google.gwt.activity.Activity" />
 	<inherits name="se.aaslin.developer.shoppinglist.shareddto"/>
 	
-	<entry-point class='se.aaslin.developer.shoppinglist.client.shoppinglist.ShoppingList' />
+	<entry-point class="se.aaslin.developer.shoppinglist.client.entrypoint.ShoppingList" />
 
-	<source path='client/shoppinglist' />
-	<source path='client/shoppinglist/presenter' />
-	<source path='client/shoppinglist/view' />
-	<source path='client/shoppinglist/service' />
-	<source path='client/common' />
+	<source path="client/entrypoint" />
+	<source path="client/content/" />
+	<source path="client/content/dashboard" />
+	<source path="client/content/dashboard/presenter" />
+	<source path="client/content/dashboard/view" />
+	<source path="client/content/dashboard/service" />
+	<source path="client/content/shoppinglists" />
+	<source path="client/content/shoppinglists/presenter" />
+	<source path="client/content/shoppinglists/view" />
+	<source path="client/content/shoppinglists/service" />
+	<source path="client/header" />
+	<source path="client/header/presenter" />
+	<source path="client/header/view" />
+	<source path="client/header/service" />
+	<source path='client/login/service' />
+	<source path="client/common" />
+	<source path="client/place" />
+	
+	
 </module>

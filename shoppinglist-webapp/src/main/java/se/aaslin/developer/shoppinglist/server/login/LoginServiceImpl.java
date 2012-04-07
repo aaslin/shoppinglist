@@ -19,11 +19,7 @@ public class LoginServiceImpl extends SpringRemoteServiceServlet implements Logi
 	@Override
 	public Boolean login(String username, String password) {
 		if (shoppingListSessionManager.validateUser(username, password)) {
-			for (Cookie cookie : getThreadLocalRequest().getCookies()) {
-				if(cookie.getName().equals("auth")) {
-					shoppingListSessionManager.invalidateSession(cookie.getValue());
-				}
-			}
+			invalidateCurrentSession();
 			UUID uuid = shoppingListSessionManager.newSession(username);
 			getThreadLocalResponse().addCookie(new Cookie("auth", uuid.toString()));
 			
@@ -31,5 +27,18 @@ public class LoginServiceImpl extends SpringRemoteServiceServlet implements Logi
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void logout() {
+		invalidateCurrentSession();
+	}
+
+	private void invalidateCurrentSession() {
+		for (Cookie cookie : getThreadLocalRequest().getCookies()) {
+			if(cookie.getName().equals("auth")) {
+				shoppingListSessionManager.invalidateSession(cookie.getValue());
+			}
+		}
 	}
 }
