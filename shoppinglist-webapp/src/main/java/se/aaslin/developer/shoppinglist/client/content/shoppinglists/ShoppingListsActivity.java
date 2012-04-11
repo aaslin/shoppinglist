@@ -21,6 +21,6 @@ public class ShoppingListsActivity extends AbstractActivity {
 		ShoppingListsView view = new ShoppingListsView();
 		new ShoppingListsPresenter(view);
 		
-		panel.setWidget(view.asWidget());
+		panel.setWidget(view.getViewAsWidget());
 	}
 }

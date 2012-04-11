@@ -21,7 +21,7 @@ public class DashboardActivity extends AbstractActivity {
 		DashboardView view = new DashboardView();
 		new DashboardPresenter(view);
 	
-		panel.setWidget(view.asWidget());
+		panel.setWidget(view.getViewAsWidget());
 	}
 }
 

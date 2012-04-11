@@ -8,10 +8,13 @@ import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.Sho
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -55,7 +58,7 @@ public class ShoppingListGridPresenter implements Presenter {
 		});
 	}
 
-	private void repaintShoppingList(List<ShoppingListDTO> shoppingListDTOs) {
+	private void repaintShoppingList(final List<ShoppingListDTO> shoppingListDTOs) {
 		display.clearShoppingList();
 		int i = 0;
 		for (final ShoppingListDTO dto : shoppingListDTOs) {
@@ -73,14 +76,34 @@ public class ShoppingListGridPresenter implements Presenter {
 
 						@Override
 						public void onSuccess(List<ShoppingItemDTO> result) {
-							Grid grid = new Grid(1, 2);
+							Grid grid = new Grid(1, 3);
 							grid.setWidget(0, 0, new Label("Name"));
 							grid.setWidget(0, 1, new Label("Amount"));
 							int row = 1;
-							for(ShoppingItemDTO dto : result){
-								grid.resize(row + 1, 2);
+							for(final ShoppingItemDTO dto : result){
+								grid.resize(row + 1, 3);
 								grid.setWidget(row, 0, new Label(dto.getName()));
 								grid.setWidget(row, 1, new Label(dto.getAmount()));
+								Button delBtn = new Button("Delete");
+								delBtn.addClickHandler(new ClickHandler() {
+									
+									@Override
+									public void onClick(ClickEvent event) {
+										srv.removeShoppingItem(dto, new AsyncCallback<List<ShoppingItemDTO>>() {
+
+											@Override
+											public void onFailure(Throwable caught) {
+												Window.alert(caught.getMessage());
+											}
+
+											@Override
+											public void onSuccess(List<ShoppingItemDTO> result) {
+												repaintShoppingList(shoppingListDTOs);
+											}
+										});
+									}
+								});
+								grid.setWidget(row, 2, delBtn);
 								row++;
 							}
 							disclosurePanel.add(grid);

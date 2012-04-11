@@ -17,7 +17,7 @@ import se.aaslin.developer.shoppinglist.entity.ShoppingItem_;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList_;
 
-@Repository("shoppingItemDAO")
+@Repository
 public class ShoppingItemDAOImpl extends GenericDAOImpl<Integer, ShoppingItem> implements ShoppingItemDAO {
 
 	@PersistenceContext EntityManager em;

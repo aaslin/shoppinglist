@@ -3,7 +3,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
 	<ui:style>
 		#header {
-			width: 940px;
+			width: 100%;
 			height: 70px;
 			margin: 0 auto;
 		}
@@ -49,7 +49,7 @@
 		}
 		
 		#menu {
-			width: 940px;
+			width: 100%;
 			height: 36px;
 			margin: 0 auto;
 			padding: 0;
@@ -109,10 +109,10 @@
 		<div id="menu">
 			<ul>
 				<li class="current_page_item">
-					<a href="#">Home</a>
+					<g:Hyperlink text="Home" targetHistoryToken="DashboardPlace:"/>
 				</li>
 				<li>
-					<a href="index.jsp#ShoppingListsPlace:">My Shopping Lists</a>
+					<g:Hyperlink text="My Shopping Lists" targetHistoryToken="ShoppingListsPlace:"/>
 				</li>
 				<li>
 					<a href="#">Photos</a>

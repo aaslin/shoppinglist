@@ -13,7 +13,7 @@ import se.aaslin.developer.shoppinglist.dao.UserDAO;
 import se.aaslin.developer.shoppinglist.entity.User;
 import se.aaslin.developer.shoppinglist.entity.User_;
 
-@Repository("userDAO")
+@Repository
 public class UserDAOImpl extends GenericDAOImpl<Integer, User> implements UserDAO{
 
 	@PersistenceContext EntityManager em;

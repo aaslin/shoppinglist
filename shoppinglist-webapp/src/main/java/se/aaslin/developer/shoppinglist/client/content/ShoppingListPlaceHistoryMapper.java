@@ -7,5 +7,5 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
 
 @WithTokenizers({DashboardPlace.Tokenizer.class, ShoppingListsPlace.Tokenizer.class})
-public interface ShoppginListPlaceHistoryMapper extends PlaceHistoryMapper {
+public interface ShoppingListPlaceHistoryMapper extends PlaceHistoryMapper {
 }

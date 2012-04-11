@@ -9,7 +9,7 @@ body {
 	color: #757575;
 }
 
-h1, h2, h3 {
+h1,h2,h3 {
 	margin: 0;
 	padding: 0;
 	font-weight: normal;
@@ -28,12 +28,13 @@ h3 {
 	font-size: 1.6em;
 }
 
-p, ul, ol {
+p,ul,ol {
 	margin-top: 0;
 	line-height: 180%;
 }
 
-ul, ol {
+ul,ol {
+	
 }
 
 a {
@@ -42,4 +43,24 @@ a {
 }
 
 a:hover {
+	
+}
+
+#wrapper {
+	width: 1140px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#gwt_topPlaceHolder {
+	width: 100%;
+}
+
+#gwt_contentPlaceHolder {
+	width: 100%;
+}
+
+#gwt_footerPlaceHolder {
+	background-color: green;
+	clear: both;
 }

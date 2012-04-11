@@ -25,6 +25,6 @@ public class HeaderActivity extends AbstractActivity {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		new HeaderPresenter(view, loginService, place);
 		
-		panel.setWidget(view.asWidget());
+		panel.setWidget(view.getViewAsWidget());
 	}
 }

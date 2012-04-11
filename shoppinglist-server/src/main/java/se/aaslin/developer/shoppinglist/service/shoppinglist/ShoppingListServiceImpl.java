@@ -66,6 +66,8 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 		dto.setName(list.getName());
 		dto.setOwnerID(list.getOwner().getID());
 		dto.setOwnerUserName(list.getOwner().getUsername());
+		dto.setID(list.getID());
+		
 		return dto;
 	}
 

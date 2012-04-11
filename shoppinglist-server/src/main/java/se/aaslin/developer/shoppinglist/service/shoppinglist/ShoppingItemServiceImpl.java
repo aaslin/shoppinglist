@@ -33,6 +33,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 			dto.setName(item.getName());
 			dto.setComment(item.getComment());
 			dto.setAmount(item.getAmount());
+			dto.setId(item.getId());
+			dto.setShoppingListId(item.getShoppingList().getID());
 			dtos.add(dto);
 		}
 		
