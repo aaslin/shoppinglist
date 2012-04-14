@@ -13,9 +13,9 @@ public interface ShoppingListGridServiceAsync {
 
 	void getShoppingLists(AsyncCallback<List<ShoppingListDTO>> callback);
 
-	void addShoppingList(ShoppingListDTO dto, AsyncCallback<List<ShoppingListDTO>> callback);
+	void saveShoppingList(ShoppingListDTO dto, AsyncCallback<List<ShoppingListDTO>> callback);
 
-	void addShoppingItem(ShoppingItemDTO itemDTO, AsyncCallback<List<ShoppingItemDTO>> callback);
+	void saveShoppingItems(int shoppingListId, List<ShoppingItemDTO> itemDTOs, AsyncCallback<List<ShoppingItemDTO>> callback);
 
 	void removeShoppingItem(ShoppingItemDTO itemDTO, AsyncCallback<List<ShoppingItemDTO>> callback);
 

@@ -10,6 +10,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingItemDAO;
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
@@ -28,6 +29,7 @@ public class ShoppingItemDAOImpl extends GenericDAOImpl<Integer, ShoppingItem> i
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public List<ShoppingItem> getShoppingListItems(int shoppingListId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ShoppingItem> query = cb.createQuery(ShoppingItem.class);

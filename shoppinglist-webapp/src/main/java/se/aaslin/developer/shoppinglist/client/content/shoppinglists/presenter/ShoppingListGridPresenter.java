@@ -1,54 +1,102 @@
 package se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
-import se.aaslin.developer.shoppinglist.client.common.Presenter;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListGridServiceAsync;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 
-public class ShoppingListGridPresenter implements Presenter {
+public class ShoppingListGridPresenter {
 	public interface ViewDisplay extends Display {
+		
+		ListBox getShoppingListsBox();
+		
+		void addHeader(String shoppingListName, String owner);
+		
+		TextBox addNameTextBox(int row, String name);
+		
+		TextBox addAmountTextBox(int row, String amount);
+		
+		TextBox addCommentTextBox(int row, String comment);
+		
+		HasValue<Boolean> addRemoveButton(int row);
+		
+		Button getNewItemButton();
+		
+		Button getSaveButton();
+		
+		Button getResetButton();
 
-		DisclosurePanel addShoppingList(int row, String name);
-
-		void clearShoppingList();
-
+		void removeRow(int i);
 	}
 
 	ShoppingListGridServiceAsync srv;
 	ViewDisplay display;
+	List<ShoppingListDTO> shoppingListDTOs;
+	List<ShoppingItemDTO> shoppingItemDTOs; 
 
 	public ShoppingListGridPresenter(ShoppingListGridServiceAsync srv, ViewDisplay display) {
 		this.srv = srv;
 		this.display = display;
+		fetchShoppingLists();
 		bind();
 	}
 
-	@Override
-	public void initContainer(HasWidgets container) {
-		container.add(display.getViewAsWidget());
-	}
-
-	private void bind() {
+	private void fetchShoppingLists() {
 		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
-
+			
 			@Override
 			public void onSuccess(List<ShoppingListDTO> result) {
-				repaintShoppingList(result);
+				updateShoppingLists(result);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+		});
+	}
+	
+	private void updateShoppingLists(List<ShoppingListDTO> result) {
+		shoppingListDTOs = result;
+		for (ShoppingListDTO dto : result) {
+			display.getShoppingListsBox().addItem(dto.getName(), Integer.toString(dto.getID()));
+		}
+		
+		display.getShoppingListsBox().addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				fetchShoppingItems();
+			}
+		});
+		display.getShoppingListsBox().setItemSelected(0, true);
+		
+		fetchShoppingItems();
+	}
+	
+	private void fetchShoppingItems() {
+		ShoppingListDTO shoppingList = getCurrentShoppingList();
+		srv.getShoppingItems(shoppingList.getID(), new AsyncCallback<List<ShoppingItemDTO>>() {
+			
+			@Override
+			public void onSuccess(List<ShoppingItemDTO> result) {
+				updateShoppingItems(result);
 			}
 
 			@Override
@@ -58,60 +106,158 @@ public class ShoppingListGridPresenter implements Presenter {
 		});
 	}
 
-	private void repaintShoppingList(final List<ShoppingListDTO> shoppingListDTOs) {
-		display.clearShoppingList();
-		int i = 0;
-		for (final ShoppingListDTO dto : shoppingListDTOs) {
-			final DisclosurePanel disclosurePanel = display.addShoppingList(i++, dto.getName());
-			disclosurePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
+	private void updateShoppingItems(List<ShoppingItemDTO> result) {
+		shoppingItemDTOs = result;
+		ShoppingListDTO shoppingList = getCurrentShoppingList();
+		display.addHeader(shoppingList.getName(), shoppingList.getOwnerUserName());
+		
+		int row = 1;
+		for (final ShoppingItemDTO dto : result) {
+			addAndBindRow(row, dto);
+			row++;
+		}
+	}
+
+	private void bind() {
+		display.getNewItemButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				ShoppingItemDTO dto = new ShoppingItemDTO();
+				shoppingItemDTOs.add(dto);
+				addAndBindRow(shoppingItemDTOs.size(), dto);
+			}
+		});
+		
+		display.getResetButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				fetchShoppingItems();
+			}
+		});
+		
+		display.getSaveButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				saveShoppingItems();
+			}
+		});
+	}
+
+	private void addAndBindRow(int row, final ShoppingItemDTO dto) {
+		display.addNameTextBox(row, dto.getName()).addValueChangeHandler(new ValueChangeHandler<String>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				dto.setChanged(true);
+				dto.setName(event.getValue());
+				display.getSaveButton().setEnabled(true);
+			}
+		});
+		
+		display.addAmountTextBox(row, dto.getAmount()).addValueChangeHandler(new ValueChangeHandler<String>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				dto.setChanged(true);
+				dto.setAmount(event.getValue());
+				display.getSaveButton().setEnabled(true);
+			}
+		});
+		
+		display.addCommentTextBox(row, dto.getComment()).addValueChangeHandler(new ValueChangeHandler<String>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				dto.setChanged(true);
+				dto.setComment(event.getValue());
+				display.getSaveButton().setEnabled(true);
+			}
+		});
+		
+		final HasValue<Boolean> removeButton = display.addRemoveButton(row);
+		removeButton.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				if(event.getValue()) {
+					remove(dto, removeButton);
+				}
+			}
+		});
+	}
+
+	private void saveShoppingItems() {
+		List<ShoppingItemDTO> toSave = new ArrayList<ShoppingItemDTO>();
+		for (ShoppingItemDTO dto : shoppingItemDTOs) {
+			if (dto.isChanged()) {
+				toSave.add(dto);
+			}
+		}
+		
+		if(toSave.size() > 0) {
+			srv.saveShoppingItems(getCurrentShoppingList().getID(), toSave, new AsyncCallback<List<ShoppingItemDTO>>() {
 				
 				@Override
-				public void onOpen(OpenEvent<DisclosurePanel> event) {
-					srv.getShoppingItems(dto.getID(), new AsyncCallback<List<ShoppingItemDTO>>() {
+				public void onSuccess(List<ShoppingItemDTO> result) {
+					updateShoppingItems(result);
+				}
 
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert(caught.getMessage());
-						}
-
-						@Override
-						public void onSuccess(List<ShoppingItemDTO> result) {
-							Grid grid = new Grid(1, 3);
-							grid.setWidget(0, 0, new Label("Name"));
-							grid.setWidget(0, 1, new Label("Amount"));
-							int row = 1;
-							for(final ShoppingItemDTO dto : result){
-								grid.resize(row + 1, 3);
-								grid.setWidget(row, 0, new Label(dto.getName()));
-								grid.setWidget(row, 1, new Label(dto.getAmount()));
-								Button delBtn = new Button("Delete");
-								delBtn.addClickHandler(new ClickHandler() {
-									
-									@Override
-									public void onClick(ClickEvent event) {
-										srv.removeShoppingItem(dto, new AsyncCallback<List<ShoppingItemDTO>>() {
-
-											@Override
-											public void onFailure(Throwable caught) {
-												Window.alert(caught.getMessage());
-											}
-
-											@Override
-											public void onSuccess(List<ShoppingItemDTO> result) {
-												repaintShoppingList(shoppingListDTOs);
-											}
-										});
-									}
-								});
-								grid.setWidget(row, 2, delBtn);
-								row++;
-							}
-							disclosurePanel.add(grid);
-						}
-					});
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());
 				}
 			});
 		}
 	}
 
+	private ShoppingListDTO getCurrentShoppingList() {
+		int index = display.getShoppingListsBox().getSelectedIndex();
+		if (index == -1) {
+			return null;
+		}
+
+		return shoppingListDTOs.get(index);
+	}
+	
+	private void remove(final ShoppingItemDTO dto, final HasValue<Boolean> removeButton) {
+		if (dto.isFromDB()) {
+			srv.removeShoppingItem(dto, new AsyncCallback<List<ShoppingItemDTO>>() {
+				
+				@Override
+				public void onSuccess(List<ShoppingItemDTO> result) {
+					removeButton.setValue(false);
+					doRemove(dto);
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					removeButton.setValue(false);
+					Window.alert(caught.getMessage());
+				}
+			});
+		} else {
+			doRemove(dto);
+		}
+	}
+	
+	private void doRemove(ShoppingItemDTO dto) {
+		int index = shoppingItemDTOs.indexOf(dto);
+		if (index != -1) {
+			shoppingItemDTOs.remove(index);
+			display.removeRow(index + 1);
+		}
+		
+		boolean unsavedChanges = false;
+		for (ShoppingItemDTO shoppingItemDTO : shoppingItemDTOs) {
+			if (shoppingItemDTO.isChanged()) {
+				unsavedChanges = true;
+				break;
+			}
+		}
+		
+		display.getSaveButton().setEnabled(unsavedChanges);
+	}
 }

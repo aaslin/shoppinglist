@@ -15,9 +15,9 @@ public interface ShoppingListGridService extends RemoteService{
 	
 	List<ShoppingItemDTO> getShoppingItems(int shoppingListId);
 	
-	List<ShoppingListDTO> addShoppingList(ShoppingListDTO dto);
+	List<ShoppingListDTO> saveShoppingList(ShoppingListDTO dto);
 	
-	List<ShoppingItemDTO> addShoppingItem(ShoppingItemDTO itemDTO);	
+	List<ShoppingItemDTO> saveShoppingItems(int shoppingListId, List<ShoppingItemDTO> itemDTOs);
 	
 	List<ShoppingListDTO> removeShoppingList(ShoppingListDTO dto);
 

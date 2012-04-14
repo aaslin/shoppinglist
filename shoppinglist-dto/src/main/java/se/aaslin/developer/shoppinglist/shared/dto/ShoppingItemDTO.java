@@ -12,7 +12,25 @@ public class ShoppingItemDTO implements Serializable{
 	private String name;
 	private String comment;
 	private String amount;
+	private boolean isChanged = false;
+	private boolean isFromDB = false;
 	
+	public boolean isChanged() {
+		return isChanged;
+	}
+
+	public void setChanged(boolean isChanged) {
+		this.isChanged = isChanged;
+	}
+
+	public boolean isFromDB() {
+		return isFromDB;
+	}
+
+	public void setFromDB(boolean isFromDB) {
+		this.isFromDB = isFromDB;
+	}
+
 	public Integer getShoppingListId() {
 		return shoppingListId;
 	}

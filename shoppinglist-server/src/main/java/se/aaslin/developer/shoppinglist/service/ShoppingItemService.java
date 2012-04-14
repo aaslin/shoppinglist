@@ -8,7 +8,7 @@ public interface ShoppingItemService {
 	
 	List<ShoppingItemDTO> getAllShoppingListItems(int shoppingListId);
 
-	void addItemToShoppingList(ShoppingItemDTO item);
+	void saveItemsToShoppingList(Integer shoppingListId, List<ShoppingItemDTO> items);
 
 	void remove(ShoppingItemDTO itemDTO);
 

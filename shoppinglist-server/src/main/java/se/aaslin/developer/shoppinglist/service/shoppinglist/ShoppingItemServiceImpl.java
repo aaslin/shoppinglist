@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingItemDAO;
 import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
@@ -17,7 +18,8 @@ import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 
-@Service("shoppingItemService")
+@Service
+@Transactional
 public class ShoppingItemServiceImpl implements ShoppingItemService{
 
 	@Autowired ShoppingItemDAO shoppingItemDAO;
@@ -35,6 +37,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 			dto.setAmount(item.getAmount());
 			dto.setId(item.getId());
 			dto.setShoppingListId(item.getShoppingList().getID());
+			dto.setFromDB(true);
 			dtos.add(dto);
 		}
 		
@@ -42,33 +45,14 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 	}
 
 	@Override
-	public void addItemToShoppingList(ShoppingItemDTO dto) {
-		ShoppingList shoppingList = shoppingListDAO.findById(dto.getShoppingListId());
-		if (shoppingList == null) {
-			return;
-		}
-		ShoppingItem item = new ShoppingItem();
-		item.setAmount(dto.getAmount());
-		item.setComment(dto.getComment());
-		item.setName(dto.getName());
-		item.setShoppingList(shoppingList);
-		TimeStamp timeStamp = new TimeStamp();
-		Date date = Calendar.getInstance().getTime();
-		timeStamp.setCreated(date);
-		timeStamp.setModified(date);
-		item.setTimeStamp(timeStamp);
-		
-		timeStampDAO.create(timeStamp);
-		shoppingItemDAO.create(item);
-	}
-
-	@Override
 	public void remove(ShoppingItemDTO itemDTO) {
 		ShoppingItem item = shoppingItemDAO.findById(itemDTO.getId());
+		item.getShoppingList().getItems().remove(item);
 		shoppingItemDAO.delete(item);
 	}
 
 	@Override
+	@Deprecated
 	public void update(ShoppingItemDTO itemDTO) {
 		ShoppingItem shoppingItem = shoppingItemDAO.findById(itemDTO.getId());
 		if (shoppingItem == null) {
@@ -88,5 +72,41 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 		
 		timeStampDAO.update(timeStamp);
 		shoppingItemDAO.update(shoppingItem);
+	}
+
+	@Override
+	public void saveItemsToShoppingList(Integer shoppingListId, List<ShoppingItemDTO> dtos) {
+		ShoppingList shoppingList = shoppingListDAO.findById(shoppingListId);
+		if (shoppingList == null) {
+			return;
+		}
+		
+		Date date = Calendar.getInstance().getTime();
+		for (ShoppingItemDTO dto : dtos) {
+			if (dto.isFromDB()) {
+				ShoppingItem item = shoppingItemDAO.findById(dto.getId());
+				item.setAmount(dto.getAmount());
+				item.setComment(dto.getComment());
+				item.setName(dto.getName());
+				TimeStamp timeStamp = item.getTimeStamp();
+				timeStamp.setModified(date);
+				
+				timeStampDAO.update(timeStamp);
+				shoppingItemDAO.update(item);		
+			} else {
+				ShoppingItem item = new ShoppingItem();
+				item.setAmount(dto.getAmount());
+				item.setComment(dto.getComment());
+				item.setName(dto.getName());
+				item.setShoppingList(shoppingList);
+				TimeStamp timeStamp = new TimeStamp();
+				timeStamp.setCreated(date);
+				timeStamp.setModified(date);
+				item.setTimeStamp(timeStamp);
+				
+				timeStampDAO.create(timeStamp);
+				shoppingItemDAO.create(item);	
+			}
+		}
 	}
 }

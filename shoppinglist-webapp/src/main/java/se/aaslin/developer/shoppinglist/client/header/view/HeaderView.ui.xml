@@ -114,18 +114,6 @@
 				<li>
 					<g:Hyperlink text="My Shopping Lists" targetHistoryToken="ShoppingListsPlace:"/>
 				</li>
-				<li>
-					<a href="#">Photos</a>
-				</li>
-				<li>
-					<a href="#">About</a>
-				</li>
-				<li>
-					<a href="#">Links</a>
-				</li>
-				<li>
-					<a href="#">Contact</a>
-				</li>
 			</ul>
 		</div>
 		<g:Button ui:field="logoutBtn" text="Logout"/>

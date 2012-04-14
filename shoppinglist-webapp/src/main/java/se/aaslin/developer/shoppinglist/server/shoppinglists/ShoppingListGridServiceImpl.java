@@ -43,15 +43,15 @@ public class ShoppingListGridServiceImpl extends SpringRemoteServiceServlet impl
 	}
 
 	@Override
-	public List<ShoppingListDTO> addShoppingList(ShoppingListDTO dto) {
+	public List<ShoppingListDTO> saveShoppingList(ShoppingListDTO dto) {
 		shoppingListService.add(dto);
 		return getShoppingLists();
 	}
 
 	@Override
-	public List<ShoppingItemDTO> addShoppingItem(ShoppingItemDTO itemDTO) {
-		shoppingItemService.addItemToShoppingList(itemDTO);
-		return getShoppingItems(itemDTO.getShoppingListId());
+	public List<ShoppingItemDTO> saveShoppingItems(int shoppingListId, List<ShoppingItemDTO> itemDTOs) {
+		shoppingItemService.saveItemsToShoppingList(shoppingListId, itemDTOs);
+		return getShoppingItems(shoppingListId);
 	}
 
 	@Override
@@ -77,5 +77,4 @@ public class ShoppingListGridServiceImpl extends SpringRemoteServiceServlet impl
 		shoppingItemService.update(itemDTO);
 		return getShoppingItems(itemDTO.getShoppingListId());
 	}
-
 }
