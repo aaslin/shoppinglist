@@ -5,6 +5,7 @@ import java.util.List;
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListChangeEvent;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListEmptyEvent;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListNewEvent;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListUpdateEvent;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListUpdateEventHandler;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
@@ -167,9 +168,9 @@ public class ShoppingListBoxPresenter {
 				model.getShoppingListDTOs().clear();
 				model.getShoppingListDTOs().addAll(result);
 				int index = model.getShoppingListDTOs().size() - 1;
+				eventBus.fireEvent(new ShoppingListNewEvent(model.getShoppingListDTOs().get(index)));
 				updateListBox(index);
 				display.getRemoveButton().setEnabled(true);
-				eventBus.fireEvent(new ShoppingListChangeEvent(model.getShoppingListDTOs().get(index)));
 			}
 			
 			@Override

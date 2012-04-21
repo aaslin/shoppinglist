@@ -2,21 +2,18 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
 	<ui:style>
 		.formPanel {
-			padding: 5px;
-			border: 1px solid;
+			border: 1px solid #889D9E;
 		}
 		
 		.gridPanel {
 			margin-top: 10px;
-			padding: 5px;
-			border: 1px solid;
+			border: 1px solid #889D9E;
 		}
 		
 		.boxPanel {
 			width: 400px;
-			padding: 5px;
 			float: left;
-			border: 1px solid;
+			border: 1px solid #889D9E;
 		}
 		
 		.leftPanel {

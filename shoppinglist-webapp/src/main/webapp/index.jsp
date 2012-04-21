@@ -11,8 +11,10 @@
 	<div id="wrapper">
 		<div id="gwt_topPlaceHolder"></div>
 
-		<div id="gwt_contentPlaceHolder"></div>
-		
+		<div id="content">
+			<div id="gwt_contentPlaceHolder"></div>
+			<div style="clear:both;"></div>
+		</div>
 		<div id="gwt_footerPlaceHolder"></div>
 	</div>
 </body>

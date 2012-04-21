@@ -120,8 +120,8 @@ public class ShoppingListFormPresenter {
 			public void onNew(ShoppingListNewEvent event) {
 				display.setEmpty(false);
 				model.setShoppingListDTO(event.getShoppingListDTO());
-				display.getListNameTextBox().setSelectionRange(0, model.getShoppingListDTO().getName().length());
 				updateForm();
+				display.getListNameTextBox().setSelectionRange(0, model.getShoppingListDTO().getName().length());
 			}
 		});
 		
@@ -185,6 +185,7 @@ public class ShoppingListFormPresenter {
 	private void updateList() {
 		if (model.getShoppingListDTO().isChanged()) {
 			display.getSaveListButton().setEnabled(false);
+			display.getResetListButton().setEnabled(false);
 			eventBus.fireEvent(new ShoppingListUpdateEvent(model.getShoppingListDTO()));
 			srv.updateShoppingList(model.getShoppingListDTO(), new AsyncCallback<ShoppingListDTO>() {
 				
@@ -265,6 +266,6 @@ public class ShoppingListFormPresenter {
 		Model.Member member = new Model.Member();
 		member.userName = null;
 		member.type = Model.Member.Type.MEBMER;
-		addAndBindMemberRow(model.getAllMembers().size(), member, true);
+		addAndBindMemberRow(model.getAllMembers().size() + 1, member, true);
 	}
 }

@@ -53,7 +53,7 @@
 			height: 36px;
 			margin: 0 auto;
 			padding: 0;
-			background: #087CF4;
+			background: #889D9E;
 		}
 		
 		#menu ul {
@@ -83,7 +83,7 @@
 		}
 		
 		#menu a:hover,#menu .current_page_item a {
-			background: #2C2C2C;
+			background: #757575;
 			text-decoration: none;
 		}
 		

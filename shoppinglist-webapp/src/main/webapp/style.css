@@ -52,13 +52,24 @@ a:hover {
 	padding: 0;
 }
 
+#top {
+	
+}
+
 #gwt_topPlaceHolder {
 	width: 100%;
+}
+
+#content {
 }
 
 #gwt_contentPlaceHolder {
 	margin-top: 10px;
 	width: 100%;
+}
+
+#footer {
+	
 }
 
 #gwt_footerPlaceHolder {

@@ -1,27 +1,98 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
-	<ui:style>
+	<ui:style type="se.aaslin.developer.shoppinglist.client.content.shoppinglists.view.ShoppingListFormView.Style">
 		.formPanel {
+			
+		}
 		
+		.table {
+			border-spacing: 0px;
+			margin-top: 30px;
+		}
+		
+		.cellHeader {
+			font-weight: bold;
+			font-size: 10px;
+			color: #4F6B72;
+			border-right: 1px solid #C1DAD7;
+			border-bottom: 1px solid #C1DAD7;
+			border-top: 1px solid #C1DAD7;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			text-align: left;
+			padding: 6px 6px 6px 12px;
+			background: #CAE8EA url(images/bg_header.jpg) no-repeat;
+			width: 178px;
+		}
+		
+		.nobg {
+			border-top: 0;
+			border-left: 0;
+			border-right: 1px solid #C1DAD7;
+			background: none;
+		}
+		
+		.cell {
+			border-right: 1px solid #C1DAD7;
+			border-bottom: 1px solid #C1DAD7;
+			background: white;
+			padding: 6px 6px 6px 12px;
+			color: #4F6B72;
+		}
+		
+		.cellLeft {
+			border-left: 1px solid #C1DAD7;
+			border-top: 0;
+		}
+		
+		.cellListBox {
+			padding: 0px 6px 0px 12px;
+		}
+		
+		.title {
+			background: #889D9E;
+			color: white;
+			padding: 6px 20px;
+			font-size: 18px;
+			letter-spacing: -0.5px;
+		}
+		
+		.textBox {
+			width: 190px;	
+		}
+		
+		.label {
+			font-weight: bold;
+			font-size: 10px;
+			color: #4F6B72;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			text-align: left;
+			padding: 0 6px 0 12px;
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.formPanel}">
-		<g:Image ui:field="loadingImage" visible="true"/>
-		<g:HTMLPanel ui:field="gridPanel" visible="false">
-			<g:Label>Name: </g:Label>
-			<g:TextBox ui:field="listTextBox" />
-			<g:Label>Manage members: </g:Label>
-			<g:FlexTable ui:field="grid" />
-			<div style="float: left">
-				<g:Button ui:field="addMember" text="Add Member" />
-			</div>
-			<div style="float: roght; clear: both;">
-				<g:Button ui:field="saveList" text="Save" enabled="false" />
-				<g:Button ui:field="resetList" text="Reset" />
-			</div>
-		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="emptyPanel" visible="false">
-			<g:Label text="empty"/>
-		</g:HTMLPanel>
+		<g:Label styleName="{style.title}" text="List"/>
+		<div style="padding: 10px">
+			<g:Image ui:field="loadingImage" visible="true" />
+			<g:HTMLPanel ui:field="gridPanel" visible="false">
+				<div style="margin-left: 40px;">
+					<g:Label styleName="{style.label}">Name </g:Label>
+					<g:TextBox styleName="{style.textBox}" ui:field="listTextBox"/>
+					<g:FlexTable styleName="{style.table}" ui:field="grid" />
+				</div>
+				<div style="float: left; margin-top: 10px;">
+					<g:Button ui:field="addMember" text="Add Member" />
+				</div>
+				<div style="float: right; margin-top: 10px;">
+					<g:Button ui:field="saveList" text="Save" enabled="false" />
+					<g:Button ui:field="resetList" text="Reset" enabled="false" />
+				</div>
+				<div style="clear: both" />
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="emptyPanel" visible="false">
+				<g:Label text="empty" />
+			</g:HTMLPanel>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

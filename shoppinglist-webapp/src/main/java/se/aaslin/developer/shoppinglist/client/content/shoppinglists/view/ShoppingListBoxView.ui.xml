@@ -1,10 +1,25 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
-
+	<ui:style>
+		.listBox {
+			width: 250px;
+		}
+		
+		.title {
+			background: #889D9E;
+			color: white;
+			padding: 6px 20px;
+			font-size: 18px;
+			letter-spacing: -0.5px;
+		}
+	</ui:style>
 	<g:HTMLPanel>
-		<g:ListBox ui:field="listBox" />
-		<g:Button ui:field="newList" text="New" />
-		<g:Button ui:field="removeList" text="Remove" enabled="false"/>
+		<g:Label styleName="{style.title}" text="Shopping Lists"/>
+		<div style="padding: 10px">
+			<g:ListBox styleName="{style.listBox}" ui:field="listBox" />
+			<g:Button ui:field="newList" text="New" />
+			<g:Button ui:field="removeList" text="Remove" enabled="false"/>
+		</div>
 	</g:HTMLPanel>
 
 </ui:UiBinder>

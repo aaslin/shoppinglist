@@ -3,6 +3,7 @@ package se.aaslin.developer.shoppinglist.client.content.shoppinglists.view;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter.ShoppingListFormPresenter;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -20,6 +21,19 @@ public class ShoppingListFormView extends Composite implements ShoppingListFormP
 	public interface ShoppingListFormViewUIBinder extends UiBinder<HTMLPanel, ShoppingListFormView> {
 	}
 	
+	interface Style extends CssResource {
+		
+		String cell();
+		
+		String cellHeader();
+		
+		String nobg();
+		
+		String cellListBox();
+		
+		String cellLeft();
+	}
+	
 	private ShoppingListFormViewUIBinder uiBinder = GWT.create(ShoppingListFormViewUIBinder.class);
 	
 	@UiField Button saveList;
@@ -31,9 +45,16 @@ public class ShoppingListFormView extends Composite implements ShoppingListFormP
 	@UiField Panel gridPanel;
 	@UiField Panel emptyPanel;
 	
+	@UiField Style style;
+	
 	public ShoppingListFormView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		loadingImage.setUrl(GWT.getModuleBaseURL() + "../images/animations/rotating.gif");
+		grid.setWidget(0, 0, new Label("Member"));
+		grid.getCellFormatter().addStyleName(0, 0, style.cellHeader());
+		grid.getCellFormatter().addStyleName(0, 0, style.nobg());
+		grid.setWidget(0, 1, new Label("Status"));
+		grid.getCellFormatter().addStyleName(0, 1, style.cellHeader());
 	}
 
 	@Override
@@ -60,17 +81,24 @@ public class ShoppingListFormView extends Composite implements ShoppingListFormP
 	public ListBox addMemberNameListBox(int row) {
 		ListBox listBox = new ListBox();
 		grid.setWidget(row, 0, listBox);
+		grid.getCellFormatter().addStyleName(row, 0, style.cell());
+		grid.getCellFormatter().addStyleName(row, 0, style.cellLeft());
+		grid.getCellFormatter().addStyleName(row, 0, style.cellListBox());
+		
 		return listBox;
 	}
 
 	@Override
 	public void addMemberNameLabel(int row, String name) {
 		grid.setWidget(row, 0, new  Label(name));
+		grid.getCellFormatter().addStyleName(row, 0, style.cell());
+		grid.getCellFormatter().addStyleName(row, 0, style.cellLeft());
 	}
 
 	@Override
 	public void addMemberStatus(int row, String status) {
 		grid.setWidget(row, 1, new Label(status));
+		grid.getCellFormatter().addStyleName(row, 1, style.cell());
 	}
 
 	@Override
