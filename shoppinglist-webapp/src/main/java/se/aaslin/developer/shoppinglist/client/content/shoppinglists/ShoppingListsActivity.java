@@ -1,9 +1,9 @@
 package se.aaslin.developer.shoppinglist.client.content.shoppinglists;
 
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter.ShoppingListGridPresenter;
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListGridService;
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListGridServiceAsync;
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.view.ShoppingListGridView;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter.ShoppingListsPresenter;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsService;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.view.ShoppingListsView;
 import se.aaslin.developer.shoppinglist.client.place.ShoppingListsPlace;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -21,9 +21,9 @@ public class ShoppingListsActivity extends AbstractActivity {
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		ShoppingListGridPresenter.ViewDisplay display = new ShoppingListGridView();
-		ShoppingListGridServiceAsync srv = GWT.create(ShoppingListGridService.class);
-		new ShoppingListGridPresenter(srv, display);
+		ShoppingListsPresenter.ViewDisplay display = new ShoppingListsView();
+		ShoppingListsServiceAsync srv = GWT.create(ShoppingListsService.class);
+		new ShoppingListsPresenter(display, srv, eventBus);
 		
 		panel.setWidget(display.getViewAsWidget());
 	}

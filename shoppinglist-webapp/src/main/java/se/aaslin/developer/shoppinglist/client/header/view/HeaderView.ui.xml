@@ -91,6 +91,22 @@
 			background: #2C2C2C;
 			color: #FFFFFF;
 		}
+		
+		.logout {
+			float: right;
+			margin-top: -25px;
+			margin-right: 15px;
+		}
+		
+		.logout a {
+			text-decoration: underline;
+			color: white;
+		}
+		
+		.logout a:hover {
+			cursor: pointer;
+			color: lightgrey;
+		}
 	</ui:style>
 
 	<g:HTMLPanel>
@@ -116,7 +132,7 @@
 				</li>
 			</ul>
 		</div>
-		<g:Button ui:field="logoutBtn" text="Logout"/>
+		<g:Hyperlink ui:field="logoutBtn" text="Logout" styleName="{style.logout}"/> 
 	</g:HTMLPanel>
 
 </ui:UiBinder>

@@ -11,7 +11,5 @@ public interface ShoppingItemService {
 	void saveItemsToShoppingList(Integer shoppingListId, List<ShoppingItemDTO> items);
 
 	void remove(ShoppingItemDTO itemDTO);
-
-	void update(ShoppingItemDTO itemDTO);
 }
 

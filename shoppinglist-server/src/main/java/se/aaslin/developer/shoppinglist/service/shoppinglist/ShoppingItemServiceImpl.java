@@ -52,29 +52,6 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 	}
 
 	@Override
-	@Deprecated
-	public void update(ShoppingItemDTO itemDTO) {
-		ShoppingItem shoppingItem = shoppingItemDAO.findById(itemDTO.getId());
-		if (shoppingItem == null) {
-			return;
-		}
-		ShoppingList shoppingList = shoppingListDAO.findById(itemDTO.getShoppingListId());
-		if (shoppingList == null) {
-			return;
-		}
-		shoppingItem.setAmount(itemDTO.getAmount());
-		shoppingItem.setComment(itemDTO.getComment());
-		shoppingItem.setName(itemDTO.getName());
-		shoppingItem.setShoppingList(shoppingList);
-		TimeStamp timeStamp = shoppingItem.getTimeStamp();
-		Date date = Calendar.getInstance().getTime();
-		timeStamp.setModified(date);
-		
-		timeStampDAO.update(timeStamp);
-		shoppingItemDAO.update(shoppingItem);
-	}
-
-	@Override
 	public void saveItemsToShoppingList(Integer shoppingListId, List<ShoppingItemDTO> dtos) {
 		ShoppingList shoppingList = shoppingListDAO.findById(shoppingListId);
 		if (shoppingList == null) {

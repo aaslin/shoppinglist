@@ -75,7 +75,7 @@
 
 	<servlet>
 		<servlet-name>shoppingListService</servlet-name>
-		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglists.ShoppingListGridServiceImpl</servlet-class>
+		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglists.ShoppingListsServiceImpl</servlet-class>
 	</servlet>
 	
 	<!-- Servlet Mappings -->

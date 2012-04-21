@@ -26,13 +26,13 @@ public class ShoppingListWs extends GenericWs {
 	@POST
 	@Consumes(APPLICATION_XML)
 	public void add(JAXBElement<ShoppingListDTO> shoppingListJAX) {
-		shoppingListService.add(shoppingListJAX.getValue());
+		shoppingListService.save(shoppingListJAX.getValue());
 	}
 
 	@PUT
 	@Consumes(APPLICATION_XML)
 	public void update(JAXBElement<ShoppingListDTO> shoppingListJAX) {
-		shoppingListService.update(shoppingListJAX.getValue());
+		shoppingListService.save(shoppingListJAX.getValue());
 	}
 
 	@GET

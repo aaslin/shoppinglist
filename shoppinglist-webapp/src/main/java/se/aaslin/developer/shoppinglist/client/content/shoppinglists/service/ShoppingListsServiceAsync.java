@@ -7,7 +7,7 @@ import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ShoppingListGridServiceAsync {
+public interface ShoppingListsServiceAsync {
 
 	void getShoppingItems(int shoppingListID, AsyncCallback<List<ShoppingItemDTO>> callback);
 
@@ -19,10 +19,11 @@ public interface ShoppingListGridServiceAsync {
 
 	void removeShoppingItem(ShoppingItemDTO itemDTO, AsyncCallback<List<ShoppingItemDTO>> callback);
 
-	void updateShoppingItem(ShoppingItemDTO itemDTO, AsyncCallback<List<ShoppingItemDTO>> callback);
-
 	void removeShoppingList(ShoppingListDTO dto, AsyncCallback<List<ShoppingListDTO>> callback);
 
-	void updateShoppingList(ShoppingListDTO dto, AsyncCallback<List<ShoppingListDTO>> callback);
+	void getAllUsers(AsyncCallback<List<String>> callback);
 
+	void getShoppingList(int shoppingListId, AsyncCallback<ShoppingListDTO> callback);
+
+	void updateShoppingList(ShoppingListDTO dto, AsyncCallback<ShoppingListDTO> callback);
 }

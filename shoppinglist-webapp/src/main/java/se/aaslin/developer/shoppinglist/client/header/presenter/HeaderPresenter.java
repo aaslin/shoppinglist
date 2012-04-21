@@ -6,16 +6,16 @@ import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 
 
 public class HeaderPresenter {
 	public interface ViewDisplay extends Display {
 		
-		Button getLogoutButton();
+		HasClickHandlers getLogout();
 	}
 
 	private ViewDisplay display;
@@ -30,7 +30,7 @@ public class HeaderPresenter {
 	}
 
 	private void bind() {
-		display.getLogoutButton().addClickHandler(new ClickHandler() {
+		display.getLogout().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {

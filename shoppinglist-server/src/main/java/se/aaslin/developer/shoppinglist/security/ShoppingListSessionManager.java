@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-@Service("shoppingListSessionManager")
+@Service
 public class ShoppingListSessionManager {
 	
 	private static final Map<UUID, String> loggedinUsers = new HashMap<UUID, String>();

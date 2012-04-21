@@ -21,7 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="`shopping_list`", uniqueConstraints = @UniqueConstraint(columnNames = {"`name`", "`userID`"}))
+@Table(name="`shopping_list`")
 public class ShoppingList implements Serializable{
 
 	private static final long serialVersionUID = -5708566252461176384L;
@@ -38,14 +38,14 @@ public class ShoppingList implements Serializable{
 	@JoinColumn(name = "`userID`", nullable = false)
 	private User owner;
 
-	@ManyToMany(targetEntity = User.class, cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name = "`shopping_list_user`", joinColumns = { @JoinColumn(name = "`shopping_listID`") }, inverseJoinColumns = { @JoinColumn(name = "`userID`")})
 	private Set<User> members;
 	
 	@Column(name = "`name`", nullable = false, length=255)
 	private String name;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "`time_stampID`", nullable = false)
 	private TimeStamp timeStamp;
 

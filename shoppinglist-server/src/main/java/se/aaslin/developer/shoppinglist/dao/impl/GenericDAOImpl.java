@@ -31,12 +31,19 @@ public abstract class GenericDAOImpl<PK, E> implements GenericDAO<PK, E> {
 
 	@Override
 	public void update(E entity) {
-		getEntityManager().refresh(entity);
+		EntityManager em = getEntityManager();
+		em.merge(entity);
 	}
 
 	@Override
 	public void delete(E entity) {
-		getEntityManager().remove(entity);
+		EntityManager em = getEntityManager();
+		if (em.contains(entity)) {
+			em.remove(entity);
+		} else {
+			em.merge(entity);
+			em.remove(entity);
+		}
 	}
 
 	@Override
@@ -52,5 +59,4 @@ public abstract class GenericDAOImpl<PK, E> implements GenericDAO<PK, E> {
 		query.from(entityClass);
 		return getEntityManager().createQuery(query).getResultList();
 	}
-
 }

@@ -12,27 +12,28 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ShoppingListGridView extends Composite implements ShoppingListGridPresenter.ViewDisplay{
+public class ShoppingListGridView extends Composite implements ShoppingListGridPresenter.View {
 	public interface ShoppingListGridViewUiBinder extends UiBinder<HTMLPanel, ShoppingListGridView>{
 	}
 	
 	ShoppingListGridViewUiBinder uiBinder = GWT.create(ShoppingListGridViewUiBinder.class);
 	
-	@UiField ListBox listBox;
+	@UiField Panel gridPanel;
+	@UiField Panel emptyPanel;
+	@UiField Image loadingImage;
 	@UiField FlexTable grid;
-	@UiField Label shoppingListName;
-	@UiField Label shoppingListOwner;
 	@UiField Button newItem;
 	@UiField Button save;
 	@UiField Button reset;
 	
 	public ShoppingListGridView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		loadingImage.setUrl(GWT.getModuleBaseURL() + "../images/animations/rotating.gif");
 	}
 
 	@Override
@@ -41,17 +42,10 @@ public class ShoppingListGridView extends Composite implements ShoppingListGridP
 	}
 
 	@Override
-	public ListBox getShoppingListsBox() {
-		return listBox;
-	}
-
-	@Override
-	public void addHeader(String listName, String listOwner) {
-		shoppingListName.setText(listName);
-		shoppingListOwner.setText(listOwner);
+	public void addHeader() {
 		grid.setWidget(0, 0, new Label("Name"));
-		grid.setWidget(0, 0, new Label("Amount"));
-		grid.setWidget(0, 0, new Label("Comment"));
+		grid.setWidget(0, 1, new Label("Amount"));
+		grid.setWidget(0, 2, new Label("Comment"));
 	}
 
 	@Override
@@ -108,5 +102,26 @@ public class ShoppingListGridView extends Composite implements ShoppingListGridP
 	@Override
 	public void removeRow(int row) {
 		grid.removeRow(row);
+	}
+
+	@Override
+	public void toggleLoading(boolean loading) {
+		loadingImage.setVisible(loading);
+		gridPanel.setVisible(!loading);
+	}
+
+	@Override
+	public void clear() {
+		grid.clear();
+		addHeader();
+	}
+
+	@Override
+	public void setEmpty(boolean empty) {
+		if (empty) {
+			loadingImage.setVisible(!empty);
+		}
+		gridPanel.setVisible(!empty);
+		emptyPanel.setVisible(empty);		
 	}
 }

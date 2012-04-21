@@ -15,6 +15,9 @@ public class ShoppingItemDTO implements Serializable{
 	private boolean isChanged = false;
 	private boolean isFromDB = false;
 	
+	public ShoppingItemDTO() {
+	}
+
 	public boolean isChanged() {
 		return isChanged;
 	}

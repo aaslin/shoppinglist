@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "shoppinglist")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ShoppingListDTO implements Serializable{
+public class ShoppingListDTO implements Serializable {
 
 	private static final long serialVersionUID = -3112563693526623930L;
 
@@ -34,6 +34,29 @@ public class ShoppingListDTO implements Serializable{
 	@XmlElementWrapper(name = "members", required = false)
 	@XmlElement(name = "member", required = false)
 	private List<String> members;
+	
+	private boolean isChanged = false;
+
+	private boolean isFromDB = false;
+
+	public ShoppingListDTO() {
+	}
+
+	public boolean isChanged() {
+		return isChanged;
+	}
+
+	public void setChanged(boolean isChanged) {
+		this.isChanged = isChanged;
+	}
+
+	public boolean isFromDB() {
+		return isFromDB;
+	}
+
+	public void setFromDB(boolean isFromDB) {
+		this.isFromDB = isFromDB;
+	}
 
 	public int getID() {
 		return ID;
@@ -47,7 +70,7 @@ public class ShoppingListDTO implements Serializable{
 		return ownerUserName;
 	}
 
-	public void setOwnerUserName(String ownerUserName) {
+	public void setOwnerUsername(String ownerUserName) {
 		this.ownerUserName = ownerUserName;
 	}
 
@@ -83,4 +106,25 @@ public class ShoppingListDTO implements Serializable{
 		this.members = members;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ID;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ShoppingListDTO other = (ShoppingListDTO) obj;
+		if (ID != other.ID)
+			return false;
+		return true;
+	}
 }

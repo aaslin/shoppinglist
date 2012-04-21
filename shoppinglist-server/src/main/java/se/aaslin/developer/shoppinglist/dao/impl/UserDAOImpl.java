@@ -1,5 +1,9 @@
 package se.aaslin.developer.shoppinglist.dao.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -38,4 +42,18 @@ public class UserDAOImpl extends GenericDAOImpl<Integer, User> implements UserDA
 		}
 	}
 
+	@Override
+	public Set<User> findUsers(List<String> usernames) {
+		if (usernames == null || usernames.size() == 0) {
+			return new HashSet<User>();
+		}
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<User> query = cb.createQuery(User.class);
+		
+		Root<User> user = query.from(User.class);
+		query.where(user.get(User_.username).in(usernames));
+		
+		return new HashSet<User>(em.createQuery(query).getResultList());
+	}
 }

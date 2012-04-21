@@ -57,6 +57,7 @@ a:hover {
 }
 
 #gwt_contentPlaceHolder {
+	margin-top: 10px;
 	width: 100%;
 }
 
