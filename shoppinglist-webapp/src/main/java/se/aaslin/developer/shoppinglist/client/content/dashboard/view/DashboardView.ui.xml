@@ -4,5 +4,6 @@
 
 	<g:HTMLPanel>
 		<g:Label text="Hello Activity"/>
+		<g:HTMLPanel ui:field="panel"/>
 	</g:HTMLPanel>
 </ui:UiBinder>

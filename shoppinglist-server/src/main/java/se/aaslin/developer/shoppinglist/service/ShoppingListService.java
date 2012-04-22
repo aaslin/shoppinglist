@@ -2,18 +2,13 @@ package se.aaslin.developer.shoppinglist.service;
 
 import java.util.List;
 
-import se.aaslin.developer.shoppinglist.entity.User;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.entity.ShoppingList;
+import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
+
 
 public interface ShoppingListService {
 	
-	void save(ShoppingListDTO shoppingList);
+	List<ShoppingList> getAllShoppingListsForUser(String username);
 	
-	List<ShoppingListDTO> getAll();
-	
-	ShoppingListDTO findById(int id);
-	
-	void remove(int shoppingList);
-	
-	List<ShoppingListDTO> getAllShoppingListsForUser(User user);
+	ShoppingList findShoppingListById(int shoppingListId, String username) throws NotAuthorizedException;
 }

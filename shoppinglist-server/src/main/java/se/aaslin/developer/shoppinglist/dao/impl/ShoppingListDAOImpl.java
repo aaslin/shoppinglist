@@ -28,8 +28,7 @@ public class ShoppingListDAOImpl extends GenericDAOImpl<Integer, ShoppingList> i
 	}
 
 	@Override
-	//TODO also include members. Maybe do some changes in the model like introducing a membership relation instead of member/owner
-	public List<ShoppingList> getShoppingListsForUser(int userId) {
+	public List<ShoppingList> getOwnedShoppingListsForUser(int userId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ShoppingList> query = cb.createQuery(ShoppingList.class);
 		
@@ -41,4 +40,15 @@ public class ShoppingListDAOImpl extends GenericDAOImpl<Integer, ShoppingList> i
 		return em.createQuery(query).getResultList();
 	}
 
+	@Override
+	public List<ShoppingList> getShoppingListsForUser(int userId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<ShoppingList> query = cb.createQuery(ShoppingList.class);
+		
+		Root<ShoppingList> shoppingList = query.from(ShoppingList.class);
+		Join<ShoppingList, User> user = shoppingList.join(ShoppingList_.members);
+		query.where(cb.equal(user.get(User_.ID), userId));
+		
+		return em.createQuery(query).getResultList();
+	}
 }

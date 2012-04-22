@@ -1,9 +1,7 @@
 package se.aaslin.developer.shoppinglist.service.shoppinglist;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,79 +9,71 @@ import org.springframework.transaction.annotation.Transactional;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingItemDAO;
 import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
-import se.aaslin.developer.shoppinglist.dao.TimeStampDAO;
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.TimeStamp;
+import se.aaslin.developer.shoppinglist.entity.User;
+import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 
 @Service
 @Transactional
 public class ShoppingItemServiceImpl implements ShoppingItemService{
 
-	@Autowired ShoppingItemDAO shoppingItemDAO;
 	@Autowired ShoppingListDAO shoppingListDAO;
-	@Autowired TimeStampDAO timeStampDAO;
-	
-	@Override
-	public List<ShoppingItemDTO> getAllShoppingListItems(int shoppingListId) {
-		List<ShoppingItem> shoppingItems = shoppingItemDAO.getShoppingListItems(shoppingListId);
-		List<ShoppingItemDTO> dtos = new ArrayList<ShoppingItemDTO>();
-		for (ShoppingItem item : shoppingItems) {
-			ShoppingItemDTO dto = new ShoppingItemDTO();
-			dto.setName(item.getName());
-			dto.setComment(item.getComment());
-			dto.setAmount(item.getAmount());
-			dto.setId(item.getId());
-			dto.setShoppingListId(item.getShoppingList().getID());
-			dto.setFromDB(true);
-			dtos.add(dto);
-		}
-		
-		return dtos;
-	}
+	@Autowired ShoppingItemDAO shoppingItemDAO;
 
 	@Override
-	public void remove(ShoppingItemDTO itemDTO) {
-		ShoppingItem item = shoppingItemDAO.findById(itemDTO.getId());
+	public void remove(ShoppingItem item, String username) throws NotAuthorizedException {
+		item = validateList(shoppingItemDAO.findById(item.getId()), username);
+		
 		item.getShoppingList().getItems().remove(item);
 		shoppingItemDAO.delete(item);
 	}
+	
+	@Override
+	public void update(ShoppingItem item, String username) throws NotAuthorizedException {
+		ShoppingItem managedItem = shoppingItemDAO.findById(item.getId());
+		managedItem = validateList(managedItem, username);
+		
+		managedItem.setName(item.getName());
+		managedItem.setAmount(item.getAmount());
+		managedItem.setComment(item.getComment());
+
+		Date date = Calendar.getInstance().getTime();
+		item.getTimeStamp().setModified(date);
+
+		shoppingItemDAO.update(item);
+	}
 
 	@Override
-	public void saveItemsToShoppingList(Integer shoppingListId, List<ShoppingItemDTO> dtos) {
-		ShoppingList shoppingList = shoppingListDAO.findById(shoppingListId);
-		if (shoppingList == null) {
+	public void create(int shoppingListId, ShoppingItem item, String username) throws NotAuthorizedException {
+		ShoppingList list = shoppingListDAO.findById(shoppingListId);
+		if (list == null) {
 			return;
 		}
+		item.setShoppingList(list);
+		item = validateList(item, username);
 		
 		Date date = Calendar.getInstance().getTime();
-		for (ShoppingItemDTO dto : dtos) {
-			if (dto.isFromDB()) {
-				ShoppingItem item = shoppingItemDAO.findById(dto.getId());
-				item.setAmount(dto.getAmount());
-				item.setComment(dto.getComment());
-				item.setName(dto.getName());
-				TimeStamp timeStamp = item.getTimeStamp();
-				timeStamp.setModified(date);
-				
-				timeStampDAO.update(timeStamp);
-				shoppingItemDAO.update(item);		
-			} else {
-				ShoppingItem item = new ShoppingItem();
-				item.setAmount(dto.getAmount());
-				item.setComment(dto.getComment());
-				item.setName(dto.getName());
-				item.setShoppingList(shoppingList);
-				TimeStamp timeStamp = new TimeStamp();
-				timeStamp.setCreated(date);
-				timeStamp.setModified(date);
-				item.setTimeStamp(timeStamp);
-				
-				timeStampDAO.create(timeStamp);
-				shoppingItemDAO.create(item);	
+		TimeStamp timeStamp = new TimeStamp();
+		timeStamp.setCreated(date);
+		timeStamp.setModified(date);
+		item.setTimeStamp(timeStamp);
+
+		shoppingItemDAO.create(item);
+	}
+	
+	private ShoppingItem validateList(ShoppingItem item, String username) throws NotAuthorizedException {
+		if (username.equals(item.getShoppingList().getOwner().getUsername())){
+			return item;
+		}
+		for (User user : item.getShoppingList().getMembers()) {
+			if (username.equals(user.getUsername())) {
+				return item;
 			}
 		}
+		
+		throw new NotAuthorizedException(username);
 	}
 }

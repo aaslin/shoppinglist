@@ -1,4 +1,4 @@
-package se.aaslin.developer.shoppinglist.server;
+package se.aaslin.developer.shoppinglist.security;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

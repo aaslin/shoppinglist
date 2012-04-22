@@ -45,22 +45,6 @@
 	</listener>
 
 	<!-- Servlets -->
-	
-	<servlet>
-		<servlet-name>Jersey REST Service</servlet-name>
-		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet
-		</servlet-class>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
-			<param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>se.aaslin.developer.shoppinglist.ws</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	
 	<servlet>
 		<servlet-name>Login Check</servlet-name>
 		<servlet-class>se.aaslin.developer.shoppinglist.security.ShoppingListLoginServlet</servlet-class>
@@ -78,13 +62,12 @@
 		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglists.ShoppingListsServiceImpl</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>dashboardService</servlet-name>
+		<servlet-class>se.aaslin.developer.shoppinglist.server.dashboard.DashboardServiceImpl</servlet-class>
+	</servlet>
+	
 	<!-- Servlet Mappings -->
-	
-	<servlet-mapping>
-		<servlet-name>Jersey REST Service</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-	
 	<servlet-mapping>
 		<servlet-name>Login Check</servlet-name>
 		<url-pattern>/security_check</url-pattern>
@@ -105,5 +88,10 @@
 	<servlet-mapping>
 		<servlet-name>shoppingListService</servlet-name>
 		<url-pattern>/gwt.shoppinglist/shoppinglists</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>dashboardService</servlet-name>
+		<url-pattern>/gwt.shoppinglist/dashboard</url-pattern>
 	</servlet-mapping>
 </web-app>

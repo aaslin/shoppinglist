@@ -4,23 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import se.aaslin.developer.shoppinglist.dao.UserDAO;
+import se.aaslin.developer.shoppinglist.entity.User;
 
 @Service
 public class ShoppingListSessionManager {
 	
 	private static final Map<UUID, String> loggedinUsers = new HashMap<UUID, String>();
-	private Map<String, String> users;
 
+	@Autowired UserDAO userDAO;
+	
 	public ShoppingListSessionManager() {
-		users = new HashMap<String, String>();
-		users.put("lars", "123");
-		users.put("linda", "123");	
 	}
 
 	public boolean validateUser(String username, String pass) {
-		if (users.containsKey(username) && users.get(username).equals(pass)) {
-			return true;
+		User user = userDAO.findByUsername(username);
+		if (user != null) {
+			return user.getPassword().equals(pass);
 		}
 
 		return false;
