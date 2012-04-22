@@ -38,8 +38,9 @@ public class ShoppingList implements Serializable{
 	@JoinColumn(name = "`userID`", nullable = false)
 	private User owner;
 
-	@ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	@JoinTable(name = "`shopping_list_user`", joinColumns = { @JoinColumn(name = "`shopping_listID`") }, inverseJoinColumns = { @JoinColumn(name = "`userID`")})
+	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
+	@JoinTable(name = "`shopping_list_user`", joinColumns = { @JoinColumn(name = "`shopping_listID`") }, inverseJoinColumns = { @JoinColumn(name = "`userID`")}, 
+		uniqueConstraints = @UniqueConstraint(columnNames = {"`shopping_listID`", "`userID`"}))
 	private Set<User> members;
 	
 	@Column(name = "`name`", nullable = false, length=255)
