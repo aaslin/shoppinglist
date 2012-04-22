@@ -18,7 +18,7 @@
 			text-align: left;
 			padding: 6px 6px 6px 12px;
 			background: #CAE8EA url(images/bg_header.jpg) no-repeat;
-			width: 178px;
+			width: 100px;
 		}
 		
 		.nobg {
@@ -56,9 +56,20 @@
 			font-size: 18px;
 			letter-spacing: -0.5px;
 		}
+		
+		.panel {
+			width: 440px;
+			margin: 10px;
+			border: 1px solid #889D9E;
+			display: inline-block;
+		}
+		
+		.textBox {
+			width: 100px;
+		}
 	</ui:style>
-	<g:HTMLPanel>
-		<g:Label styleName="{style.title}" text="Items"/>
+	<g:HTMLPanel styleName="{style.panel}">
+		<g:Label styleName="{style.title}" ui:field="label"/>
 		<div style="padding: 10px">
 			<g:Image ui:field="loadingImage" visible="true"/>
 			<g:HTMLPanel ui:field="gridPanel" visible="false">

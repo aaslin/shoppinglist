@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
-import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
 import se.aaslin.developer.shoppinglist.service.DashboardViewService;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 
 @Service
 @Transactional
@@ -85,7 +82,9 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 	
 	private ShoppingItem extractShoppingItem(DashboardItemDTO dto) {
 		ShoppingItem item = new ShoppingItem();
-		item.setId(dto.getId());
+		if(dto.getId() != null) {
+			item.setId(dto.getId());
+		}
 		item.setAmount(dto.getAmount());
 		item.setComment(dto.getComment());
 		item.setName(dto.getName());

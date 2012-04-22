@@ -8,7 +8,6 @@ import se.aaslin.developer.shoppinglist.client.content.dashboard.service.Dashboa
 import se.aaslin.developer.shoppinglist.client.content.dashboard.view.DashboardListPortletView;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;

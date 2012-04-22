@@ -33,6 +33,8 @@ public class DashboardListPortletView extends Composite implements DashboardList
 		String removeBtn();
 		
 		String cellLeft();
+		
+		String textBox();
 	}
 
 	DashboardListPortletViewUIBinder uiBinder = GWT.create(DashboardListPortletViewUIBinder.class);
@@ -44,7 +46,9 @@ public class DashboardListPortletView extends Composite implements DashboardList
 	@UiField Button newItem;
 	@UiField Button save;
 	@UiField Button reset;
-	
+	@UiField Label label;
+//	@UiField Label ownerLabel;
+ 	
 	@UiField Style style;
 	
 	public DashboardListPortletView() {
@@ -72,6 +76,7 @@ public class DashboardListPortletView extends Composite implements DashboardList
 	public TextBox addNameTextBox(int row, String name) {
 		TextBox tb = new TextBox();
 		tb.setText(name);
+		tb.setStyleName(style.textBox());
 		grid.setWidget(row, 0, tb);
 		grid.getCellFormatter().addStyleName(row, 0, style.cell());
 		grid.getCellFormatter().addStyleName(row, 0, style.cellLeft());
@@ -83,6 +88,7 @@ public class DashboardListPortletView extends Composite implements DashboardList
 	public TextBox addAmountTextBox(int row, String amount) {
 		TextBox tb = new TextBox();
 		tb.setText(amount);
+		tb.setStyleName(style.textBox());
 		grid.setWidget(row, 1, tb);
 		grid.getCellFormatter().addStyleName(row, 1, style.cell());
 		
@@ -93,6 +99,7 @@ public class DashboardListPortletView extends Composite implements DashboardList
 	public TextBox addCommentTextBox(int row, String comment) {
 		TextBox tb = new TextBox();
 		tb.setText(comment);
+		tb.setStyleName(style.textBox());
 		grid.setWidget(row, 2, tb);
 		grid.getCellFormatter().addStyleName(row, 2, style.cell());
 		
@@ -147,5 +154,15 @@ public class DashboardListPortletView extends Composite implements DashboardList
 		}
 		gridPanel.setVisible(!empty);
 		emptyPanel.setVisible(empty);		
+	}
+
+	@Override
+	public void setLabel(String text) {
+		label.setText(text);
+	}
+
+	@Override
+	public void setOwner(String username) {
+//		label.setText(username);
 	}
 }

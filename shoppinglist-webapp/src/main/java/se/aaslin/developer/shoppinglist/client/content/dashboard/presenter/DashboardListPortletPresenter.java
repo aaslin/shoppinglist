@@ -6,7 +6,6 @@ import java.util.List;
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardServiceAsync;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -44,6 +43,10 @@ public class DashboardListPortletPresenter {
 		void clear();
 		
 		void setEmpty(boolean empty);
+		
+		void setLabel(String label);
+		
+		void setOwner(String username);
 	}
 	
 	public interface Model {
@@ -103,10 +106,12 @@ public class DashboardListPortletPresenter {
 			
 			@Override
 			public void onSuccess(List<DashboardItemDTO> result) {
-				updateShoppingItems(result);
+				model.getItems().clear();
+				model.getItems().addAll(result);
 				display.getSaveButton().setEnabled(false);
 				display.getResetButton().setEnabled(false);
 				display.toggleLoading(false);
+				updateShoppingItems();
 			}
 
 			@Override
@@ -116,15 +121,13 @@ public class DashboardListPortletPresenter {
 		});
 	}
 
-	private void updateShoppingItems(List<DashboardItemDTO> result) {
-		model.getItems().clear();
-		model.getItems().addAll(result);
-
+	private void updateShoppingItems() {
 		display.clear();
+		display.setLabel(model.getName());
 		display.addHeader();
 		
 		int row = 1;
-		for (final DashboardItemDTO dto : result) {
+		for (final DashboardItemDTO dto : model.getItems()) {
 			addAndBindRow(row, dto);
 			row++;
 		}
@@ -189,9 +192,11 @@ public class DashboardListPortletPresenter {
 				
 				@Override
 				public void onSuccess(List<DashboardItemDTO> result) {
-					updateShoppingItems(result);
+					model.getItems().clear();
+					model.getItems().addAll(result);
 					display.getSaveButton().setEnabled(false);
 					display.getResetButton().setEnabled(false);
+					updateShoppingItems();
 				}
 
 				@Override

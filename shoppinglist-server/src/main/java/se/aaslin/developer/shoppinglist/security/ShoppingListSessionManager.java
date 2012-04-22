@@ -23,7 +23,7 @@ public class ShoppingListSessionManager {
 	public boolean validateUser(String username, String pass) {
 		User user = userDAO.findByUsername(username);
 		if (user != null) {
-			return user.getPassword().equals(pass);
+			return user.getUsername().equals(username) && user.getPassword().equals(pass);
 		}
 
 		return false;
