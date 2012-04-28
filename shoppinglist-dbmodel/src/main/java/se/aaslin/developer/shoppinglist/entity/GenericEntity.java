@@ -1,7 +1,6 @@
 package se.aaslin.developer.shoppinglist.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
 
@@ -15,7 +14,5 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class GenericEntity<PK, E> implements Serializable{
 
-	private static final long serialVersionUID = -1534704826424623691L;
-		
-	
+	private static final long serialVersionUID = -1534704826424623691L;	
 }

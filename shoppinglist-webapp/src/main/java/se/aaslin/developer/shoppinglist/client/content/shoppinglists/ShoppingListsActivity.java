@@ -12,11 +12,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ShoppingListsActivity extends AbstractActivity {
-	
-	private ShoppingListsPlace place;
 
 	public ShoppingListsActivity(ShoppingListsPlace place) {
-		this.place = place;
 	}
 
 	@Override

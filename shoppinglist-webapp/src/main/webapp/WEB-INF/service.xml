@@ -14,4 +14,8 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 	
+	<context:component-scan base-package="se.aaslin.developer.shoppinglist.server">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+	
 </beans>

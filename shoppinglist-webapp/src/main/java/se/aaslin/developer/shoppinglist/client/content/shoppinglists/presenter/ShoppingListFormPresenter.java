@@ -12,7 +12,6 @@ import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingLis
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.ShoppingListUpdateEvent;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.presenter.ShoppingListFormPresenter.Model.Member;
 import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 
 import com.google.gwt.event.dom.client.ChangeEvent;

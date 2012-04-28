@@ -28,7 +28,7 @@ public class ShoppingList implements EntryPoint {
 	
 	private static final String HEADER_ID = "gwt_topPlaceHolder";
 	private static final String CONTENT_ID = "gwt_contentPlaceHolder";
-	private static final String FOOTER_ID = "gwt_footerPlaceHolder";
+//	private static final String FOOTER_ID = "gwt_footerPlaceHolder";
 	
 	private HTMLPanel outerPanel;
 	

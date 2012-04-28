@@ -17,7 +17,5 @@ public abstract class SpringRemoteServiceServlet extends RemoteServiceServlet {
 		context.getAutowireCapableBeanFactory().autowireBean(this);
 		
 		super.init();
-	}
-	
-	
+	}	
 }

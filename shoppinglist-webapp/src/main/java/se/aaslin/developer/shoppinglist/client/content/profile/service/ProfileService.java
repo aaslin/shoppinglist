@@ -5,5 +5,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("profile")
 public interface ProfileService extends RemoteService {
-
+	
+	void changePassword(String newPassword);
 }

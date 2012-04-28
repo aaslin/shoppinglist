@@ -128,7 +128,7 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="current_page_item">
+				<li>
 					<g:Hyperlink ui:field="home" text="Home" targetHistoryToken="DashboardPlace:"/>
 				</li>
 				<li>

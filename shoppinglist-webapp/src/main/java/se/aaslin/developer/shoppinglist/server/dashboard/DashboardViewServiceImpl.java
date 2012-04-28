@@ -1,36 +1,49 @@
-package se.aaslin.developer.shoppinglist.service.dashboard;
+package se.aaslin.developer.shoppinglist.server.dashboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import se.aaslin.developer.shoppinglist.annotation.Url;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardService;
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
-import se.aaslin.developer.shoppinglist.service.DashboardViewService;
+import se.aaslin.developer.shoppinglist.security.CookieUtils;
+import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
 
+@Service
+@Scope("request")
 @Transactional
-public class DashboardViewServiceImpl implements DashboardViewService {
+@Url("dashboard")
+public class DashboardViewServiceImpl implements DashboardService {
 	
 	@Autowired ShoppingListService shoppingListService;
 	@Autowired ShoppingItemService shoppingItemService;
+	@Autowired ShoppingListSessionManager sessionManager;
+	@Autowired(required=true) HttpServletRequest request;
 	
 	@Override
-	public List<DashboardListPortletDTO> getAllListPortlets(String username) {
-		List<ShoppingList> lists = shoppingListService.getAllShoppingListsForUser(username);
+	public List<DashboardListPortletDTO> getAllListPortlets() {
+		List<ShoppingList> lists = shoppingListService.getAllShoppingListsForUser(getCurrentUsername());
 		return createDashboardListPortletDTOs(lists);
 	}
 
 	@Override
-	public List<DashboardItemDTO> getAllShoppingListItems(int shoppingListId, String username) {
+	public List<DashboardItemDTO> getShoppingItems(int shoppingListId) {
 		try {
-			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, username);
+			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, getCurrentUsername());
 			return createDashboardItemDTOs(list.getItems());
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
@@ -39,18 +52,18 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 	}
 	
 	@Override
-	public List<DashboardItemDTO> saveShoppingItems(int shoppingListId, List<DashboardItemDTO> dtos, String username) {
+	public List<DashboardItemDTO> saveShoppingItems(int shoppingListId, List<DashboardItemDTO> dtos) {
 		try {
 			for (DashboardItemDTO dto : dtos) {
 				ShoppingItem item = extractShoppingItem(dto);
 				if (dto.isFromDB() && dto.getId() != 0) {
-					shoppingItemService.update(item, username);
+					shoppingItemService.update(item, getCurrentUsername());
 				} else {
-					shoppingItemService.create(shoppingListId, item,username);
+					shoppingItemService.create(shoppingListId, item,getCurrentUsername());
 				}
 			}
 			
-			return getAllShoppingListItems(shoppingListId, username);
+			return getShoppingItems(shoppingListId);
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
 			return null;
@@ -58,11 +71,11 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 	}
 
 	@Override
-	public List<DashboardItemDTO> removeShoppingItem(DashboardItemDTO dto, String username) {
+	public List<DashboardItemDTO> removeShoppingItem(DashboardItemDTO dto) {
 		try {
 			ShoppingItem item = extractShoppingItem(dto);
-			shoppingItemService.remove(item, username);
-			return getAllShoppingListItems(dto.getShoppingListId(), username);
+			shoppingItemService.remove(item, getCurrentUsername());
+			return getShoppingItems(dto.getShoppingListId());
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
 			return null;
@@ -118,5 +131,15 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 		dto.setShoppingListId(list.getID());
 		
 		return dto;
+	}
+	
+	private String getCurrentUsername() {
+		String cookie = CookieUtils.getAuthCookie(request);
+		if (cookie == null) {
+			return null;
+		}
+		String username = sessionManager.getSessionUser(UUID.fromString(cookie));
+		
+		return username;
 	}
 }

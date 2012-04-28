@@ -13,10 +13,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class DashboardActivity extends AbstractActivity {
 	
-	private String token;
-	
 	public DashboardActivity(DashboardPlace place) {
-		this.token = place.getToken();
 	}
 
 	@Override

@@ -30,7 +30,7 @@
 	</div>
 
 	<script type="text/javascript" language="JavaScript">
-		document.forms['loginForm'].elements['j_username'].focus();
+		document.forms['loginForm'].elements['username'].focus();
 	</script>
 
 </body>
