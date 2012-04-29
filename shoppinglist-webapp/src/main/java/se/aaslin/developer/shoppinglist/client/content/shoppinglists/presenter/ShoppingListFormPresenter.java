@@ -108,6 +108,8 @@ public class ShoppingListFormPresenter {
 		
 		List<String> getAllUsers();
 		
+		List<String> getAllAvailableUsers();
+		
 		List<Member> getAllMembers();
 	}
 	
@@ -132,6 +134,7 @@ public class ShoppingListFormPresenter {
 			public void onSuccess(List<String> result) {
 				model.getAllUsers().clear();
 				model.getAllUsers().addAll(result);
+				resetAvailableUsers();
 			}
 			
 			@Override
@@ -268,14 +271,14 @@ public class ShoppingListFormPresenter {
 		member.userName = model.getShoppingListDTO().getOwnerUserName();
 		member.type = Model.Member.Type.OWNER;
 		model.getAllMembers().add(member);
-		model.getAllUsers().remove(member.userName);
+		model.getAllAvailableUsers().remove(member.userName);
 
 		for (String username : model.getShoppingListDTO().getMembers()) {
 			member = new Model.Member();
 			member.userName = username;
 			member.type = Model.Member.Type.MEBMER;
 			model.getAllMembers().add(member);
-			model.getAllUsers().remove(member.userName);
+			model.getAllAvailableUsers().remove(member.userName);
 		}
 		
 		if (model.getAllMembers().size() == 0) {
@@ -295,12 +298,12 @@ public class ShoppingListFormPresenter {
 	
 	private void addAndBindMemberRow(int row, final Model.Member member, boolean isNewRow) {
 		if (isNewRow) {
-			final ListBox listbox = display.addMembersListBox(model.getAllUsers(), row);
+			final ListBox listbox = display.addMembersListBox(model.getAllAvailableUsers(), row);
 			listbox.addChangeHandler(new ChangeHandler() {
 				
 				@Override
 				public void onChange(ChangeEvent event) {
-					member.userName = model.getAllUsers().get(listbox.getSelectedIndex());
+					member.userName = model.getAllAvailableUsers().get(listbox.getSelectedIndex());
 				}
 			});
 		} else {
@@ -329,7 +332,7 @@ public class ShoppingListFormPresenter {
 		removeButton.setValue(false);
 		int index = model.getAllMembers().indexOf(member);
 		model.getAllMembers().remove(index);
-		model.getAllUsers().add(member.userName);
+		model.getAllAvailableUsers().add(member.userName);
 		display.getAddMemberButton().setEnabled(true);
 		display.removeMemberRow(index + 1); 
 		
@@ -357,19 +360,24 @@ public class ShoppingListFormPresenter {
 		
 		Model.Member prevMember = model.getAllMembers().get(model.getAllMembers().size() -1);
 		if (prevMember.isNew) {
-			model.getAllUsers().remove(prevMember.userName);
-			if (model.getAllUsers().size() == 1) {
+			model.getAllAvailableUsers().remove(prevMember.userName);
+			if (model.getAllAvailableUsers().size() == 1) {
 				display.getAddMemberButton().setEnabled(false);
 			}
 			addAndBindMemberRow(model.getAllMembers().size() + 1, prevMember, false);
 		}
 		
 		Model.Member member = new Model.Member();
-		member.userName = model.getAllUsers().get(0);
+		member.userName = model.getAllAvailableUsers().get(0);
 		member.type = Model.Member.Type.MEBMER;
 		member.isNew = true;
 		model.getAllMembers().add(member);
 		
 		addAndBindMemberRow(model.getAllMembers().size() + 1, member, true);
+	}
+	
+	private void resetAvailableUsers() {
+		model.getAllAvailableUsers().clear();
+		model.getAllAvailableUsers().addAll(model.getAllAvailableUsers());
 	}
 }

@@ -21,7 +21,8 @@ public class ShoppingListsPresenter {
 	
 	public class ShoppingListFormModel implements ShoppingListFormPresenter.Model {
 		private ShoppingListDTO shoppingListDTO;
-		private List<String> users = new ArrayList<String>();
+		private final List<String> users = new ArrayList<String>();
+		private final List<String> availableUsers = new ArrayList<String>();
 		private List<Member> members = new ArrayList<ShoppingListFormPresenter.Model.Member>();		
 
 		@Override
@@ -42,6 +43,11 @@ public class ShoppingListsPresenter {
 		@Override
 		public void setShoppingListDTO(ShoppingListDTO shoppingListDTO) {
 			this.shoppingListDTO = shoppingListDTO;
+		}
+
+		@Override
+		public List<String> getAllAvailableUsers() {
+			return this.availableUsers;
 		}
 	}
 	

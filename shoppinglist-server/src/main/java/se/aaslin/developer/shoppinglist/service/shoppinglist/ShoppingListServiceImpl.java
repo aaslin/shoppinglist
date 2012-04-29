@@ -51,6 +51,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 		list.setMembers(userDAO.findUsers(members));
 		
 		TimeStamp timeStamp = new TimeStamp();
+		list.setTimeStamp(timeStamp);
 		Date date = Calendar.getInstance().getTime();
 		timeStamp.setCreated(date);
 		timeStamp.setModified(date);
@@ -73,8 +74,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	
 	@Override
 	public void remove(ShoppingList list, String currentSessionsUsername) throws NotAuthorizedException {
-		list = validateAccessOwnerOnly(list, currentSessionsUsername);
 		ShoppingList managedList = shoppingListDAO.findById(list.getID());
+		managedList = validateAccessOwnerOnly(managedList, currentSessionsUsername);
+		
 		if(managedList != null){
 			List<ShoppingItem> items = managedList.getItems();
 			for (ShoppingItem item : items) {
