@@ -1,7 +1,7 @@
 package se.aaslin.developer.shoppinglist.client.content.profile.presenter;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
-import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewServiceAsync;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -49,9 +49,9 @@ public class ProfilePasswordPresenter {
 	
 	View display;
 	Model model;
-	ProfileServiceAsync srv;
+	ProfileViewServiceAsync srv;
 	
-	public ProfilePasswordPresenter(View display, Model model, ProfileServiceAsync srv) {
+	public ProfilePasswordPresenter(View display, Model model, ProfileViewServiceAsync srv) {
 		this.display = display;
 		this.model = model;
 		this.srv = srv;

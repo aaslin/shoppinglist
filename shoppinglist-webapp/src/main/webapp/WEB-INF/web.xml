@@ -24,17 +24,7 @@
 	</context-param>
 	
 	<!-- Filters -->
-	
-	<filter>
-		<filter-name>shoppingListSecurityFilter</filter-name>
-		<filter-class>se.aaslin.developer.shoppinglist.security.ShoppingListSecurityFilter</filter-class>
-	</filter>
-	
-	<filter-mapping>
-	    <filter-name>shoppingListSecurityFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
-  	</filter-mapping>
-	
+
 	<filter>
 	    <filter-name>shoppingListGwtDispatcher</filter-name>
 	    <filter-class>se.aaslin.developer.shoppinglist.server.ShoppingListRPCDispatcher</filter-class>
@@ -45,6 +35,16 @@
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<filter>
+		<filter-name>shoppingListSecurityFilter</filter-name>
+		<filter-class>se.aaslin.developer.shoppinglist.security.ShoppingListSecurityFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	    <filter-name>shoppingListSecurityFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+  	</filter-mapping>
+		
 	<!-- Listeners -->
 
 	<listener>
@@ -63,48 +63,9 @@
 		<servlet-class>se.aaslin.developer.shoppinglist.security.ShoppingListLoginServlet</servlet-class>
 	</servlet>
 	
-	<!-- Servlets GWT -->
-	
-	<servlet>
-		<servlet-name>loginService</servlet-name>
-		<servlet-class>se.aaslin.developer.shoppinglist.server.login.LoginServiceImpl</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>shoppingListService</servlet-name>
-		<servlet-class>se.aaslin.developer.shoppinglist.server.shoppinglists.ShoppingListsServiceImpl</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>dashboardService</servlet-name>
-		<servlet-class>se.aaslin.developer.shoppinglist.server.dashboard.DashboardServiceImpl</servlet-class>
-	</servlet>
-	
 	<!-- Servlet Mappings -->
 	<servlet-mapping>
 		<servlet-name>Login Check</servlet-name>
 		<url-pattern>/security_check</url-pattern>
 	</servlet-mapping>
-	
-	<!-- Servlet Mappings GWT -->
-	
-	<servlet-mapping>
-		<servlet-name>loginService</servlet-name>
-		<url-pattern>/gwt.login/login</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>loginService</servlet-name>
-		<url-pattern>/gwt.shoppinglist/login</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>shoppingListService</servlet-name>
-		<url-pattern>/gwt.shoppinglist/shoppinglists</url-pattern>
-	</servlet-mapping>
-	
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>dashboardService</servlet-name> -->
-<!-- 		<url-pattern>/gwt.shoppinglist/dashboard</url-pattern> -->
-<!-- 	</servlet-mapping> -->
 </web-app>

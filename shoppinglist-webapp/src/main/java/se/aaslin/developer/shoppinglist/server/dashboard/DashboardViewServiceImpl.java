@@ -2,49 +2,42 @@ package se.aaslin.developer.shoppinglist.server.dashboard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import se.aaslin.developer.shoppinglist.annotation.Url;
-import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardService;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardViewService;
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
-import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
-import se.aaslin.developer.shoppinglist.security.CookieUtils;
-import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
+import se.aaslin.developer.shoppinglist.security.UserSession;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 @Service
 @Scope("request")
 @Transactional
-@Url("dashboard")
-public class DashboardViewServiceImpl implements DashboardService {
+public class DashboardViewServiceImpl implements DashboardViewService {
 	
 	@Autowired ShoppingListService shoppingListService;
 	@Autowired ShoppingItemService shoppingItemService;
-	@Autowired ShoppingListSessionManager sessionManager;
-	@Autowired(required=true) HttpServletRequest request;
+	@Autowired UserSession userSession;
 	
 	@Override
 	public List<DashboardListPortletDTO> getAllListPortlets() {
-		List<ShoppingList> lists = shoppingListService.getAllShoppingListsForUser(getCurrentUsername());
+		List<ShoppingList> lists = shoppingListService.getAllShoppingListsForUser(userSession.getCurrentSessionsUsername());
 		return createDashboardListPortletDTOs(lists);
 	}
 
 	@Override
 	public List<DashboardItemDTO> getShoppingItems(int shoppingListId) {
-		try {
-			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, getCurrentUsername());
-			return createDashboardItemDTOs(list.getItems());
+		try {	
+			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, userSession.getCurrentSessionsUsername());
+			return createDashboardItemDTOs(shoppingListId, list.getItems());
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
 			return null;
@@ -57,9 +50,9 @@ public class DashboardViewServiceImpl implements DashboardService {
 			for (DashboardItemDTO dto : dtos) {
 				ShoppingItem item = extractShoppingItem(dto);
 				if (dto.isFromDB() && dto.getId() != 0) {
-					shoppingItemService.update(item, getCurrentUsername());
+					shoppingItemService.update(item, userSession.getCurrentSessionsUsername());
 				} else {
-					shoppingItemService.create(shoppingListId, item,getCurrentUsername());
+					shoppingItemService.create(shoppingListId, item, userSession.getCurrentSessionsUsername());
 				}
 			}
 			
@@ -74,7 +67,7 @@ public class DashboardViewServiceImpl implements DashboardService {
 	public List<DashboardItemDTO> removeShoppingItem(DashboardItemDTO dto) {
 		try {
 			ShoppingItem item = extractShoppingItem(dto);
-			shoppingItemService.remove(item, getCurrentUsername());
+			shoppingItemService.remove(item, userSession.getCurrentSessionsUsername());
 			return getShoppingItems(dto.getShoppingListId());
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
@@ -94,22 +87,22 @@ public class DashboardViewServiceImpl implements DashboardService {
 		return item;
 	}
 
-	private List<DashboardItemDTO> createDashboardItemDTOs(List<ShoppingItem> items) {
+	private List<DashboardItemDTO> createDashboardItemDTOs(int shoppingListId, List<ShoppingItem> items) {
 		List<DashboardItemDTO> dtos = new ArrayList<DashboardItemDTO>();
 		for (ShoppingItem item : items) {
-			dtos.add(createDashboardItemDTO(item));
+			dtos.add(createDashboardItemDTO(shoppingListId, item));
 		}
 		
 		return dtos;
 	}
 	
-	private DashboardItemDTO createDashboardItemDTO(ShoppingItem item) {
+	private DashboardItemDTO createDashboardItemDTO(int shoppingListId,ShoppingItem item) {
 		DashboardItemDTO dto = new DashboardItemDTO();
 		dto.setName(item.getName());
 		dto.setComment(item.getComment());
 		dto.setAmount(item.getAmount());
 		dto.setId(item.getId());
-		dto.setShoppingListId(item.getShoppingList().getID());
+		dto.setShoppingListId(shoppingListId);
 		dto.setFromDB(true);
 		
 		return dto;
@@ -131,15 +124,5 @@ public class DashboardViewServiceImpl implements DashboardService {
 		dto.setShoppingListId(list.getID());
 		
 		return dto;
-	}
-	
-	private String getCurrentUsername() {
-		String cookie = CookieUtils.getAuthCookie(request);
-		if (cookie == null) {
-			return null;
-		}
-		String username = sessionManager.getSessionUser(UUID.fromString(cookie));
-		
-		return username;
 	}
 }

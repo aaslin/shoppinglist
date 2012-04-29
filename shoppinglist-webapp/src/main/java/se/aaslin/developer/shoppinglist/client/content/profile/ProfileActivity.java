@@ -1,8 +1,8 @@
 package se.aaslin.developer.shoppinglist.client.content.profile;
 
 import se.aaslin.developer.shoppinglist.client.content.profile.presenter.ProfilePresenter;
-import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileService;
-import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewService;
+import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.content.profile.view.ProfileView;
 import se.aaslin.developer.shoppinglist.client.place.ProfilePlace;
 
@@ -22,7 +22,7 @@ public class ProfileActivity extends AbstractActivity {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		ProfileView view = new ProfileView();
-		ProfileServiceAsync srv = GWT.create(ProfileService.class);
+		ProfileViewServiceAsync srv = GWT.create(ProfileViewService.class);
 		new ProfilePresenter(view, eventBus, srv, place);
 		
 		panel.setWidget(view.getViewAsWidget());

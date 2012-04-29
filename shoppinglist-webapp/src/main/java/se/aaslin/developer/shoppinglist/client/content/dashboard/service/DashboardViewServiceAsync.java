@@ -7,7 +7,7 @@ import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface DashboardServiceAsync {
+public interface DashboardViewServiceAsync {
 
 	void getAllListPortlets(AsyncCallback<List<DashboardListPortletDTO>> callback);
 

@@ -7,11 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import se.aaslin.developer.shoppinglist.dao.GenericDAO;
 
-@Transactional
 public abstract class GenericDAOImpl<PK, E> implements GenericDAO<PK, E> {
 
 	protected abstract EntityManager getEntityManager();

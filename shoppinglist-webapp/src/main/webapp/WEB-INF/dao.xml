@@ -13,14 +13,6 @@
 	<context:component-scan base-package="se.aaslin.developer.shoppinglist.dao">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
-	
-	
-	<!-- DAO Setup -->
-	
-<!-- 	<bean id="userDAO" class="se.aaslin.developer.shoppinglist.dao.impl.UserDAOImpl" name="UserDAO" /> -->
-	
-<!-- 	<bean id="shoppingListDAO" class="se.aaslin.developer.shoppinglist.dao.impl.ShoppingListDAOImpl" /> -->
-
 
 	<!-- JPA Setup -->
 
@@ -31,12 +23,9 @@
 		<property name="password" value="abc123" />
 	</bean>
 	
-	<bean id="myEntityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<bean id="myEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="myDataSource" />
 	</bean>
-
-<!-- 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> -->
 
 	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="myEntityManagerFactory" />

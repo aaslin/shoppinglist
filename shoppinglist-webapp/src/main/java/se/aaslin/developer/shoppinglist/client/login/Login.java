@@ -1,8 +1,8 @@
 package se.aaslin.developer.shoppinglist.client.login;
 
 import se.aaslin.developer.shoppinglist.client.login.presenter.LoginPresenter;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginService;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewService;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.login.view.LoginView;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -28,7 +28,7 @@ public class Login implements EntryPoint {
 		outerPanel = uiBinder.createAndBindUi(this);
 		rootPanel.add(outerPanel);
 		
-		LoginServiceAsync srv = GWT.create(LoginService.class);
+		LoginViewServiceAsync srv = GWT.create(LoginViewService.class);
 		new LoginPresenter(new LoginView(), srv).initContainer(outerPanel);
 	}
 }

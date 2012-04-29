@@ -2,8 +2,8 @@ package se.aaslin.developer.shoppinglist.client.header;
 
 import se.aaslin.developer.shoppinglist.client.header.presenter.HeaderPresenter;
 import se.aaslin.developer.shoppinglist.client.header.view.HeaderView;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginService;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewService;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -22,7 +22,7 @@ public class HeaderActivity extends AbstractActivity {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		HeaderView view = new HeaderView();
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
+		LoginViewServiceAsync loginService = GWT.create(LoginViewService.class);
 		new HeaderPresenter(view, loginService, place);
 		
 		panel.setWidget(view.getViewAsWidget());

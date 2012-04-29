@@ -1,7 +1,7 @@
 package se.aaslin.developer.shoppinglist.client.header.presenter;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.place.DashboardPlace;
 import se.aaslin.developer.shoppinglist.client.place.ProfilePlace;
 import se.aaslin.developer.shoppinglist.client.place.ShoppingListsPlace;
@@ -28,10 +28,10 @@ public class HeaderPresenter {
 	}
 
 	private ViewDisplay display;
-	private LoginServiceAsync loginService;
+	private LoginViewServiceAsync loginService;
 	private Place place;
 	
-	public HeaderPresenter(ViewDisplay display, LoginServiceAsync loginService, Place place) {
+	public HeaderPresenter(ViewDisplay display, LoginViewServiceAsync loginService, Place place) {
 		this.display = display;
 		this.loginService = loginService;
 		this.place = place;

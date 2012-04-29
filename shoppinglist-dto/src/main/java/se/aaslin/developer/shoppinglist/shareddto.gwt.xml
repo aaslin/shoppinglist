@@ -5,4 +5,5 @@
 	<inherits name="com.google.gwt.resources.Resources" />
 
 	<source path='shared/dto' />
+	<source path='shared/exception' />
 </module>

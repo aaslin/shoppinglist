@@ -1,7 +1,7 @@
 package se.aaslin.developer.shoppinglist.service;
 
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
-import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 public interface ShoppingItemService {
 	

@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("dashboard")
-public interface DashboardService extends RemoteService {
+public interface DashboardViewService extends RemoteService {
 	
 	List<DashboardListPortletDTO> getAllListPortlets();
 	

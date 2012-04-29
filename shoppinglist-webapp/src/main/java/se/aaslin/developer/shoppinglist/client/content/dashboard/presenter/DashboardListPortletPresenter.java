@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
-import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardViewServiceAsync;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -62,9 +62,9 @@ public class DashboardListPortletPresenter {
 
 	View display;
 	Model model;
-	DashboardServiceAsync srv;
+	DashboardViewServiceAsync srv;
 	
-	public DashboardListPortletPresenter(View display, Model model, DashboardServiceAsync srv) {
+	public DashboardListPortletPresenter(View display, Model model, DashboardViewServiceAsync srv) {
 		this.display = display;
 		this.model = model;
 		this.srv = srv;

@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingItemDAO;
 import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
@@ -13,11 +12,10 @@ import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.entity.User;
-import se.aaslin.developer.shoppinglist.exception.NotAuthorizedException;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 @Service
-@Transactional
 public class ShoppingItemServiceImpl implements ShoppingItemService{
 
 	@Autowired ShoppingListDAO shoppingListDAO;
@@ -25,7 +23,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 
 	@Override
 	public void remove(ShoppingItem item, String username) throws NotAuthorizedException {
-		item = validateList(shoppingItemDAO.findById(item.getId()), username);
+		item = validateAccess(shoppingItemDAO.findById(item.getId()), username);
 		
 		item.getShoppingList().getItems().remove(item);
 		shoppingItemDAO.delete(item);
@@ -34,16 +32,15 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 	@Override
 	public void update(ShoppingItem item, String username) throws NotAuthorizedException {
 		ShoppingItem managedItem = shoppingItemDAO.findById(item.getId());
-		managedItem = validateList(managedItem, username);
+		managedItem = validateAccess(managedItem, username);
 		
 		managedItem.setName(item.getName());
 		managedItem.setAmount(item.getAmount());
 		managedItem.setComment(item.getComment());
 
 		Date date = Calendar.getInstance().getTime();
-		item.getTimeStamp().setModified(date);
-
-		shoppingItemDAO.update(item);
+		TimeStamp timeStamp = managedItem.getTimeStamp();
+		timeStamp.setModified(date);
 	}
 
 	@Override
@@ -53,7 +50,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 			return;
 		}
 		item.setShoppingList(list);
-		item = validateList(item, username);
+		list.getItems().add(item);
+		item = validateAccess(item, username);
 		
 		Date date = Calendar.getInstance().getTime();
 		TimeStamp timeStamp = new TimeStamp();
@@ -64,7 +62,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 		shoppingItemDAO.create(item);
 	}
 	
-	private ShoppingItem validateList(ShoppingItem item, String username) throws NotAuthorizedException {
+	private ShoppingItem validateAccess(ShoppingItem item, String username) throws NotAuthorizedException {
 		if (username.equals(item.getShoppingList().getOwner().getUsername())){
 			return item;
 		}

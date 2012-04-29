@@ -2,7 +2,7 @@ package se.aaslin.developer.shoppinglist.client.content.profile.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ProfileServiceAsync {
+public interface ProfileViewServiceAsync {
 
 	void changePassword(String newPassword, AsyncCallback<Void> callback);
 }

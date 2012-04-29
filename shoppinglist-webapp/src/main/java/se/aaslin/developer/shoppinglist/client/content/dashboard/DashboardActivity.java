@@ -1,8 +1,8 @@
 package se.aaslin.developer.shoppinglist.client.content.dashboard;
 
 import se.aaslin.developer.shoppinglist.client.content.dashboard.presenter.DashboardPresenter;
-import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardService;
-import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardViewService;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.content.dashboard.view.DashboardView;
 import se.aaslin.developer.shoppinglist.client.place.DashboardPlace;
 
@@ -19,7 +19,7 @@ public class DashboardActivity extends AbstractActivity {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		DashboardView view = new DashboardView();
-		DashboardServiceAsync srv = GWT.create(DashboardService.class);
+		DashboardViewServiceAsync srv = GWT.create(DashboardViewService.class);
 		new DashboardPresenter(view, srv);
 	
 		panel.setWidget(view.getViewAsWidget());

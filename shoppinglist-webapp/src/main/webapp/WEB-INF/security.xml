@@ -12,4 +12,5 @@
 	
 	<bean name="shoppingListSessionManager" class="se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager"/>
 	
+	<bean name="userSession" class="se.aaslin.developer.shoppinglist.security.UserSession" />
 </beans>

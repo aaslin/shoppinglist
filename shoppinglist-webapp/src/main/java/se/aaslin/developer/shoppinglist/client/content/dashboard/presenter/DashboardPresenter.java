@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
-import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.dashboard.service.DashboardViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.content.dashboard.view.DashboardListPortletView;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
@@ -47,9 +47,9 @@ public class DashboardPresenter {
 	}
 	
 	View display;
-	DashboardServiceAsync srv;
+	DashboardViewServiceAsync srv;
 
-	public DashboardPresenter(View display, DashboardServiceAsync srv) {
+	public DashboardPresenter(View display, DashboardViewServiceAsync srv) {
 		this.display = display;
 		this.srv = srv;
 		fetchPortlets();

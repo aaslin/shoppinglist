@@ -2,7 +2,7 @@ package se.aaslin.developer.shoppinglist.client.content.profile.presenter;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.content.profile.place.ProfilePasswordPlace;
-import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileServiceAsync;
+import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewServiceAsync;
 import se.aaslin.developer.shoppinglist.client.content.profile.view.ProfilePasswordView;
 import se.aaslin.developer.shoppinglist.client.content.profile.view.ProfileSubMenuView;
 import se.aaslin.developer.shoppinglist.client.content.profile.view.ProfileUserAdminView;
@@ -47,10 +47,10 @@ public class ProfilePresenter {
 	
 	View display;
 	EventBus eventBus;
-	ProfileServiceAsync srv;
+	ProfileViewServiceAsync srv;
 	ProfilePlace place;
 	
-	public ProfilePresenter(View display, EventBus eventBus, ProfileServiceAsync srv, ProfilePlace place) {
+	public ProfilePresenter(View display, EventBus eventBus, ProfileViewServiceAsync srv, ProfilePlace place) {
 		this.display = display;
 		this.eventBus = eventBus;
 		this.srv = srv;

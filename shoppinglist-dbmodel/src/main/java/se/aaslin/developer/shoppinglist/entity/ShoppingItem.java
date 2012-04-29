@@ -33,7 +33,7 @@ public class ShoppingItem {
 	@JoinColumn(name="`shopping_listID`", nullable = false)
 	private ShoppingList shoppingList;
 	
-	@OneToOne(cascade = {CascadeType.REMOVE})
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "`time_stampID`", nullable = false)
 	private TimeStamp timeStamp;
 

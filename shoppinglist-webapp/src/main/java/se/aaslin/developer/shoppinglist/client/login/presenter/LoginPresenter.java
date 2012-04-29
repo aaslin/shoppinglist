@@ -2,7 +2,7 @@ package se.aaslin.developer.shoppinglist.client.login.presenter;
 
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.common.Presenter;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,10 +26,10 @@ public class LoginPresenter implements Presenter{
 		Label getInfo();
 	}
 	
-	private LoginServiceAsync srv;
+	private LoginViewServiceAsync srv;
 	private ViewDisplay display;
 
-	public LoginPresenter(ViewDisplay display, LoginServiceAsync srv) {
+	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv) {
 		this.srv = srv;
 		this.display = display;
 		bind();
