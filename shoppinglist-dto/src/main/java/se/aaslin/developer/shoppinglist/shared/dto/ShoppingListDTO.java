@@ -4,39 +4,17 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "shoppinglist")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ShoppingListDTO implements Serializable {
 
 	private static final long serialVersionUID = -3112563693526623930L;
 
-	@XmlElement(name = "id", required = true)
 	private int ID;
-	
-	@XmlElement(name = "ownername", required = true)
 	private String ownerUserName;
-	
-	@XmlElement(name = "ownerid", required = true)
 	private int ownerID;
-	
-	@XmlElement(name = "name", required = true)
 	private String name;
-	
-	@XmlElement(name = "modified", required = false)
 	private Date modified;
-	
-	@XmlElementWrapper(name = "members", required = false)
-	@XmlElement(name = "member", required = false)
 	private List<String> members;
-	
 	private boolean isChanged = false;
-
 	private boolean isFromDB = false;
 
 	public ShoppingListDTO() {

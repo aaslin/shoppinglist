@@ -1,4 +1,4 @@
-package se.aaslin.developer.shoppinglist.event.login;
+package se.aaslin.developer.shoppinglist.ui.login;
 
 import se.aaslin.developer.roboeventbus.event.RoboEvent;
 

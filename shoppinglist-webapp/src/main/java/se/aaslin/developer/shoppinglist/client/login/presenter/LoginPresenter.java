@@ -1,5 +1,7 @@
 package se.aaslin.developer.shoppinglist.client.login.presenter;
 
+import java.util.UUID;
+
 import se.aaslin.developer.shoppinglist.client.common.Display;
 import se.aaslin.developer.shoppinglist.client.common.Presenter;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
@@ -48,11 +50,11 @@ public class LoginPresenter implements Presenter{
 				String uname = display.getUsername().getText();
 				String pass = display.getPassword().getText();
 				
-				srv.login(uname, pass, new AsyncCallback<Boolean>() {
+				srv.login(uname, pass, new AsyncCallback<String>() {
 					
 					@Override
-					public void onSuccess(Boolean result) {
-						if(result){
+					public void onSuccess(String result) {
+						if(result != null){
 							String url = GWT.getHostPageBaseURL() + "index.jsp";
 							Window.Location.assign(url);
 						}else{

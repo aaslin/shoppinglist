@@ -2,29 +2,25 @@ package se.aaslin.developer.shoppinglist.app;
 
 import java.util.List;
 
-import roboguice.config.AbstractAndroidModule;
-import se.aaslin.developer.robomvp.app.RoboMVPApplication;
+import roboguice.application.RoboApplication;
+import se.aaslin.developer.shoppinglist.app.mvp.ActivityProvider;
+import android.app.Activity;
 
+import com.google.inject.Binder;
 import com.google.inject.Module;
 
-public class ShoppingListApplication extends RoboMVPApplication {
+public class ShoppingListApplication extends RoboApplication {
 
 	public static String URL = "http://192.168.0.12:8080/shoppinglist/gwt.shoppinglist/";
-
+	public static String LOGIN_URL = "http://192.168.0.12:8080/shoppinglist/gwt.login/";
+	
 	@Override
 	protected void addApplicationModules(List<Module> modules) {
 
-		// for(Module module : mockModules){
-		// modules.add(module);
-		// }
-		//
-		modules.add(new AbstractAndroidModule() {
+		modules.add(new Module() {
 			@Override
-			protected void configure() {
-//				bind(LoginServiceAsync.class).toInstance(
-//						(LoginServiceAsync) RoboProxy.newProxyInstance(LoginServiceAsync.class, url, getApplicationContext()));
+			public void configure(Binder binder) {
 			}
 		});
-
 	}
 }

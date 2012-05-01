@@ -1,18 +1,15 @@
-package se.aaslin.developer.shoppinglist.client.login.view;
+package se.aaslin.developer.shoppinglist.ui.login.view;
 
 import roboguice.inject.InjectView;
-import se.aaslin.developer.robomvp.annotation.ContentView;
-import se.aaslin.developer.robomvp.view.RoboView;
 import se.aaslin.developer.shoppinglist.R;
-import se.aaslin.developer.shoppinglist.client.info.view.InfoView;
-import se.aaslin.developer.shoppinglist.client.login.presenter.LoginPresenter;
-import android.view.View;
+import se.aaslin.developer.shoppinglist.app.mvp.InjectionUtils;
+import se.aaslin.developer.shoppinglist.ui.login.presenter.LoginPresenter;
+import android.app.Activity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-@ContentView(view = R.layout.login)
-public class LoginView extends RoboView implements LoginPresenter.ViewDisplay{
+public class LoginView implements LoginPresenter.ViewDisplay {
 
 	@InjectView(R.id.username) EditText username;
 	@InjectView(R.id.password) EditText password;
@@ -23,20 +20,24 @@ public class LoginView extends RoboView implements LoginPresenter.ViewDisplay{
 	public EditText getUsername() {
 		return username;
 	}
+	
 	@Override
 	public EditText getPassword() {
 		return password;
 	}
+	
 	@Override
 	public Button getLoginButton() {
 		return loginButton;
 	}
+	
 	@Override
 	public TextView getInfo() {
 		return info;
 	}
+
 	@Override
-	protected void onInitView(View rootView) {
-		addComposite(InfoView.class);
+	public void initView(Activity activity) {
+		InjectionUtils.injectViews(this, activity.getWindow().getDecorView());
 	}
 }

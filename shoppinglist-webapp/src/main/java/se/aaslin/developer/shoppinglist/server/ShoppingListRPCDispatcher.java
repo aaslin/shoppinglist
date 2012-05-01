@@ -48,6 +48,7 @@ import com.google.gwt.user.server.rpc.SerializationPolicyProvider;
 public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyProvider {
 
 	private static final String GWT_PATH = "/gwt.";
+	private static final String GWT_LOGIN = "/gwt.login";
 	private final Map<String, SerializationPolicy> serializationPolicyCache = new HashMap<String, SerializationPolicy>();
 
 	@Autowired ApplicationContext context;
@@ -85,7 +86,7 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		String path = request.getRequestURI().replaceFirst(request.getContextPath(), "");
 		if (path.startsWith(GWT_PATH) && !path.endsWith(".js") && !path.endsWith(".html")) {
 			try {
-				if (isSessionValid(request)) {				
+				if (path.startsWith(GWT_LOGIN) || isSessionValid(request)) {				
 					String url = path.substring(path.lastIndexOf("/") + 1, path.length());
 					Class<?> clazz = managedBeans.get(url);
 					Object bean = context.getBean(clazz);

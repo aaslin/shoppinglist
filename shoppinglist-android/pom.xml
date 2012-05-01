@@ -8,8 +8,8 @@
 	<name>shoppinglist-android</name>
 
 	<modules>
-		<module>shoppinglist-androidapp</module>
-		<module>shoppinglist-androidapp-int</module>
+		<module>shoppinglist-androidapp-rpc</module>
+	    <module>shoppinglist-androidapp</module>
 	</modules>
 
 	<repositories>
