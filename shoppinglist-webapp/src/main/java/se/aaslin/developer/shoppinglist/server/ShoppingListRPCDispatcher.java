@@ -106,7 +106,7 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		try {
 			RPCRequest rpcRequest = RPC.decodeRequest(payload, bean.getClass(), this);
 			if (!isAuthorized) {
-				RPC.encodeResponseForFailure(rpcRequest.getMethod(), new NotAuthorizedException());
+				return RPC.encodeResponseForFailure(null, new NotAuthorizedException());
 			}
 			return RPC.invokeAndEncodeResponse(bean, rpcRequest.getMethod(), rpcRequest.getParameters(), rpcRequest.getSerializationPolicy(), rpcRequest.getFlags());
 		} catch (IncompatibleRemoteServiceException ex) {

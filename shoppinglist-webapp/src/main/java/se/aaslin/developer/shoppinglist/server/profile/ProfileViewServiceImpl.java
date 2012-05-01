@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewService;
 import se.aaslin.developer.shoppinglist.security.UserSession;
 import se.aaslin.developer.shoppinglist.service.UserService;
+import se.aaslin.developer.shoppinglist.shared.exception.NoValidSessionException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 @Service
 @Scope("request")
@@ -20,5 +22,15 @@ public class ProfileViewServiceImpl implements ProfileViewService {
 	@Override
 	public void changePassword(String newPassword) {
 		userService.changePassword(userSession.getCurrentSessionsUsername(), newPassword);
+	}
+
+	@Override
+	public void testAuthException() throws NotAuthorizedException {
+		throw new NotAuthorizedException();
+	}
+
+	@Override
+	public void testSessionException() throws NoValidSessionException {
+		throw new NoValidSessionException();
 	}
 }

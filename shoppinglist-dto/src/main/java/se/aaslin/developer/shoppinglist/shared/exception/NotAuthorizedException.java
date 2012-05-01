@@ -1,9 +1,9 @@
 package se.aaslin.developer.shoppinglist.shared.exception;
 
-public class NotAuthorizedException extends Exception {
+import java.io.Serializable;
 
-	private static final long serialVersionUID = -6820540836951786210L;
-	
+public class NotAuthorizedException extends Exception implements Serializable {
+
 	public NotAuthorizedException() {
 	}
 

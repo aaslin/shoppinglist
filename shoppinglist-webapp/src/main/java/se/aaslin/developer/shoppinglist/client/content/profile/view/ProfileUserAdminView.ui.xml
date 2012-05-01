@@ -3,6 +3,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
 
 	<g:HTMLPanel>
-		UserAdmin
+	    <g:Button ui:field="auth" text="auth"/>
+	    <g:Button ui:field="session" text="session"/>
 	</g:HTMLPanel>
 </ui:UiBinder>
