@@ -33,6 +33,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
 import se.aaslin.developer.shoppinglist.shared.exception.NoValidSessionException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -86,17 +87,13 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		String path = request.getRequestURI().replaceFirst(request.getContextPath(), "");
 		if (path.startsWith(GWT_PATH) && !path.endsWith(".js") && !path.endsWith(".html")) {
 			try {
-				if (path.startsWith(GWT_LOGIN) || isSessionValid(request)) {				
-					String url = path.substring(path.lastIndexOf("/") + 1, path.length());
-					Class<?> clazz = managedBeans.get(url);
-					Object bean = context.getBean(clazz);
-					String payload = RPCServletUtils.readContentAsGwtRpc(request);
-	
-					String responsePayload = processCall(payload, bean);
-					writeResponse(request, response, responsePayload);
-				} else {
-					RPCServletUtils.writeResponseForUnexpectedFailure(servletContext, response, new NoValidSessionException());
-				}
+				String url = path.substring(path.lastIndexOf("/") + 1, path.length());
+				Class<?> clazz = managedBeans.get(url);
+				Object bean = context.getBean(clazz);
+				String payload = RPCServletUtils.readContentAsGwtRpc(request);		
+				boolean isAuthorized = path.startsWith(GWT_LOGIN) || isSessionValid(request);
+				String responsePayload = processCall(isAuthorized, payload, bean);
+				writeResponse(request, response, responsePayload);
 			} catch (Throwable caught) {
 				RPCServletUtils.writeResponseForUnexpectedFailure(servletContext, response, caught);
 			}
@@ -105,9 +102,12 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		}	
 	}
 
-	private String processCall(String payload, Object bean) throws SerializationException {
+	private String processCall(boolean isAuthorized, String payload, Object bean) throws SerializationException {
 		try {
 			RPCRequest rpcRequest = RPC.decodeRequest(payload, bean.getClass(), this);
+			if (!isAuthorized) {
+				RPC.encodeResponseForFailure(rpcRequest.getMethod(), new NotAuthorizedException());
+			}
 			return RPC.invokeAndEncodeResponse(bean, rpcRequest.getMethod(), rpcRequest.getParameters(), rpcRequest.getSerializationPolicy(), rpcRequest.getFlags());
 		} catch (IncompatibleRemoteServiceException ex) {
 			return RPC.encodeResponseForFailure(null, ex);
