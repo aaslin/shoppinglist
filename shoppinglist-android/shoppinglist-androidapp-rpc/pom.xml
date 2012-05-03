@@ -13,7 +13,7 @@
 
 	<packaging>jar</packaging>
 
-	<name>Shopping List Android App RPC</name>
+	<name>Shopping List Android RPC</name>
 	
 	<dependencies>
 	  	<dependency>
@@ -31,5 +31,10 @@
 			<artifactId>gwt-user</artifactId>
 			<version>2.4.0</version>
 		</dependency>
+		 <dependency>
+	        <groupId>se.aaslin.developer</groupId>
+	        <artifactId>shoppinglist-dto</artifactId>
+	        <version>1.0</version>
+	    </dependency>
 	</dependencies>
 </project>

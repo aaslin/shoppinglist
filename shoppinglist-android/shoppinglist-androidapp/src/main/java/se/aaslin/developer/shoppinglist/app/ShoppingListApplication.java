@@ -3,8 +3,6 @@ package se.aaslin.developer.shoppinglist.app;
 import java.util.List;
 
 import roboguice.application.RoboApplication;
-import se.aaslin.developer.shoppinglist.app.mvp.ActivityProvider;
-import android.app.Activity;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;

@@ -89,6 +89,9 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 			try {
 				String url = path.substring(path.lastIndexOf("/") + 1, path.length());
 				Class<?> clazz = managedBeans.get(url);
+				if (clazz == null) {
+					throw new Exception("Uknown service");
+				}
 				Object bean = context.getBean(clazz);
 				String payload = RPCServletUtils.readContentAsGwtRpc(request);		
 				boolean isAuthorized = path.startsWith(GWT_LOGIN) || isSessionValid(request);
@@ -106,7 +109,7 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		try {
 			RPCRequest rpcRequest = RPC.decodeRequest(payload, bean.getClass(), this);
 			if (!isAuthorized) {
-				return RPC.encodeResponseForFailure(null, new NotAuthorizedException());
+				return RPC.encodeResponseForFailure(null, new NotAuthorizedException(), rpcRequest.getSerializationPolicy());
 			}
 			return RPC.invokeAndEncodeResponse(bean, rpcRequest.getMethod(), rpcRequest.getParameters(), rpcRequest.getSerializationPolicy(), rpcRequest.getFlags());
 		} catch (IncompatibleRemoteServiceException ex) {

@@ -1,9 +1,12 @@
 package se.aaslin.developer.shoppinglist.ui.login.presenter;
 
+import se.aaslin.developer.shoppinglist.android.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.app.mvp.Display;
+import se.aaslin.developer.shoppinglist.app.mvp.Place;
 import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
-import android.app.Activity;
+import se.aaslin.developer.shoppinglist.ui.shoppinglists.ShoppingListsPlace;
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 public class LoginPresenter extends Presenter {
 	public interface ViewDisplay extends Display {
@@ -27,14 +31,16 @@ public class LoginPresenter extends Presenter {
 		TextView getInfo();	
 	}
 	
+	@Inject AuthenticationService authenticationService;
+	
 	ViewDisplay display;
 	LoginViewServiceAsync srv;
-	Activity activity;
+	Context context;
 	
-	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv, Activity activity) {
+	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv, Context context) {
 		this.display = display;
 		this.srv = srv;
-		this.activity = activity;
+		this.context = context;
 		bind();
 	}
 
@@ -49,8 +55,9 @@ public class LoginPresenter extends Presenter {
 					@Override
 					public void onSuccess(String result) {
 						if (result != null) {
-							display.getInfo().setText("");
-							Toast.makeText(activity, "Login succeded\n" + result, Toast.LENGTH_LONG).show();
+							authenticationService.storeAuthenticationId(result);
+							Place shoppingListsPlace = new ShoppingListsPlace();
+							shoppingListsPlace.moveTo(context);
 						} else {
 							TextView info = display.getInfo();
 							info.setText("Wrong username or password");
@@ -60,7 +67,7 @@ public class LoginPresenter extends Presenter {
 					
 					@Override
 					public void onFailure(Throwable caught) {
-						Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, caught.getMessage(), Toast.LENGTH_LONG).show();
 						Log.getStackTraceString(caught);
 					}
 				});
