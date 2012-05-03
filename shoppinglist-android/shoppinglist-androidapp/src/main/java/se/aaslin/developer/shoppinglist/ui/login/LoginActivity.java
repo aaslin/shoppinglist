@@ -4,6 +4,7 @@ import se.aaslin.developer.roboproxy.RoboProxy;
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.app.ShoppingListApplication;
 import se.aaslin.developer.shoppinglist.app.mvp.ActivityPlace;
+import se.aaslin.developer.shoppinglist.app.mvp.InjectionUtils;
 import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 import se.aaslin.developer.shoppinglist.ui.login.presenter.LoginPresenter;
@@ -23,6 +24,7 @@ public class LoginActivity extends ActivityPlace<LoginPlace> {
 		view.initView(this);
 		LoginViewServiceAsync srv = (LoginViewServiceAsync) RoboProxy.newProxyInstance(LoginViewServiceAsync.class, ShoppingListApplication.LOGIN_URL, this);
 		loginPresenter = new LoginPresenter(view, srv, this);
+		InjectionUtils.injectMembers(loginPresenter, this);
 		loginPresenter.create(savedInstanceState);
 	}
 

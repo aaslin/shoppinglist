@@ -39,8 +39,8 @@ public class InjectionUtils {
 		}
 	}
 
-	public static void injectMembers(Object object, Activity activity) {
-		Injector injector = ((RoboApplication) activity.getApplicationContext()).getInjector();
+	public static void injectMembers(Object object, Context context) {
+		Injector injector = ((RoboApplication) context.getApplicationContext()).getInjector();
 		injector.injectMembers(object);
 	}
 

@@ -14,7 +14,7 @@ public class Property {
 	@Id
 	@Column(name = Property_.id)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	private int id;
 	
 	@Column(name = Property_.key, nullable = false, length = 256)
 	private String key;
@@ -22,11 +22,11 @@ public class Property {
 	@Column(name = Property_.value, nullable = false, length = 256)
 	private String value;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
