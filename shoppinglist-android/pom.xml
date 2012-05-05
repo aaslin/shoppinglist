@@ -8,10 +8,10 @@
 	<name>shoppinglist-android</name>
 
 	<modules>
-	    <module>shoppinglist-androidapp-dbmodel</module>
-	    <module>shoppinglist-androidapp-businesslogic</module>
-		<module>shoppinglist-androidapp-rpc</module>
-	    <module>shoppinglist-androidapp</module>
+	    <module>shoppinglist-android-dbmodel</module>
+	    <module>shoppinglist-android-businesslogic</module>
+		<module>shoppinglist-android-rpc</module>
+	    <module>shoppinglist-android-app</module>
 	</modules>
 
 	<repositories>

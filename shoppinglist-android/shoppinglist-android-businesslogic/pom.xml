@@ -8,7 +8,7 @@
 		<version>1.0</version>
 	</parent>
 	
-	<artifactId>shoppinglist-androidapp-businesslogic</artifactId>
+	<artifactId>shoppinglist-android-businesslogic</artifactId>
 	
 	<packaging>jar</packaging>
 	
@@ -21,7 +21,7 @@
 		</dependency>
 	    <dependency>
 	        <groupId>se.aaslin.developer</groupId>
-	        <artifactId>shoppinglist-androidapp-dbmodel</artifactId>
+	        <artifactId>shoppinglist-android-dbmodel</artifactId>
 	        <version>1.0</version>
 	    </dependency>
 	    <dependency>

@@ -15,7 +15,7 @@
 <!-- 		</repository> -->
 <!-- 	</repositories> -->
 
-	<artifactId>shoppinglist-androidapp</artifactId>
+	<artifactId>shoppinglist-android-app</artifactId>
 
 	<packaging>apk</packaging>
 
@@ -24,12 +24,12 @@
 	<dependencies> 
 	    <dependency>
 	        <groupId>se.aaslin.developer</groupId>
-	        <artifactId>shoppinglist-androidapp-rpc</artifactId>
+	        <artifactId>shoppinglist-android-rpc</artifactId>
 	        <version>1.0</version>
 	    </dependency>
 	     <dependency>
 	        <groupId>se.aaslin.developer</groupId>
-	        <artifactId>shoppinglist-androidapp-businesslogic</artifactId>
+	        <artifactId>shoppinglist-android-businesslogic</artifactId>
 	        <version>1.0</version>
 	    </dependency>
 	    <dependency>

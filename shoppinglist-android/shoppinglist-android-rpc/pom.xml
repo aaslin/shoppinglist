@@ -9,7 +9,7 @@
 		<version>1.0</version>
 	</parent>
 	
-	<artifactId>shoppinglist-androidapp-rpc</artifactId>
+	<artifactId>shoppinglist-android-rpc</artifactId>
 
 	<packaging>jar</packaging>
 
