@@ -24,8 +24,7 @@ public class LoginViewServiceImpl implements LoginViewService {
 		if (shoppingListSessionManager.validateUser(username, password)) {
 			invalidateCurrentSession();
 			UUID uuid = shoppingListSessionManager.newSession(username);
-//			response.addCookie(new Cookie("auth", uuid.toString()));
-			
+		
 			return uuid.toString();
 		}
 		

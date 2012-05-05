@@ -42,7 +42,7 @@
 	
 	<filter-mapping>
 	    <filter-name>shoppingListSecurityFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
+	    <url-pattern>/secFilter*</url-pattern>
   	</filter-mapping>
 		
 	<!-- Listeners -->

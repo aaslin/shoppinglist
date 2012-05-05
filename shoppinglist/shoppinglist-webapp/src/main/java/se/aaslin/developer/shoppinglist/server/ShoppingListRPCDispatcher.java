@@ -32,7 +32,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
-import se.aaslin.developer.shoppinglist.shared.exception.NoValidSessionException;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
@@ -85,12 +84,12 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		String path = request.getRequestURI().replaceFirst(request.getContextPath(), "");
-		if (path.startsWith(GWT_PATH) && !path.endsWith(".js") && !path.endsWith(".html")) {
+		if (path.startsWith(GWT_PATH) && !path.endsWith(".js") && !path.endsWith(".html") && !path.endsWith(".rpc")) {
 			try {
 				String url = path.substring(path.lastIndexOf("/") + 1, path.length());
 				Class<?> clazz = managedBeans.get(url);
 				if (clazz == null) {
-					throw new Exception("Uknown service");
+					throw new Throwable(String.format("Uknown service: %s", url));
 				}
 				Object bean = context.getBean(clazz);
 				String payload = RPCServletUtils.readContentAsGwtRpc(request);		
@@ -243,9 +242,13 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		}
 		for (Cookie cookie : httpServletRequest.getCookies()) {
 			if (cookie.getName() != null && cookie.getName().equals("auth")) {
-				UUID sessionId = UUID.fromString(cookie.getValue());
-				if (sessionManager.isSessionValid(sessionId)) {
-					return true;
+				try {
+					UUID sessionId = UUID.fromString(cookie.getValue());
+					if (sessionManager.isSessionValid(sessionId)) {
+						return true;
+					}
+				} catch (IllegalArgumentException e) {
+					break;
 				}
 			}
 		}

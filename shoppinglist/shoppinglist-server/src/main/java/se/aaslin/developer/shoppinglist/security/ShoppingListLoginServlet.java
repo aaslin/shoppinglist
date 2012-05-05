@@ -31,13 +31,17 @@ public class ShoppingListLoginServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		String baseURL = req.getRequestURL().toString().replace(req.getRequestURI(), req.getContextPath());
 		if (shoppingListSessionManager.validateUser(username, password)) {
-			for (Cookie cookie : req.getCookies()) {
-				if(cookie.getName().equals("auth")) {
-					shoppingListSessionManager.invalidateSession(cookie.getValue());
+			if (req.getCookies() != null) {
+				for (Cookie cookie : req.getCookies()) {
+					if(cookie.getName().equals("auth")) {
+						shoppingListSessionManager.invalidateSession(cookie.getValue());
+					}
 				}
 			}
 			UUID uuid = shoppingListSessionManager.newSession(username);
-			resp.addCookie(new Cookie("auth", uuid.toString()));	
+			Cookie cookie = new Cookie("auth", uuid.toString());
+			cookie.setPath("/shoppinglist");
+			resp.addCookie(cookie);	
 			
 			String indexURL = baseURL + "/index.jsp#shoppinglist";
 			resp.sendRedirect(indexURL);

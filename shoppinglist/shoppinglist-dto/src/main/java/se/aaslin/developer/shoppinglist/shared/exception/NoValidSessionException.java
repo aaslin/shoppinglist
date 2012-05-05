@@ -1,6 +1,6 @@
 package se.aaslin.developer.shoppinglist.shared.exception;
 
-public class NoValidSessionException extends Exception{
+public class NoValidSessionException extends ServerSideException {
 
 	private static final long serialVersionUID = 189055216715147444L;
 
