@@ -2,10 +2,9 @@ package se.aaslin.developer.shoppinglist.ui.shoppinglists.presenter;
 
 import java.util.List;
 
+import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.ui.shoppinglists.ShoppingListsPlace;
 import android.content.Context;
 import android.widget.AdapterView;
@@ -13,7 +12,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
 public class ShoppingListsPresenter extends Presenter<ShoppingListsPlace> {
@@ -35,12 +33,10 @@ public class ShoppingListsPresenter extends Presenter<ShoppingListsPlace> {
 	
 	View display;
 	Model model;
-	ShoppingListsServiceAsync srv;
 	
-	public ShoppingListsPresenter(View display, Model model, ShoppingListsServiceAsync srv) {
+	public ShoppingListsPresenter(View display, Model model) {
 		this.display = display;
 		this.model = model;
-		this.srv = srv;
 	}
 
 	@Override
@@ -62,22 +58,22 @@ public class ShoppingListsPresenter extends Presenter<ShoppingListsPlace> {
 
 	private void fetchShoppingLists() {
 		display.showSpinner(true);
-		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
-			
-			@Override
-			public void onSuccess(List<ShoppingListDTO> result) {
-				model.getShoppingLists().clear();
-				model.getShoppingLists().addAll(result);
-				updateShoppinglists();
-				display.showSpinner(false);
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				display.showSpinner(false);
-				Toast.makeText(context, caught.getMessage(), Toast.LENGTH_SHORT).show();
-			}
-		});
+//		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
+//			
+//			@Override
+//			public void onSuccess(List<ShoppingListDTO> result) {
+//				model.getShoppingLists().clear();
+//				model.getShoppingLists().addAll(result);
+//				updateShoppinglists();
+//				display.showSpinner(false);
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				display.showSpinner(false);
+//				Toast.makeText(context, caught.getMessage(), Toast.LENGTH_SHORT).show();
+//			}
+//		});
 	}
 	
 	private void updateShoppinglists() {

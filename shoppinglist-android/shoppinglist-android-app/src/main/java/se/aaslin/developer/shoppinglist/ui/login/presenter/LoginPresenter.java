@@ -1,16 +1,17 @@
 package se.aaslin.developer.shoppinglist.ui.login.presenter;
 
+import se.aaslin.developer.shoppinglist.android.exception.AuthenticationFailedException;
 import se.aaslin.developer.shoppinglist.android.service.AuthenticationService;
+import se.aaslin.developer.shoppinglist.android.service.async.LoginAsyncService;
+import se.aaslin.developer.shoppinglist.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.app.mvp.Place;
 import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
-import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
 import se.aaslin.developer.shoppinglist.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.ui.shoppinglists.ShoppingListsPlace;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
 public class LoginPresenter extends Presenter<LoginPlace> {
@@ -37,10 +37,10 @@ public class LoginPresenter extends Presenter<LoginPlace> {
 	@Inject AuthenticationService authenticationService;
 	
 	ViewDisplay display;
-	LoginViewServiceAsync srv;
+	LoginAsyncService srv;
 	Activity activity;
 	
-	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv, Activity activity) {
+	public LoginPresenter(ViewDisplay display, LoginAsyncService srv, Activity activity) {
 		this.display = display;
 		this.srv = srv;
 		this.activity = activity;
@@ -57,21 +57,21 @@ public class LoginPresenter extends Presenter<LoginPlace> {
 					
 					@Override
 					public void onSuccess(String result) {
-						if (result != null) {
-							authenticationService.storeAuthenticationId(result);
-							Place shoppingListsPlace = new ShoppingListsPlace();
-							shoppingListsPlace.moveTo(activity);
-						} else {
-							TextView info = display.getInfo();
-							info.setText("Wrong username or password");
-							info.setTextColor(Color.RED);
-						}
+						authenticationService.storeAuthenticationId(result);
+						Place shoppingListsPlace = new ShoppingListsPlace();
+						shoppingListsPlace.moveTo(activity);
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
-						Toast.makeText(context, caught.getMessage(), Toast.LENGTH_LONG).show();
-						Log.getStackTraceString(caught);
+						if (caught instanceof AuthenticationFailedException) {
+							TextView info = display.getInfo();
+							info.setText("Wrong username or password");
+							info.setTextColor(Color.RED);
+						} else {
+							Toast.makeText(context, caught.getMessage(), Toast.LENGTH_LONG).show();
+							throw new RuntimeException(caught);
+						}
 					}
 				});
 			}

@@ -5,9 +5,9 @@ import java.util.List;
 
 import roboguice.inject.InjectView;
 import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.app.util.InjectionUtils;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.ui.shoppinglists.presenter.ShoppingListsPresenter;
 import android.app.Dialog;
 import android.app.ProgressDialog;

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.app.mvp.ActivityPlace;
 import se.aaslin.developer.shoppinglist.app.mvp.Place;
-import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.ui.shoppinglists.presenter.ShoppingListsPresenter;
 
 public class ShoppingListsPlace extends Place {
