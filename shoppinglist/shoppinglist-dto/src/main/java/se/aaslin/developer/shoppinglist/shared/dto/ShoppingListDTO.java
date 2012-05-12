@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ShoppingListDTO implements Serializable {
 
 	private static final long serialVersionUID = -3112563693526623930L;

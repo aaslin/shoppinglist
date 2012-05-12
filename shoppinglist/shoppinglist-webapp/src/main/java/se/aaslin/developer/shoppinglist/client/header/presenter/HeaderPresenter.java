@@ -6,10 +6,10 @@ import se.aaslin.developer.shoppinglist.client.place.DashboardPlace;
 import se.aaslin.developer.shoppinglist.client.place.ProfilePlace;
 import se.aaslin.developer.shoppinglist.client.place.ShoppingListsPlace;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -58,8 +58,9 @@ public class HeaderPresenter {
 					
 					@Override
 					public void onSuccess(Void result) {
-						String url = GWT.getHostPageBaseURL() + "login.jsp";
-						Window.Location.assign(url);
+						UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
+						urlBuilder.setPath("shoppinglist/login.jsp");
+						Window.Location.assign(urlBuilder.buildString());
 					}
 					
 					@Override

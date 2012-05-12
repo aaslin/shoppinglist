@@ -1,20 +1,86 @@
 package se.aaslin.developer.shoppinglist.ui.shoppinglists.presenter;
 
-import se.aaslin.developer.shoppinglist.app.mvp.Display;
-import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
+import java.util.List;
 
-public class ShoppingListsPresenter {
+import se.aaslin.developer.shoppinglist.app.mvp.Display;
+import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
+import se.aaslin.developer.shoppinglist.client.content.shoppinglists.service.ShoppingListsServiceAsync;
+import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.ui.shoppinglists.ShoppingListsPlace;
+import android.content.Context;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
+
+public class ShoppingListsPresenter extends Presenter<ShoppingListsPlace> {
 	public interface View extends Display {
 		
+		void addLists(List<ShoppingListDTO> listDTOs);
+		
+		ListView getListView();
+		
+		void showSpinner(boolean show);
 	}
 	
 	public interface Model {
 		
+		List<ShoppingListDTO> getShoppingLists();
 	}
+	
+	@Inject Context context;
 	
 	View display;
 	Model model;
 	ShoppingListsServiceAsync srv;
 	
+	public ShoppingListsPresenter(View display, Model model, ShoppingListsServiceAsync srv) {
+		this.display = display;
+		this.model = model;
+		this.srv = srv;
+	}
+
+	@Override
+	protected void onBind() {
+		display.getListView().setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adpaterView, android.view.View view, int pos, long id) {
+				ShoppingListDTO shoppingList = model.getShoppingLists().get(pos);
+				Toast.makeText(context, shoppingList.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	@Override
+	protected void onCreate() {
+		fetchShoppingLists();
+	}
+
+	private void fetchShoppingLists() {
+		display.showSpinner(true);
+		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
+			
+			@Override
+			public void onSuccess(List<ShoppingListDTO> result) {
+				model.getShoppingLists().clear();
+				model.getShoppingLists().addAll(result);
+				updateShoppinglists();
+				display.showSpinner(false);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.showSpinner(false);
+				Toast.makeText(context, caught.getMessage(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 	
+	private void updateShoppinglists() {
+		display.addLists(model.getShoppingLists());
+	}
 }

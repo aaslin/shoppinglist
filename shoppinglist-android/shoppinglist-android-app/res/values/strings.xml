@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Hello android-app!</string>
     <string name="app_name">Shopping List</string>
+    
+    <string name="loading">Loading</string>
+    <string name="loading_info">Loading... Please wait</string>
 </resources>

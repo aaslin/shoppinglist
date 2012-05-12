@@ -1,11 +1,10 @@
 package se.aaslin.developer.shoppinglist.app.mvp;
 
-import android.os.Bundle;
 
-public abstract class Presenter {
+public abstract class Presenter<T extends Place> {
 	
-	public final void create(Bundle savedInstanceState) {
-		onCreate(savedInstanceState);
+	public final void create() {
+		onCreate();
 	}
 	
 	public final void start() {
@@ -20,7 +19,14 @@ public abstract class Presenter {
 		onDestroy();
 	}
 	
-	protected void onCreate(Bundle savedInstanceState) {
+	public final void bind() {
+		onBind();
+	}
+	
+	protected void onBind() {
+	}
+
+	protected void onCreate() {
 	}
 	
 	protected void onStart() {

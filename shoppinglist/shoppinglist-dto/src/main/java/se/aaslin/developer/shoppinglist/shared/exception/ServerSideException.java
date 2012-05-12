@@ -1,8 +1,9 @@
 package se.aaslin.developer.shoppinglist.shared.exception;
 
-public class ServerSideException extends Exception {
-	
-	private static final long serialVersionUID = -4219727415431749579L;
+import java.io.Serializable;
+
+public abstract class ServerSideException extends Exception implements Serializable {
+	private static final long serialVersionUID = 1185483843867138655L;
 
 	public ServerSideException() {
 		super();

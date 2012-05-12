@@ -2,9 +2,9 @@ package se.aaslin.developer.shoppinglist.ui.login.view;
 
 import roboguice.inject.InjectView;
 import se.aaslin.developer.shoppinglist.R;
-import se.aaslin.developer.shoppinglist.app.mvp.InjectionUtils;
+import se.aaslin.developer.shoppinglist.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.ui.login.presenter.LoginPresenter;
-import android.app.Activity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,7 +37,7 @@ public class LoginView implements LoginPresenter.ViewDisplay {
 	}
 
 	@Override
-	public void initView(Activity activity) {
-		InjectionUtils.injectViews(this, activity.getWindow().getDecorView());
+	public void initView(View view) {
+		InjectionUtils.injectViews(this, view);
 	}
 }

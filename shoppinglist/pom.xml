@@ -14,6 +14,7 @@
 		<module>shoppinglist-dbmodel</module>
 		<module>shoppinglist-dto</module>
 		<module>shoppinglist-server</module>
+		<module>shoppinglist-webservice</module>
 		<module>shoppinglist-webapp</module>
 	</modules>
 

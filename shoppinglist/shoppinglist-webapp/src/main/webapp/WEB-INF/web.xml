@@ -17,6 +17,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
+			/WEB-INF/webservice.xml
 			/WEB-INF/dao.xml
 			/WEB-INF/service.xml
 			/WEB-INF/security.xml
@@ -63,9 +64,19 @@
 		<servlet-class>se.aaslin.developer.shoppinglist.security.ShoppingListLoginServlet</servlet-class>
 	</servlet>
 	
-	<!-- Servlet Mappings -->
 	<servlet-mapping>
 		<servlet-name>Login Check</servlet-name>
 		<url-pattern>/security_check</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+    	<servlet-name>jaxws-servlet</servlet-name>
+    	<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+  	</servlet>
+ 	
+	<servlet-mapping>
+    	<servlet-name>jaxws-servlet</servlet-name>
+    	<url-pattern>/rest/*</url-pattern>
+  	</servlet-mapping>
+	
 </web-app>

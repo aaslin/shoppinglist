@@ -5,7 +5,9 @@ import se.aaslin.developer.shoppinglist.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.app.mvp.Place;
 import se.aaslin.developer.shoppinglist.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.client.login.service.LoginViewServiceAsync;
+import se.aaslin.developer.shoppinglist.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.ui.shoppinglists.ShoppingListsPlace;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -19,7 +21,7 @@ import android.widget.Toast;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
-public class LoginPresenter extends Presenter {
+public class LoginPresenter extends Presenter<LoginPlace> {
 	public interface ViewDisplay extends Display {
 
 		EditText getUsername();
@@ -31,20 +33,21 @@ public class LoginPresenter extends Presenter {
 		TextView getInfo();	
 	}
 	
+	@Inject Context context;
 	@Inject AuthenticationService authenticationService;
 	
 	ViewDisplay display;
 	LoginViewServiceAsync srv;
-	Context context;
+	Activity activity;
 	
-	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv, Context context) {
+	public LoginPresenter(ViewDisplay display, LoginViewServiceAsync srv, Activity activity) {
 		this.display = display;
 		this.srv = srv;
-		this.context = context;
-		bind();
+		this.activity = activity;
 	}
 
-	protected void bind(){
+	@Override
+	protected void onBind(){
 		display.getLoginButton().setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -57,7 +60,7 @@ public class LoginPresenter extends Presenter {
 						if (result != null) {
 							authenticationService.storeAuthenticationId(result);
 							Place shoppingListsPlace = new ShoppingListsPlace();
-							shoppingListsPlace.moveTo(context);
+							shoppingListsPlace.moveTo(activity);
 						} else {
 							TextView info = display.getInfo();
 							info.setText("Wrong username or password");

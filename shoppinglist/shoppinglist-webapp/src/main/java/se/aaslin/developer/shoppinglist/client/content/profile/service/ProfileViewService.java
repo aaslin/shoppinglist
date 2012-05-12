@@ -1,6 +1,6 @@
 package se.aaslin.developer.shoppinglist.client.content.profile.service;
 
-import se.aaslin.developer.shoppinglist.shared.exception.NoValidSessionException;
+import se.aaslin.developer.shoppinglist.shared.exception.SessionExpiredException;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -14,5 +14,5 @@ public interface ProfileViewService extends RemoteService {
 	// Dummy
 	void testAuthException() throws NotAuthorizedException;
 
-	void testSessionException() throws NoValidSessionException;
+	void testSessionException() throws SessionExpiredException;
 }

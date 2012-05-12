@@ -1,4 +1,4 @@
-package se.aaslin.developer.shoppinglist.app.mvp;
+package se.aaslin.developer.shoppinglist.app.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -42,6 +42,11 @@ public class InjectionUtils {
 	public static void injectMembers(Object object, Context context) {
 		Injector injector = ((RoboApplication) context.getApplicationContext()).getInjector();
 		injector.injectMembers(object);
+	}
+	
+	public static <T> T getInstance(Class<T> clazz, Context context) {
+		Injector injector = ((RoboApplication) context.getApplicationContext()).getInjector();
+		return injector.getInstance(clazz);
 	}
 
 	public static void injectActivity(Object object, Activity activity) {

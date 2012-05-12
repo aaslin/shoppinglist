@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.aaslin.developer.shoppinglist.client.content.profile.service.ProfileViewService;
 import se.aaslin.developer.shoppinglist.security.UserSession;
 import se.aaslin.developer.shoppinglist.service.UserService;
-import se.aaslin.developer.shoppinglist.shared.exception.NoValidSessionException;
+import se.aaslin.developer.shoppinglist.shared.exception.SessionExpiredException;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 @Service
@@ -30,7 +30,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
 	}
 
 	@Override
-	public void testSessionException() throws NoValidSessionException {
-		throw new NoValidSessionException();
+	public void testSessionException() throws SessionExpiredException {
+		throw new SessionExpiredException();
 	}
 }

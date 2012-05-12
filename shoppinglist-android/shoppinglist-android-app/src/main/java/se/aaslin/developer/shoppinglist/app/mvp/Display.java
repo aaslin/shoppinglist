@@ -1,8 +1,8 @@
 package se.aaslin.developer.shoppinglist.app.mvp;
 
-import android.app.Activity;
+import android.view.View;
 
 public interface Display {
 	
-	void initView(Activity activity);
+	void initView(View view);
 }

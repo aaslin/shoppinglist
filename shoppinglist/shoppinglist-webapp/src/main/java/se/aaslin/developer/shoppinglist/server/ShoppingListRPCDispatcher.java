@@ -2,15 +2,19 @@ package se.aaslin.developer.shoppinglist.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -31,8 +35,11 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import se.aaslin.developer.shoppinglist.dao.UserDAO;
+import se.aaslin.developer.shoppinglist.entity.User;
 import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.SessionExpiredException;
 
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -46,13 +53,42 @@ import com.google.gwt.user.server.rpc.SerializationPolicyLoader;
 import com.google.gwt.user.server.rpc.SerializationPolicyProvider;
 
 public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyProvider {
+	private class ExcpetionSerializationPolicy extends SerializationPolicy {
+		
+		List<Class<?>> clazzes = Arrays.asList(new Class<?>[] { NotAuthorizedException.class, SessionExpiredException.class});
+		
+		@Override
+		public boolean shouldDeserializeFields(Class<?> clazz) {
+			return false;
+		}
 
-	private static final String GWT_PATH = "/gwt.";
-	private static final String GWT_LOGIN = "/gwt.login";
+		@Override
+		public boolean shouldSerializeFields(Class<?> clazz) {
+			return clazzes.contains(clazz);
+		}
+
+		@Override
+		public void validateDeserialize(Class<?> clazz) throws SerializationException {
+			if (!shouldDeserializeFields(clazz)) {
+				throw new SerializationException(String.format("Type '%s' was not included in %s for deserialization", clazz.getCanonicalName(), this.getClass().getCanonicalName()));	
+			}
+		}
+
+		@Override
+		public void validateSerialize(Class<?> clazz) throws SerializationException {
+			if (!shouldSerializeFields(clazz)) {
+				throw new SerializationException(String.format("Type '%s' was not included in %s for serialization", clazz.getCanonicalName(), this.getClass().getCanonicalName()));
+			}
+		}
+
+	}
+	
 	private final Map<String, SerializationPolicy> serializationPolicyCache = new HashMap<String, SerializationPolicy>();
-
+	private final SerializationPolicy exceptionSerializationPolicy = new ExcpetionSerializationPolicy();
+	
 	@Autowired ApplicationContext context;
 	@Autowired ShoppingListSessionManager sessionManager;
+	@Autowired UserDAO userDAO;
 
 	Map<String, Class<?>> managedBeans = new HashMap<String, Class<?>>();
 	ServletContext servletContext;
@@ -83,18 +119,19 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		String path = request.getRequestURI().replaceFirst(request.getContextPath(), "");
-		if (path.startsWith(GWT_PATH) && !path.endsWith(".js") && !path.endsWith(".html") && !path.endsWith(".rpc")) {
+		
+		String module = request.getHeader("X-GWT-Module-Base");
+		String permutation = request.getHeader("X-GWT-Permutation");
+		if (module != null && permutation != null) {
 			try {
-				String url = path.substring(path.lastIndexOf("/") + 1, path.length());
+				String url = request.getRequestURL().toString().replace(module, "");
 				Class<?> clazz = managedBeans.get(url);
 				if (clazz == null) {
 					throw new Throwable(String.format("Uknown service: %s", url));
 				}
 				Object bean = context.getBean(clazz);
 				String payload = RPCServletUtils.readContentAsGwtRpc(request);		
-				boolean isAuthorized = path.startsWith(GWT_LOGIN) || isSessionValid(request);
-				String responsePayload = processCall(isAuthorized, payload, bean);
+				String responsePayload = processCall(payload, bean, request);
 				writeResponse(request, response, responsePayload);
 			} catch (Throwable caught) {
 				RPCServletUtils.writeResponseForUnexpectedFailure(servletContext, response, caught);
@@ -104,15 +141,34 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		}	
 	}
 
-	private String processCall(boolean isAuthorized, String payload, Object bean) throws SerializationException {
+	private String processCall(String payload, Object bean, HttpServletRequest httpServletRequest) throws SerializationException {
 		try {
 			RPCRequest rpcRequest = RPC.decodeRequest(payload, bean.getClass(), this);
-			if (!isAuthorized) {
-				return RPC.encodeResponseForFailure(null, new NotAuthorizedException(), rpcRequest.getSerializationPolicy());
+			
+			try {
+				validateRequest(rpcRequest, httpServletRequest);
+			} catch (SessionExpiredException e) {
+				return RPC.encodeResponseForFailure(null, new SessionExpiredException(), exceptionSerializationPolicy);
+			} catch (NotAuthorizedException e) {
+				return RPC.encodeResponseForFailure(null, new NotAuthorizedException(), exceptionSerializationPolicy);
 			}
 			return RPC.invokeAndEncodeResponse(bean, rpcRequest.getMethod(), rpcRequest.getParameters(), rpcRequest.getSerializationPolicy(), rpcRequest.getFlags());
 		} catch (IncompatibleRemoteServiceException ex) {
 			return RPC.encodeResponseForFailure(null, ex);
+		}
+	}
+
+	private void validateRequest(RPCRequest rpcRequest, HttpServletRequest httpServletRequest) throws SessionExpiredException, NotAuthorizedException {
+		for (Annotation annotation : rpcRequest.getMethod().getAnnotations()) {
+			if (annotation instanceof PermitAll) {
+				return;
+			} else if (annotation instanceof DenyAll) {
+				throw new NotAuthorizedException();
+			}
+		}
+		
+		if (!isSessionValid(httpServletRequest)) {
+			throw new SessionExpiredException();
 		}
 	}
 
@@ -234,6 +290,27 @@ public class ShoppingListRPCDispatcher implements Filter, SerializationPolicyPro
 		}
 
 		return serializationPolicy;
+	}
+	
+	private User getCurrentUser(HttpServletRequest httpServletRequest) {
+		if (httpServletRequest.getCookies() == null) {
+			return null;
+		}
+		for (Cookie cookie : httpServletRequest.getCookies()) {
+			if (cookie.getName() != null && cookie.getName().equals("auth")) {
+				try {
+					UUID sessionId = UUID.fromString(cookie.getValue());
+					String username = sessionManager.getSessionUser(sessionId);
+					if (username != null) {
+						return userDAO.findByUsername(username);
+					}
+				} catch (IllegalArgumentException e) {
+					break;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	private boolean isSessionValid(HttpServletRequest httpServletRequest) {

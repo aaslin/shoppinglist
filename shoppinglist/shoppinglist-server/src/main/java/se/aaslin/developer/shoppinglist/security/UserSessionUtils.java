@@ -12,9 +12,11 @@ public class UserSessionUtils {
 	}
 	
 	public static String getCookie(String key, HttpServletRequest request) {
-		for (Cookie cookie : request.getCookies()) {
-			if(cookie.getName().equals(key)) {
-				return cookie.getValue();
+		if (request.getCookies() != null) { 
+			for (Cookie cookie : request.getCookies()) {
+				if(cookie.getName().equals(key)) {
+					return cookie.getValue();
+				}
 			}
 		}
 		

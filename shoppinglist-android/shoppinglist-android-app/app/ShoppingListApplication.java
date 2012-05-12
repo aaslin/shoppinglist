@@ -21,6 +21,12 @@ import com.j256.ormlite.support.ConnectionSource;
 
 public class ShoppingListApplication extends RoboApplication {
 
+	public static String DOMAIN = "http://192.168.0.12:8080";
+	public static String PATH = "/shoppinglist";
+	public static String URL = String.format("%s%s/gwt.shoppinglist/", DOMAIN, PATH);
+	public static String LOGIN_URL = String.format("%s%s/gwt.login/", DOMAIN, PATH);
+	public static String URL_REST = String.format("%s/rest/", URL);
+	
 	private ConnectionSource connectionSource;
 	
 	public ShoppingListApplication() {
