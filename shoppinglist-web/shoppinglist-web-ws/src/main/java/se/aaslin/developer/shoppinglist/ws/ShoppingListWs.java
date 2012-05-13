@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -23,6 +24,7 @@ import se.aaslin.developer.shoppinglist.security.UserSession;
 import se.aaslin.developer.shoppinglist.service.shoppinglist.ShoppingListServiceImpl;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
 import com.sun.jersey.api.core.InjectParam;
 
@@ -44,11 +46,10 @@ public class ShoppingListWs extends GenericWs {
 	
 	@GET
 	@Produces({ APPLICATION_XML, APPLICATION_JSON })
-	public Response getAll() {
+	public Response getShoppingLists() {
 		String username = userSession.getCurrentSessionsUsername();
 		if(username == null) {
-			return Response.status(Status.FORBIDDEN).build();
-//			throw new HTTPException(Response.Status.FORBIDDEN.getStatusCode());
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		List<ShoppingList> shoppingLists = shoppingListService.getAllShoppingListsForUser(username);
 		List<ShoppingListDTO> dtos = createShoppingListDTOs(shoppingLists);
@@ -56,6 +57,25 @@ public class ShoppingListWs extends GenericWs {
 		GenericEntity<List<ShoppingListDTO>> entity = new GenericEntity<List<ShoppingListDTO>>(dtos) {};
 		
 		return Response.ok(entity).build();
+	}
+	
+	@GET
+	@Produces({ APPLICATION_XML, APPLICATION_JSON })
+	@Path("/{shoppingListId}")
+	public Response getShoppingItems(@PathParam("shoppingListId") int shoppingListId) {
+		try {
+			String username = userSession.getCurrentSessionsUsername();
+			if(username == null) {
+				throw new NotAuthorizedException();
+			}
+			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, userSession.getCurrentSessionsUsername());
+			List<ShoppingItemDTO> dtos = createShoppingItemDTOs(shoppingListId, list.getItems()); 
+			GenericEntity<List<ShoppingItemDTO>> entity = new GenericEntity<List<ShoppingItemDTO>>(dtos) {};
+			
+			return Response.ok(entity).build();
+		} catch (NotAuthorizedException e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 	}
 	
 	private List<ShoppingListDTO> createShoppingListDTOs(List<ShoppingList> lists) {
@@ -105,5 +125,26 @@ public class ShoppingListWs extends GenericWs {
 		item.setName(dto.getName());
 		
 		return item;
+	}
+	
+	private List<ShoppingItemDTO> createShoppingItemDTOs(int shoppingListId, List<ShoppingItem> items) {
+		List<ShoppingItemDTO> dtos = new ArrayList<ShoppingItemDTO>();
+		for (ShoppingItem item : items) {
+			dtos.add(createShoppingItemDTO(shoppingListId, item));
+		}
+		
+		return dtos;
+	}
+	
+	private ShoppingItemDTO createShoppingItemDTO(int shoppingListId, ShoppingItem item) {
+		ShoppingItemDTO dto = new ShoppingItemDTO();
+		dto.setName(item.getName());
+		dto.setComment(item.getComment());
+		dto.setAmount(item.getAmount());
+		dto.setId(item.getId());
+		dto.setShoppingListId(shoppingListId);
+		dto.setFromDB(true);
+		
+		return dto;
 	}
 }

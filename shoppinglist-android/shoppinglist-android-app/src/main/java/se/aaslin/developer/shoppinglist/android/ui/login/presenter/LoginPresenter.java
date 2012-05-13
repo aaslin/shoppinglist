@@ -1,13 +1,12 @@
 package se.aaslin.developer.shoppinglist.android.ui.login.presenter;
 
+import se.aaslin.developer.shoppinglist.android.app.exception.AuthenticationFailedException;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
-import se.aaslin.developer.shoppinglist.android.app.mvp.Place;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
-import se.aaslin.developer.shoppinglist.android.exception.AuthenticationFailedException;
-import se.aaslin.developer.shoppinglist.android.service.AuthenticationService;
-import se.aaslin.developer.shoppinglist.android.service.LoginServiceAsync;
-import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.ShoppingListsPlace;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
+import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.dashboard.DashboardPlace;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -50,15 +49,16 @@ public class LoginPresenter extends Presenter {
 		display.getLoginButton().setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				String uname = display.getUsername().getEditableText().toString();
-				String password = display.getPassword().getEditableText().toString();
+				final String uname = display.getUsername().getEditableText().toString();
+				final String password = display.getPassword().getEditableText().toString();
 				srv.login(uname, password, new AsyncCallback<String>() {
 					
 					@Override
 					public void onSuccess(String result) {
 						authenticationService.storeAuthenticationId(result);
-						Place shoppingListsPlace = new ShoppingListsPlace();
-						shoppingListsPlace.moveTo(activity);
+						authenticationService.storeUsername(uname);
+						authenticationService.storePassword(password);
+						new DashboardPlace().moveTo(activity);
 					}
 					
 					@Override

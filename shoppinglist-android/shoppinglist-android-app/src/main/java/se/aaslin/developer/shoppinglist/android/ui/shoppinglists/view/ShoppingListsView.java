@@ -7,10 +7,8 @@ import roboguice.inject.InjectView;
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
-import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter.ShoppingListsPresenter;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +57,9 @@ public class ShoppingListsView implements ShoppingListsPresenter.View {
 		@Override
 		public View getView(int pos, View contentView, ViewGroup viewGroup) {
 			if (contentView == null) {
-				contentView = inflater.inflate(R.layout.shoppinglists_item, null);
+				contentView = inflater.inflate(R.layout.shoppinglists_listelement, null);
 			}
-			ListElement element = new ShoppingListsItemView();
+			ListElement element = new ShoppingListsListElementView();
 			element.initView(contentView);
 
 			ShoppingListDTO listDTO = shoppingLists.get(pos);
@@ -74,9 +72,9 @@ public class ShoppingListsView implements ShoppingListsPresenter.View {
 	
 	private Context context;
 	private ShoppingListsViewAdapter adapter;
-	private Dialog spinner;
 	
 	@InjectView(R.id.listView) ListView listView;
+	@InjectView(R.id.progressBarPanel) View progressBarPanel;
 	
 	public ShoppingListsView(Context context) {
 		this.context = context;
@@ -105,11 +103,14 @@ public class ShoppingListsView implements ShoppingListsPresenter.View {
 	}
 
 	@Override
-	public void showSpinner(boolean show) {
-		if (show) {
-			spinner = ProgressDialog.show(context, context.getResources().getText(R.string.loading), context.getResources().getText(R.string.loading_info));
-		} else {
-			spinner.cancel();
-		}
+	public void showLoadingSpinner() {
+		progressBarPanel.setVisibility(View.VISIBLE);
+		listView.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void disableLoadingSpinner() {
+		progressBarPanel.setVisibility(View.GONE);
+		listView.setVisibility(View.VISIBLE);
 	}
 }

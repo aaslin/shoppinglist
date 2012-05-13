@@ -3,6 +3,6 @@
 	<version>
 		<name>1.0-SNAPSHOT</name>
 		<number>1</number>
-		<script>se.aaslin.developer.nexttrip.app.version.Version_1_0_SNAPSHOT</script>
+		<script>se.aaslin.developer.shoppinglist.android.app.version.Version_1_0_SNAPSHOT</script>
 	</version>
 </versions>

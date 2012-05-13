@@ -5,16 +5,15 @@ import java.util.List;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
-import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
-import se.aaslin.developer.shoppinglist.android.service.ShoppingListServiceAsync;
-import android.content.Context;
+import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
+import android.app.Activity;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.inject.Inject;
 
 public class ShoppingListsPresenter extends Presenter {
 	public interface View extends Display {
@@ -23,7 +22,9 @@ public class ShoppingListsPresenter extends Presenter {
 		
 		ListView getListView();
 		
-		void showSpinner(boolean show);
+		void showLoadingSpinner();
+		
+		void disableLoadingSpinner();
 	}
 	
 	public interface Model {
@@ -31,16 +32,21 @@ public class ShoppingListsPresenter extends Presenter {
 		List<ShoppingListDTO> getShoppingLists();
 	}
 	
-	@Inject Context context;
-	
 	View display;
 	ShoppingListServiceAsync srv;
 	Model model;
+	Activity activity;
 	
-	public ShoppingListsPresenter(View display, ShoppingListServiceAsync srv, Model model) {
+	public ShoppingListsPresenter(View display, ShoppingListServiceAsync srv, Model model, Activity activity) {
 		this.display = display;
 		this.srv = srv;
 		this.model = model;
+		this.activity = activity;
+	}
+	
+	@Override
+	protected void onCreate() {
+		fetchShoppingLists();
 	}
 
 	@Override
@@ -50,33 +56,28 @@ public class ShoppingListsPresenter extends Presenter {
 			@Override
 			public void onItemClick(AdapterView<?> adpaterView, android.view.View view, int pos, long id) {
 				ShoppingListDTO shoppingList = model.getShoppingLists().get(pos);
-				Toast.makeText(context, shoppingList.getName(), Toast.LENGTH_SHORT).show();
+				new ShoppingItemsPlace(shoppingList).moveTo(activity);
 			}
 		});
 	}
 
-	@Override
-	protected void onCreate() {
-		fetchShoppingLists();
-	}
-
 	private void fetchShoppingLists() {
-		display.showSpinner(true);
-		srv.getAll(new AsyncCallback<List<ShoppingListDTO>>() {
+		display.showLoadingSpinner();
+		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
 			
 			@Override
 			public void onSuccess(List<ShoppingListDTO> result) {
 				model.getShoppingLists().clear();
 				model.getShoppingLists().addAll(result);
 				updateShoppinglists();
-				display.showSpinner(false);
+				display.disableLoadingSpinner();
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.showSpinner(false);
+				display.disableLoadingSpinner();
 				Log.e(ShoppingListsPresenter.class.getCanonicalName(), caught.getLocalizedMessage());
-				Toast.makeText(context, caught.getMessage(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

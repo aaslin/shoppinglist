@@ -28,8 +28,11 @@ public class UserSessionUtils {
 		if (cookie == null) {
 			return null;
 		}
-		String username = sessionManager.getSessionUser(UUID.fromString(cookie));
-		
-		return username;
+		try {
+			String username = sessionManager.getSessionUser(UUID.fromString(cookie));
+			return username;
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 	}
 }

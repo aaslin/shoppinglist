@@ -3,6 +3,20 @@
     <string name="hello">Hello android-app!</string>
     <string name="app_name">Shopping List</string>
     
+    <!-- Erros messages -->
+    <string name="installError">An error have occurred during the installation. Please remove the application from the phone and try to install it again</string>
+    
+    <!-- System messsages -->
     <string name="loading">Loading</string>
     <string name="loading_info">Loading... Please wait</string>
+    
+    <!-- Dashboard -->
+    <string name="myLists">My Lists</string>
+    <string name="settings">Settings</string>
+    
+    <!-- Menu -->
+    <string name="menu_help">Help</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_refresh">Refresh</string>
+        
 </resources>

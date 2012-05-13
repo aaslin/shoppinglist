@@ -28,9 +28,9 @@
 	        <artifactId>shoppinglist-android-dbmodel</artifactId>
 	        <version>1.0</version>
 	    </dependency>
-		<dependency>          
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
+		<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>se.aaslin.developer</groupId>

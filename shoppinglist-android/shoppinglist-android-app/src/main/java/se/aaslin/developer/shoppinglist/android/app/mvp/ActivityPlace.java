@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 public abstract class ActivityPlace<T extends Place> extends Activity {
 	
-	protected T place;
+	private T place;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -28,5 +28,9 @@ public abstract class ActivityPlace<T extends Place> extends Activity {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	protected T getPlace() {
+		return place;
 	}
 }

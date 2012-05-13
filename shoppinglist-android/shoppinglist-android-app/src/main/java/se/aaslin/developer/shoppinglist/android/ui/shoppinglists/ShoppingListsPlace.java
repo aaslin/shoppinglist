@@ -6,7 +6,7 @@ import java.util.List;
 
 import se.aaslin.developer.shoppinglist.android.app.mvp.ActivityPlace;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Place;
-import se.aaslin.developer.shoppinglist.android.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter.ShoppingListsPresenter;
 
 public class ShoppingListsPlace extends Place {

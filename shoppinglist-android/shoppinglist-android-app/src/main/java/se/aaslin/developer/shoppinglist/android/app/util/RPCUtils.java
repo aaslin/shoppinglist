@@ -10,8 +10,8 @@ import java.net.HttpCookie;
 import java.net.URL;
 import java.util.Arrays;
 
+import se.aaslin.developer.shoppinglist.android.app.conf.Urls;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
-import se.aaslin.developer.shoppinglist.android.conf.Urls;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -83,7 +83,7 @@ public class RPCUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T getRPCService(Class<T> clazz, Context context) {
+	public static <T> T createRPCService(Class<T> clazz, Context context) {
 		return (T) Proxy.newProxyInstance(context.getClassLoader(), new Class[] {clazz}, new RPCProxyHandler(context));
 	}
 	

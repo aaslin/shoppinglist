@@ -24,7 +24,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>se.aaslin.developer</groupId>
-			<artifactId>shoppinglist-dto</artifactId>
+			<artifactId>shoppinglist-web-dto</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>

@@ -2,7 +2,9 @@ package se.aaslin.developer.shoppinglist.shared.dto;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class ShoppingItemDTO implements Serializable{
 
 	private static final long serialVersionUID = -2583911167795796148L;
