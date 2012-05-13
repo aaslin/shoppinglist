@@ -9,7 +9,6 @@
 
 	<modules>
 	    <module>shoppinglist-android-dbmodel</module>
-	    <module>shoppinglist-android-businesslogic</module>
 	    <module>shoppinglist-android-app</module>
 	</modules>
 

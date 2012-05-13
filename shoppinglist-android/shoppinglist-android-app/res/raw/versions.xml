@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<versions>
+	<version>
+		<name>1.0-SNAPSHOT</name>
+		<number>1</number>
+		<script>se.aaslin.developer.nexttrip.app.version.Version_1_0_SNAPSHOT</script>
+	</version>
+</versions>

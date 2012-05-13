@@ -8,15 +8,17 @@
     <uses-sdk android:targetSdkVersion="15"/>
     
     <application
-        android:name=".app.ShoppingListApplication"
+        android:name=".android.app.ShoppingListApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
-        <activity android:name=".ui.login.LoginActivity" >
+        
+        <activity android:name=".android.ui.splash.SplashActivity" android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.shoppinglists.ShoppingListsActivity"/>
+        <activity android:name=".android.ui.login.LoginActivity" android:noHistory="true" />
+        <activity android:name=".android.ui.shoppinglists.ShoppingListsActivity"/>
     </application>
 </manifest>
