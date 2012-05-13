@@ -24,6 +24,11 @@ public class SplashPresenter extends Presenter {
 	ViewDisplay display;
 	Activity activity;
 
+	public SplashPresenter(ViewDisplay display, Activity activity) {
+		this.display = display;
+		this.activity = activity;
+	}
+
 	@Override
 	protected void onCreate() {
 		new AsyncTask<Void, Void, Void>() {

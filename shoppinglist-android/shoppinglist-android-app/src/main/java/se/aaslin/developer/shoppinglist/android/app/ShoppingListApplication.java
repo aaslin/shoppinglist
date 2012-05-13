@@ -11,10 +11,12 @@ import se.aaslin.developer.shoppinglist.android.dao.impl.VersionDAOImpl;
 import se.aaslin.developer.shoppinglist.android.entity.Property;
 import se.aaslin.developer.shoppinglist.android.entity.Version;
 import se.aaslin.developer.shoppinglist.android.service.AuthenticationService;
+import se.aaslin.developer.shoppinglist.android.service.InstallerService;
 import se.aaslin.developer.shoppinglist.android.service.LoginService;
 import se.aaslin.developer.shoppinglist.android.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.android.service.VersionService;
 import se.aaslin.developer.shoppinglist.android.service.impl.AuthenticationServiceImpl;
+import se.aaslin.developer.shoppinglist.android.service.impl.InstallerServiceImpl;
 import se.aaslin.developer.shoppinglist.android.service.impl.LoginServiceImpl;
 import se.aaslin.developer.shoppinglist.android.service.impl.ShoppingListServiceImpl;
 import se.aaslin.developer.shoppinglist.android.service.impl.VersionServiceImpl;
@@ -78,6 +80,7 @@ public class ShoppingListApplication extends RoboApplication {
 				binder.bind(ShoppingListService.class).to(ShoppingListServiceImpl.class);
 				binder.bind(VersionService.class).to(VersionServiceImpl.class);
 				binder.bind(VersionIngester.class);
+				binder.bind(InstallerService.class).to(InstallerServiceImpl.class);
 			}
 		});
 	}
