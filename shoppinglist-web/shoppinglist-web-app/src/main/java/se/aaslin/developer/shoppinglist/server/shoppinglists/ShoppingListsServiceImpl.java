@@ -160,7 +160,7 @@ public class ShoppingListsServiceImpl implements ShoppingListsService {
 		dto.setModified(list.getTimeStamp().getModified());
 		dto.setName(list.getName());
 		dto.setOwnerID(list.getOwner().getID());
-		dto.setOwnerUsername(list.getOwner().getUsername());
+		dto.setOwner(list.getOwner().getUsername());
 		dto.setID(list.getID());
 		dto.setFromDB(true);
 		

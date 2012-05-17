@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -12,7 +14,7 @@ public class ShoppingListDTO implements Serializable {
 	private static final long serialVersionUID = -3112563693526623930L;
 
 	private int ID;
-	private String ownerUserName;
+	private String owner;
 	private int ownerID;
 	private String name;
 	private Date modified;
@@ -47,12 +49,12 @@ public class ShoppingListDTO implements Serializable {
 		ID = iD;
 	}
 
-	public String getOwnerUserName() {
-		return ownerUserName;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setOwnerUsername(String ownerUserName) {
-		this.ownerUserName = ownerUserName;
+	public void setOwner(String ownerUserName) {
+		this.owner = ownerUserName;
 	}
 
 	public int getOwnerID() {
@@ -78,7 +80,9 @@ public class ShoppingListDTO implements Serializable {
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
-
+	
+	@XmlElementWrapper(name="members")
+	@XmlElement(name="member")
 	public List<String> getMembers() {
 		return members;
 	}

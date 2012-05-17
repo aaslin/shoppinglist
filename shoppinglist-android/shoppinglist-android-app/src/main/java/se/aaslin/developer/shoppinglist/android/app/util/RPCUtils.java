@@ -83,7 +83,7 @@ public class RPCUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T createRPCService(Class<T> clazz, Context context) {
+	public static <T> T create(Class<T> clazz, Context context) {
 		return (T) Proxy.newProxyInstance(context.getClassLoader(), new Class[] {clazz}, new RPCProxyHandler(context));
 	}
 	

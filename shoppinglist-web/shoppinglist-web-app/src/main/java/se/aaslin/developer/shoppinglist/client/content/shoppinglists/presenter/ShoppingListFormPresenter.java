@@ -271,7 +271,7 @@ public class ShoppingListFormPresenter {
 		model.getAllMembers().clear();
 
 		Model.Member member = new Model.Member();
-		member.userName = model.getShoppingListDTO().getOwnerUserName();
+		member.userName = model.getShoppingListDTO().getOwner();
 		member.type = Model.Member.Type.OWNER;
 		model.getAllMembers().add(member);
 		model.getAllAvailableUsers().remove(member.userName);

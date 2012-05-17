@@ -22,5 +22,6 @@
         <activity android:name=".android.ui.dashboard.DashboardActivity"/>
         <activity android:name=".android.ui.shoppinglists.ShoppingListsActivity"/>
         <activity android:name=".android.ui.shoppingitems.ShoppingItemsActivity"/>
+        <activity android:name=".android.ui.shoppinglists.NewShoppingListActivity"/>
     </application>
 </manifest>

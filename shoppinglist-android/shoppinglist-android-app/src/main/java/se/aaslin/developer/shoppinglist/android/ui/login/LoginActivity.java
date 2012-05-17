@@ -22,7 +22,7 @@ public class LoginActivity extends ActivityPlace<LoginPlace> {
 		LoginPresenter.ViewDisplay display = new LoginView();
 		display.initView(getWindow().getDecorView());
 		
-		LoginServiceAsync srv = RPCUtils.createRPCService(LoginServiceAsync.class, this);
+		LoginServiceAsync srv = RPCUtils.create(LoginServiceAsync.class, this);
 		loginPresenter = new LoginPresenter(display, srv, this);
 		InjectionUtils.injectMembers(loginPresenter, this);
 		loginPresenter.bind();

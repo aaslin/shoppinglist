@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -21,11 +25,33 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 
+import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.http.HttpRequest.Alias;
+
+import android.net.Proxy;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
 
 public class HttpRequest<T> {
+	public static class Alias {
+		private final String alias;
+		private final Class<?> clazz;
+		
+		public Alias(String alias, Class<?> clazz) {
+			this.alias = alias;
+			this.clazz = clazz;
+		}
+
+		public String getAlias() {
+			return alias;
+		}
+
+		public Class<?> getClazz() {
+			return clazz;
+		}
+	}
 	
 	private Class<T> clazz;
 	private Class<? extends Collection> collectionClazz;
@@ -45,17 +71,17 @@ public class HttpRequest<T> {
 		return this;
 	}
 	
-	public HttpResponse<T> doGet(URI uri) {
+	public HttpResponse<T> doGet(URI uri, Alias... aliases) {
 		try {
 			org.apache.http.HttpResponse httpResponse = get(uri);
 			
 			if (collectionClazz == null) {
 				@SuppressWarnings("unchecked")
-				T responseEntity = (T) ingestResponse(httpResponse);
+				T responseEntity = (T) ingestResponse(httpResponse, aliases);
 				return new HttpResponse<T>(responseEntity, httpResponse.getStatusLine().getStatusCode());
 			} else {
 				@SuppressWarnings("unchecked")
-				List<T> responseEntities = (List<T>) ingestResponse(httpResponse);
+				List<T> responseEntities = (List<T>) ingestResponse(httpResponse, aliases);
 				return new HttpResponse<T>(responseEntities, httpResponse.getStatusLine().getStatusCode());
 			}
 		} catch (ClientProtocolException e) {
@@ -65,18 +91,22 @@ public class HttpRequest<T> {
 		}
 	}
 	
-	public HttpResponse<T> doPost(URI uri, Object request) {
+	public HttpResponse<T> doPost(URI uri, Object request, Alias... aliases) {
 		try {
 			String requestEntity = marshall(request);
 			org.apache.http.HttpResponse httpResponse = post(uri, requestEntity);
 			
+			if (clazz.equals(Void.class)) {
+				return new HttpResponse<T>(new ArrayList<T>(), httpResponse.getStatusLine().getStatusCode());
+			}
+			
 			if (collectionClazz == null) {
 				@SuppressWarnings("unchecked")
-				T responseEntity = (T) ingestResponse(httpResponse);
+				T responseEntity = (T) ingestResponse(httpResponse, aliases);
 				return new HttpResponse<T>(responseEntity, httpResponse.getStatusLine().getStatusCode());
 			} else {
 				@SuppressWarnings("unchecked")
-				List<T> responseEntities = (List<T>) ingestResponse(httpResponse);
+				List<T> responseEntities = (List<T>) ingestResponse(httpResponse, aliases);
 				return new HttpResponse<T>(responseEntities, httpResponse.getStatusLine().getStatusCode());
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -88,10 +118,27 @@ public class HttpRequest<T> {
 		}
 	}
 
-	private Object ingestResponse(org.apache.http.HttpResponse httpResponse) throws IOException {
+	public HttpResponse<T> doDelete(URI uri) {
+		try {
+			org.apache.http.HttpResponse httpResponse = delete(uri);
+			return new HttpResponse<T>(new ArrayList<T>(), httpResponse.getStatusLine().getStatusCode());
+	
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		} catch (ClientProtocolException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private Object ingestResponse(org.apache.http.HttpResponse httpResponse, Alias... aliases) throws IOException {
 		Object response;
 		if (clazz.isAnnotationPresent(XStreamAlias.class)) {
 			XStream stream = getDefaultXStream();
+			for (Alias a : aliases) {
+				stream.alias(a.getAlias(), a.getClazz());
+			}
 			XStreamAlias clazzAlias = clazz.getAnnotation(XStreamAlias.class);
 			String alias = clazzAlias.value();
 			stream.alias(alias, clazz);
@@ -150,6 +197,17 @@ public class HttpRequest<T> {
 		httpRequest.setHeader("Accept", "application/xml");
 		addCookies(httpRequest);
 		
+		return client.execute(httpRequest);
+	}
+	
+	private org.apache.http.HttpResponse delete(URI uri) throws UnsupportedEncodingException, IOException, ClientProtocolException {
+		HttpClient client = new DefaultHttpClient();
+		HttpDelete httpRequest = new HttpDelete();
+		httpRequest.setURI(uri);
+		httpRequest.setHeader("Content-Type", "application/xml");
+		httpRequest.setHeader("Accept", "application/xml");
+		addCookies(httpRequest);
+				
 		return client.execute(httpRequest);
 	}
 	

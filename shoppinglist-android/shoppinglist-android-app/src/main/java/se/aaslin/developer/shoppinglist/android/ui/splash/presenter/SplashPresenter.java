@@ -67,6 +67,7 @@ public class SplashPresenter extends Presenter {
 			@Override
 			public void onSuccess(String result) {
 				display.stopLoading();
+				authenticationService.storeAuthenticationId(result);
 				new DashboardPlace().moveTo(activity);
 			}
 			

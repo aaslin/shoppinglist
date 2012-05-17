@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -61,18 +64,51 @@ public class ShoppingListWs extends GenericWs {
 	
 	@GET
 	@Produces({ APPLICATION_XML, APPLICATION_JSON })
-	@Path("/{shoppingListId}")
-	public Response getShoppingItems(@PathParam("shoppingListId") int shoppingListId) {
+	@Path("/{id}")
+	public Response getShoppingList(@PathParam("id") int shoppingListId) {
 		try {
 			String username = userSession.getCurrentSessionsUsername();
 			if(username == null) {
 				throw new NotAuthorizedException();
 			}
 			ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, userSession.getCurrentSessionsUsername());
-			List<ShoppingItemDTO> dtos = createShoppingItemDTOs(shoppingListId, list.getItems()); 
-			GenericEntity<List<ShoppingItemDTO>> entity = new GenericEntity<List<ShoppingItemDTO>>(dtos) {};
+			ShoppingListDTO dto = createShoppingListDTO(list);
 			
-			return Response.ok(entity).build();
+			return Response.ok(dto).build();
+		} catch (NotAuthorizedException e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
+	@POST
+	@Consumes(APPLICATION_XML)
+	public Response saveShoppingList(ShoppingListDTO dto) {
+		try {
+			ShoppingList list = extractShoppingList(dto);
+			String username = userSession.getCurrentSessionsUsername();
+			List<String> members = dto.getMembers();
+			if (dto.isFromDB() && dto.getID() != 0) {
+				shoppingListService.update(list, members, username);
+			} else {
+				shoppingListService.create(list, members, username);
+			}
+			
+			return Response.ok().build();
+		} catch (NotAuthorizedException e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
+	@DELETE
+	@Consumes(APPLICATION_XML)
+	@Path("/{id}")
+	public Response removeShoppingList(@PathParam("id") int shoppingListId) {
+		try {
+			ShoppingList list = new ShoppingList();
+			list.setID(shoppingListId);
+			shoppingListService.remove(list, userSession.getCurrentSessionsUsername());
+			
+			return Response.ok().build();
 		} catch (NotAuthorizedException e) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
@@ -98,7 +134,7 @@ public class ShoppingListWs extends GenericWs {
 		dto.setModified(list.getTimeStamp().getModified());
 		dto.setName(list.getName());
 		dto.setOwnerID(list.getOwner().getID());
-		dto.setOwnerUsername(list.getOwner().getUsername());
+		dto.setOwner(list.getOwner().getUsername());
 		dto.setID(list.getID());
 		dto.setFromDB(true);
 		

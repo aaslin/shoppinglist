@@ -154,7 +154,7 @@ public class ShoppingListBoxPresenter {
 	
 	private void newList() {
 		ShoppingListDTO shoppingListDTO = new ShoppingListDTO();
-		shoppingListDTO.setOwnerUsername(model.getCurrentUser());
+		shoppingListDTO.setOwner(model.getCurrentUser());
 		shoppingListDTO.setName("\"New Shopping List\"");
 		
 		saveShoppingList(shoppingListDTO);

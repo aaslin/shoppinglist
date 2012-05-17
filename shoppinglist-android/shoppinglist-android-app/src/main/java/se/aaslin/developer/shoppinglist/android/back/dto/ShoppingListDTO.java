@@ -13,8 +13,8 @@ public class ShoppingListDTO implements Serializable {
 
 	@XStreamAlias("ID")
 	private int ID;
-	@XStreamAlias("ownerUserName")
-	private String ownerUserName;
+	@XStreamAlias("owner")
+	private String owner;
 	@XStreamAlias("ownerID")
 	private int ownerID;
 	@XStreamAlias("name")
@@ -55,12 +55,12 @@ public class ShoppingListDTO implements Serializable {
 		ID = iD;
 	}
 
-	public String getOwnerUserName() {
-		return ownerUserName;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setOwnerUsername(String ownerUserName) {
-		this.ownerUserName = ownerUserName;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public int getOwnerID() {

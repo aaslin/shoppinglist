@@ -31,7 +31,7 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		
 		ShoppingItemsPresenter.Model model = getPlace().getModel();
 		
-		ShoppingListServiceAsync srv = RPCUtils.createRPCService(ShoppingListServiceAsync.class, this);
+		ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 		
 		shoppingItemsPresenter = new ShoppingItemsPresenter(display, model, srv, this);
 		shoppingItemsPresenter.create();

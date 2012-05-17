@@ -1,10 +1,13 @@
 package se.aaslin.developer.shoppinglist.android.ui.shoppinglists;
 
+import java.util.ArrayList;
+
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.mvp.ActivityPlace;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
+import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.dashboard.DashboardPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter.ShoppingListsPresenter;
@@ -23,12 +26,14 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.shoppinglists);
 
-		ShoppingListsPresenter.View view = new ShoppingListsView(this);
-		view.initView(getWindow().getDecorView());
+		ShoppingListsPresenter.View view = new ShoppingListsView();
+		view.initView(this);
+		setContentView(view.getView());
+		
 		ShoppingListsPresenter.Model model = getPlace().getModel();
-		ShoppingListServiceAsync srv = RPCUtils.createRPCService(ShoppingListServiceAsync.class, this);
+
+		ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 
 		presenter = new ShoppingListsPresenter(view, srv, model, this);
 		InjectionUtils.injectMembers(presenter, this);
@@ -53,14 +58,27 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 			new DashboardPlace().moveTo(this, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			return true;
 		case R.id.menu_add:
+			ShoppingListDTO list = initEmptyShoppingList();
+			new NewShoppingListPlace(list).moveTo(this);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void setupActionbar() {
 		ActionBar actionbar = getActionBar();
 		actionbar.setDisplayHomeAsUpEnabled(true);
+		actionbar.setTitle(getResources().getString(R.string.myLists));
 	}
+
+	private ShoppingListDTO initEmptyShoppingList() {
+		ShoppingListDTO list = new ShoppingListDTO();
+		list.setFromDB(false);
+		list.setChanged(true);
+		list.setMembers(new ArrayList<String>());
+		
+		return list;
+	}
+
 }
