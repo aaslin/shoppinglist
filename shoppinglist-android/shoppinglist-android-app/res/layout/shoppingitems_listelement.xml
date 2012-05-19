@@ -2,14 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-    
-    <TextView android:id="@+id/nameTextView"
+    android:orientation="horizontal" >
+
+    <LinearLayout
         android:layout_width="match_parent"
-		android:layout_height="wrap_content"/>
-    
-    <TextView android:id="@+id/infoTextView"
+        android:layout_height="50dip"
+        android:paddingLeft="15dp"
+        android:layout_weight="1"
+        android:gravity="left|center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Lorem" />
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Ipsum" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-		android:layout_height="wrap_content"/>
-    
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <ImageButton
+            android:id="@+id/info"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:background="@null"
+            android:src="@android:drawable/ic_menu_info_details" />
+
+        <ImageButton
+            android:id="@+id/edit"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:background="@null"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:background="@null"
+            android:src="@android:drawable/ic_delete" />
+    </LinearLayout>
+
 </LinearLayout>

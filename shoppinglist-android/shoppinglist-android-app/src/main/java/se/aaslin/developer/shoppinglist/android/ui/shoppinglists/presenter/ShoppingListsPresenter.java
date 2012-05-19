@@ -11,7 +11,7 @@ import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
-import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.NewShoppingListPlace;
+import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.EditShoppingListPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.view.ShoppingListsListElementView;
 import android.app.Activity;
 import android.util.Log;
@@ -139,7 +139,7 @@ public class ShoppingListsPresenter extends Presenter {
 
 				@Override
 				public void onClick(android.view.View v) {
-					new NewShoppingListPlace(list).moveTo(activity);
+					new EditShoppingListPlace(list).moveTo(activity);
 				}
 			});
 		}

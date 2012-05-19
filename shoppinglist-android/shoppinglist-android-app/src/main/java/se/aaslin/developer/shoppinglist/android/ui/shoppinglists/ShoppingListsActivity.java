@@ -59,7 +59,7 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 			return true;
 		case R.id.menu_add:
 			ShoppingListDTO list = initEmptyShoppingList();
-			new NewShoppingListPlace(list).moveTo(this);
+			new EditShoppingListPlace(list).moveTo(this);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

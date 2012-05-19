@@ -30,7 +30,7 @@ public abstract class ActivityPlace<T extends Place> extends Activity {
 		}
 	}
 	
-	protected T getPlace() {
+	protected final T getPlace() {
 		return place;
 	}
 }
