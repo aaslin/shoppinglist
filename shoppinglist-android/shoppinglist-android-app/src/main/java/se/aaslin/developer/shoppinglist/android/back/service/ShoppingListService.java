@@ -18,4 +18,8 @@ public interface ShoppingListService {
 	List<UserDTO> getAllUsers() throws HttpException;
 	
 	void removeShoppingList(ShoppingListDTO dto) throws HttpException;
+	
+	void saveShoppingItem(int shoppingListId, ShoppingItemDTO dto) throws HttpException;	
+	
+	void removeShoppingItem(ShoppingItemDTO dto) throws HttpException;
 }

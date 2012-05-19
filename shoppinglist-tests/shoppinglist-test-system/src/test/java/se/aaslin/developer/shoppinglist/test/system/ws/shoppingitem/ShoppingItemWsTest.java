@@ -43,4 +43,54 @@ public class ShoppingItemWsTest extends BaseWsTest {
 		List<ShoppingItemDTO> dtos = response.getEntity(type);
 		Assert.assertNotNull(dtos);
 	}
+	
+	@Test
+	public void testSaveShoppingItemsAuthorized() {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(getBaseURI());
+		
+		LoginDTO loginDTO = new LoginDTO();
+		loginDTO.setUsername("Lars");
+		loginDTO.setPassword("abc123");
+		
+		ClientResponse response = service.path("rest").path("login").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginDTO);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+		String uuid = response.getEntity(String.class);
+		
+		ShoppingItemDTO shoppingItemDTO = new ShoppingItemDTO();
+		shoppingItemDTO.setName("test");
+		shoppingItemDTO.setFromDB(false);
+		shoppingItemDTO.setAmount("12 st");
+		
+		Cookie cookie = new Cookie("auth", uuid);
+		response = service.path("rest").path("shoppingitem").path("/" + 24).cookie(cookie).accept(MediaType.APPLICATION_XML).post(ClientResponse.class, shoppingItemDTO);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+	}
+	
+	@Test
+	public void testDeleteShoppingItemsAuthorized() {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(getBaseURI());
+		
+		LoginDTO loginDTO = new LoginDTO();
+		loginDTO.setUsername("Lars");
+		loginDTO.setPassword("abc123");
+		
+		ClientResponse response = service.path("rest").path("login").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginDTO);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+		String uuid = response.getEntity(String.class);
+		
+		Cookie cookie = new Cookie("auth", uuid);
+		response = service.path("rest").path("shoppingitem").path("/" + 24).cookie(cookie).accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+		
+		GenericType<List<ShoppingItemDTO>> type = new GenericType<List<ShoppingItemDTO>>() {};
+		List<ShoppingItemDTO> dtos = response.getEntity(type);
+		int id = dtos.get(0).getId();
+		
+		response = service.path("rest").path("shoppingitem").path("/" + id).cookie(cookie).accept(MediaType.APPLICATION_XML).delete(ClientResponse.class);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+	}
 }

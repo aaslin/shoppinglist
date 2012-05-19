@@ -14,6 +14,7 @@ public class ShoppingItemsListElementView implements ShoppingItemsPresenter.List
 	@InjectView(R.id.amount) TextView amount;
 	@InjectView(R.id.edit) ImageButton edit;
 	@InjectView(R.id.info) ImageButton info;
+	@InjectView(R.id.delete) ImageButton delete;
 	
 	@Override
 	public void initView(View view) {
@@ -38,5 +39,10 @@ public class ShoppingItemsListElementView implements ShoppingItemsPresenter.List
 	@Override
 	public ImageButton getInfoButton() {
 		return info;
+	}
+
+	@Override
+	public ImageButton getRemoveButton() {
+		return delete;
 	}
 }

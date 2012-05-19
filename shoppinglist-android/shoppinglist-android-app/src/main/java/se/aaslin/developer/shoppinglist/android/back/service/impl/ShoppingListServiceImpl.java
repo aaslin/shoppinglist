@@ -116,4 +116,41 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public void saveShoppingItem(int shoppingListId, ShoppingItemDTO dto) throws HttpException {
+		try {
+			String authId = authenticationService.getAuthenticationId();
+
+			HttpRequest<Void> request = new HttpRequest<Void>(Void.class);
+			HttpResponse<Void> response = request.setCookie("auth", authId).doPost(
+					new URI(String.format("%s/%s", Urls.URL_REST_SHOPPINGITEM, shoppingListId)), dto);
+
+			if (response.getStatusCode() == HttpStatus.SC_OK) {
+				return;
+			}
+
+			throw new HttpException(response.getStatusCode());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void removeShoppingItem(ShoppingItemDTO dto) throws HttpException {
+		try {
+			String authId = authenticationService.getAuthenticationId();
+
+			HttpRequest<Void> request = new HttpRequest<Void>(Void.class);
+			HttpResponse<Void> response = request.setCookie("auth", authId).doDelete(new URI(String.format("%s/%s", Urls.URL_REST_SHOPPINGITEM, dto.getId())));
+
+			if (response.getStatusCode() == HttpStatus.SC_OK) {
+				return;
+			}
+
+			throw new HttpException(response.getStatusCode());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

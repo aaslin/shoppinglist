@@ -63,12 +63,14 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 	}
 	
 	private ShoppingItem validateAccess(ShoppingItem item, String username) throws NotAuthorizedException {
-		if (username.equals(item.getShoppingList().getOwner().getUsername())){
-			return item;
-		}
-		for (User user : item.getShoppingList().getMembers()) {
-			if (username.equals(user.getUsername())) {
+		if (item != null) {
+			if (username.equals(item.getShoppingList().getOwner().getUsername())){
 				return item;
+			}
+			for (User user : item.getShoppingList().getMembers()) {
+				if (username.equals(user.getUsername())) {
+					return item;
+				}
 			}
 		}
 		

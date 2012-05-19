@@ -3,7 +3,10 @@ package se.aaslin.developer.shoppinglist.ws;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,7 +21,8 @@ import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.security.ShoppingListSessionManager;
 import se.aaslin.developer.shoppinglist.security.UserSession;
-import se.aaslin.developer.shoppinglist.service.shoppinglist.ShoppingListServiceImpl;
+import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
+import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 
@@ -29,7 +33,8 @@ import com.sun.jersey.api.core.InjectParam;
 @Transactional
 public class ShoppingItemWs extends GenericWs {
 
-	@InjectParam ShoppingListServiceImpl shoppingListService;
+	@InjectParam ShoppingListService shoppingListService;
+	@InjectParam ShoppingItemService shoppingItemService;
 	@InjectParam ShoppingListSessionManager shoppingListSessionManager;
 	@InjectParam UserSession userSession;
 	
@@ -47,6 +52,39 @@ public class ShoppingItemWs extends GenericWs {
 			GenericEntity<List<ShoppingItemDTO>> entity = new GenericEntity<List<ShoppingItemDTO>>(dtos) {};
 			
 			return Response.ok(entity).build();
+		} catch (NotAuthorizedException e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
+	@POST
+	@Consumes({APPLICATION_XML})
+	@Path("/{shoppingListId}")
+	public Response saveShoppingItem(@PathParam("shoppingListId") int shoppingListId, ShoppingItemDTO dto) {
+		try {
+			ShoppingItem item = extractShoppingItem(dto);
+			if (dto.isFromDB() && dto.getId() != 0) {
+				shoppingItemService.update(item, userSession.getCurrentSessionsUsername());
+			} else {
+				shoppingItemService.create(shoppingListId, item, userSession.getCurrentSessionsUsername());
+			}
+			
+			return Response.ok().build();
+		} catch (NotAuthorizedException e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
+	@DELETE
+	@Consumes({APPLICATION_XML})
+	@Path("/{shoppingItemId}")
+	public Response deleteShoppingItem(@PathParam("shoppingItemId") int shoppingItemId) {
+		try {
+			ShoppingItem item = new ShoppingItem();
+			item.setId(shoppingItemId);
+			shoppingItemService.remove(item, userSession.getCurrentSessionsUsername());
+			
+			return Response.ok().build();
 		} catch (NotAuthorizedException e) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}

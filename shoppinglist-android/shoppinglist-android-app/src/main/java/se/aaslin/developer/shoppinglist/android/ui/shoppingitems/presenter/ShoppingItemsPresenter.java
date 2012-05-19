@@ -13,7 +13,11 @@ import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListService
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.EditShoppingItemPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.view.ShoppingItemsListElementView;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -43,6 +47,8 @@ public class ShoppingItemsPresenter extends Presenter {
 		ImageButton getEditButton();
 		
 		ImageButton getInfoButton();
+		
+		ImageButton getRemoveButton();
 	}
 	
 	public interface Model {
@@ -122,6 +128,18 @@ public class ShoppingItemsPresenter extends Presenter {
 
 		element.setName(item.getName());
 		element.setAmount(item.getAmount());
+		if (item.getComment() != null && item.getComment().length() > 0) {
+			element.getInfoButton().setVisibility(android.view.View.VISIBLE);
+			element.getInfoButton().setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(android.view.View v) {
+					showInfoPopup(item.getComment());
+				}
+			});
+		} else {
+			element.getInfoButton().setVisibility(android.view.View.INVISIBLE);
+		}
 		element.getEditButton().setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -129,14 +147,47 @@ public class ShoppingItemsPresenter extends Presenter {
 				new EditShoppingItemPlace(model.getShoppingList(), item).moveTo(activity);
 			}
 		});
-		element.getInfoButton().setOnClickListener(new OnClickListener() {
+		element.getRemoveButton().setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(android.view.View v) {
-				Toast.makeText(activity, "test", Toast.LENGTH_SHORT).show();
+				removeItem(item);
 			}
 		});
 		
 		return convertView;
+	}
+	
+
+	private void showInfoPopup(String text) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setMessage(text);
+		builder.setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+		
+		builder.create().show();
+	}
+	
+	private void removeItem(final ShoppingItemDTO item) {
+		srv.removeShoppingItem(item, new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+				view.removeList(item);
+				model.getShoppingItems().remove(item);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				Log.e(ShoppingItemsPresenter.this.getClass().getCanonicalName(), caught.getMessage(), caught);
+				Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 }

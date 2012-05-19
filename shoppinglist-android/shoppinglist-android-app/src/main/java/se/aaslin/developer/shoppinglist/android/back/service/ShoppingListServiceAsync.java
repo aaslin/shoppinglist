@@ -18,4 +18,8 @@ public interface ShoppingListServiceAsync {
 	void getAllUsers(AsyncCallback<List<UserDTO>> callback);
 	
 	void removeShoppingList(ShoppingListDTO dto, AsyncCallback<Void> callback);
+	
+	void saveShoppingItem(int shoppingListId, ShoppingItemDTO dto, AsyncCallback<Void> callback);
+	
+	void removeShoppingItem(ShoppingItemDTO dto, AsyncCallback<Void> callback);
 }

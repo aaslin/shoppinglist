@@ -34,8 +34,10 @@
     <string name="disposeChanges">Dispose unsaved changes?</string>
     <string name="amount">Amount</string>
     <string name="comment">Comment</string>
+    <string name="disposeItem">Dispose item?</string>
     
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="close">Close</string>
     
 </resources>
