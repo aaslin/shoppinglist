@@ -77,6 +77,10 @@ public class HttpRequest<T> {
 		try {
 			org.apache.http.HttpResponse httpResponse = get(uri);
 			
+			if (clazz.equals(Void.class)) {
+				return new HttpResponse<T>(new ArrayList<T>(), httpResponse.getStatusLine().getStatusCode());
+			}
+			
 			if (collectionClazz == null) {
 				@SuppressWarnings("unchecked")
 				T responseEntity = (T) ingestResponse(httpResponse, aliases);

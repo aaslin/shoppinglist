@@ -135,6 +135,7 @@ public class ShoppingListsPresenter extends Presenter {
 			}
 		});
 		if (list.getOwner().equals(getCurrentUsername())) {
+			element.getEditButton().setVisibility(android.view.View.VISIBLE);
 			element.getEditButton().setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -142,6 +143,8 @@ public class ShoppingListsPresenter extends Presenter {
 					new EditShoppingListPlace(list).moveTo(activity);
 				}
 			});
+		} else {
+			element.getEditButton().setVisibility(android.view.View.INVISIBLE);
 		}
 
 		return convertView;

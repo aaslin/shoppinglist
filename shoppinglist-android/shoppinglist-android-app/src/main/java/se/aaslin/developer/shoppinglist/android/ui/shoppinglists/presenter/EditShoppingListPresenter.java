@@ -5,6 +5,7 @@ import java.util.List;
 import se.aaslin.developer.roboeventbus.RoboEventBus;
 import se.aaslin.developer.roboeventbus.RoboRegistration;
 import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.android.app.exception.HttpException;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.android.app.mvp.IsView;
@@ -12,6 +13,7 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.ShoppingListsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.event.RemoveShoppingListEvent;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.event.RemoveShoppingListEventHandler;
@@ -46,9 +48,9 @@ public class EditShoppingListPresenter extends Presenter {
 		void addMember(String name);
 
 		void removeMember(String user);
-		
+
 		void showLoadingSpinner();
-		
+
 		void disableLoadingSpinner();
 	}
 
@@ -79,7 +81,7 @@ public class EditShoppingListPresenter extends Presenter {
 
 	LayoutInflater inflater;
 	RoboEventBus eventBus;
-	
+
 	RoboRegistration saveRegistration;
 	RoboRegistration removeRegistration;
 
@@ -139,9 +141,9 @@ public class EditShoppingListPresenter extends Presenter {
 				save();
 			}
 		});
-		
+
 		removeRegistration = eventBus.addHandler(RemoveShoppingListEvent.TYPE, new RemoveShoppingListEventHandler() {
-			
+
 			@Override
 			public void onRemove() {
 				remove();
@@ -188,8 +190,12 @@ public class EditShoppingListPresenter extends Presenter {
 				@Override
 				public void onFailure(Throwable caught) {
 					view.disableLoadingSpinner();
-					caught.printStackTrace();
-					Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+					if (caught instanceof HttpException) {
+						handleHttpException(caught);
+					} else {
+						caught.printStackTrace();
+						Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+					}
 				}
 			});
 		} else {
@@ -197,48 +203,34 @@ public class EditShoppingListPresenter extends Presenter {
 		}
 	}
 
-	private void remove() {			
+	private void remove() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setMessage(activity.getResources().getString(R.string.disposeList));
 		builder.setCancelable(false);
 		builder.setPositiveButton(activity.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 				view.showLoadingSpinner();
 				if (model.getShoppingListDTO().isFromDB()) {
-					srv.removeShoppingList(model.getShoppingListDTO(), new AsyncCallback<Void>() {
-						
-						@Override
-						public void onSuccess(Void result) {
-							view.disableLoadingSpinner();
-							new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						}
-						
-						@Override
-						public void onFailure(Throwable caught) {
-							view.disableLoadingSpinner();
-							caught.printStackTrace();
-							Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
-						}
-					});
+					removeList();
 				} else {
 					new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 			}
 		});
-		builder.setNegativeButton(activity.getResources().getString(R.string.no),  new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(activity.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
 		});
-		
+
 		builder.create().show();
 	}
-	
+
 	private android.view.View createMemberListElement(final int position, android.view.View convertView, String user) {
 		ListElement element = null;
 		if (convertView == null) {
@@ -290,5 +282,45 @@ public class EditShoppingListPresenter extends Presenter {
 			}
 		});
 		builder.create().show();
+	}
+
+	private void removeList() {
+		srv.removeShoppingList(model.getShoppingListDTO(), new AsyncCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				view.disableLoadingSpinner();
+				new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				view.disableLoadingSpinner();
+				if (caught instanceof HttpException) {
+					handleHttpException(caught);
+				} else {
+					caught.printStackTrace();
+					Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+	}
+
+	private void handleHttpException(Throwable caught) {
+		HttpException e = (HttpException) caught;
+		if (e.getStatusCode() == 403) {
+			new LoginPlace().moveTo(activity);
+		} else if (e.getStatusCode() == 410) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+			builder.setMessage(activity.getResources().getString(R.string.listNotFound));
+			builder.setCancelable(false);
+			builder.setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				}
+			});
+		}
 	}
 }

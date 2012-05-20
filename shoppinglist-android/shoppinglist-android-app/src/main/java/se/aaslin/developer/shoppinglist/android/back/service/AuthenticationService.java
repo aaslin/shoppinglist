@@ -1,8 +1,11 @@
 package se.aaslin.developer.shoppinglist.android.back.service;
 
+
 public interface AuthenticationService {
 	
 	void storeAuthenticationId(String uuid);
+	
+	void removeAuthenticationId();
 	
 	String getAuthenticationId();
 	

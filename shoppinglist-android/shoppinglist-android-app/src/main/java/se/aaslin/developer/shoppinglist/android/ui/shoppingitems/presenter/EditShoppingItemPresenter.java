@@ -3,12 +3,14 @@ package se.aaslin.developer.shoppinglist.android.ui.shoppingitems.presenter;
 import se.aaslin.developer.roboeventbus.RoboEventBus;
 import se.aaslin.developer.roboeventbus.RoboRegistration;
 import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.android.app.exception.HttpException;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.IsView;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.event.RemoveShoppingItemEvent;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.event.RemoveShoppingItemEventHandler;
@@ -171,8 +173,13 @@ public class EditShoppingItemPresenter extends Presenter {
 						@Override
 						public void onFailure(Throwable caught) {
 							view.disableLoadingSpinner();
-							caught.printStackTrace();
-							Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+							view.disableLoadingSpinner();
+							if (caught instanceof HttpException) {
+								handleHttpException(caught);
+							} else {
+								caught.printStackTrace();
+								Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+							}
 						}
 					});
 				} else {
@@ -205,8 +212,31 @@ public class EditShoppingItemPresenter extends Presenter {
 				@Override
 				public void onFailure(Throwable caught) {
 					view.disableLoadingSpinner();
-					caught.printStackTrace();
-					Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+					view.disableLoadingSpinner();
+					if (caught instanceof HttpException) {
+						handleHttpException(caught);
+					} else {
+						caught.printStackTrace();
+						Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+					}
+				}
+			});
+		}
+	}
+	
+	private void handleHttpException(Throwable caught) {
+		HttpException e = (HttpException) caught;
+		if (e.getStatusCode() == 403) {
+			new LoginPlace().moveTo(activity);
+		} else if (e.getStatusCode() == 410) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+			builder.setMessage(activity.getResources().getString(R.string.itemNotFound));
+			builder.setCancelable(false);
+			builder.setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					new ShoppingItemsPlace(model.getShoppingListDTO()).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 			});
 		}

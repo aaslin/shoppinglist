@@ -7,20 +7,29 @@ import java.util.List;
 import se.aaslin.developer.roboeventbus.RoboEventBus;
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.mvp.ActivityPlace;
+import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
+import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
+import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.presenter.ShoppingItemsPresenter;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.view.ShoppingItemsView;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.ShoppingListsPlace;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 	public class ShoppingItemsModel implements ShoppingItemsPresenter.Model, Serializable {
@@ -49,9 +58,13 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 	Presenter presenter;
 	RoboEventBus eventBus;
 	
+	@Inject AuthenticationService authenticationService;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		InjectionUtils.injectMembers(this, this);
 		eventBus = RoboEventBus.getInstance();
 		setupActionbar();
 		
@@ -100,5 +113,25 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		ActionBar actionbar = getActionBar();
 		actionbar.setDisplayHomeAsUpEnabled(true);
 		actionbar.setTitle(getPlace().getShoppingListDTO().getName());
+	}
+	
+	private void logout() {
+		authenticationService.removeAuthenticationId();
+		authenticationService.storePassword("");
+		authenticationService.storeUsername("");
+		LoginServiceAsync loginService = RPCUtils.create(LoginServiceAsync.class, this);
+		loginService.logout(new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+				new LoginPlace().moveTo(ShoppingItemsActivity.this, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.e(ShoppingItemsActivity.this.getClass().getCanonicalName(), caught.getMessage(), caught);
+				Toast.makeText(ShoppingItemsActivity.this, caught.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 }

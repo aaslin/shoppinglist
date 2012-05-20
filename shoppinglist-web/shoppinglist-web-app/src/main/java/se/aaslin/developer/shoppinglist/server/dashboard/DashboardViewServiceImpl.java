@@ -17,6 +17,7 @@ import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.DashboardListPortletDTO;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
 
 @Service
 @Scope("request")
@@ -41,6 +42,9 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 		} catch (NotAuthorizedException e) {
 			e.printStackTrace();
 			return null;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -58,6 +62,9 @@ public class DashboardViewServiceImpl implements DashboardViewService {
 			
 			return getShoppingItems(shoppingListId);
 		} catch (NotAuthorizedException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}

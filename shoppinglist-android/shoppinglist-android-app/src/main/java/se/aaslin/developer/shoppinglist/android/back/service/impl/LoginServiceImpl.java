@@ -5,15 +5,20 @@ import java.net.URISyntaxException;
 
 import org.apache.http.HttpStatus;
 
+import com.google.inject.Inject;
+
 import se.aaslin.developer.shoppinglist.android.app.conf.Urls;
 import se.aaslin.developer.shoppinglist.android.app.exception.AuthenticationFailedException;
 import se.aaslin.developer.shoppinglist.android.app.exception.HttpException;
 import se.aaslin.developer.shoppinglist.android.back.dto.LoginDTO;
 import se.aaslin.developer.shoppinglist.android.back.http.HttpRequest;
 import se.aaslin.developer.shoppinglist.android.back.http.HttpResponse;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginService;
 
 public class LoginServiceImpl implements LoginService {
+
+	@Inject	AuthenticationService authenticationService;
 
 	@Override
 	public String login(String username, String password) throws AuthenticationFailedException, HttpException {
@@ -28,6 +33,24 @@ public class LoginServiceImpl implements LoginService {
 				return response.getSingleEntity();
 			} else if(response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
 				throw new AuthenticationFailedException();	
+			}
+			
+			throw new HttpException(response.getStatusCode());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void logout() throws HttpException  {
+		try { 
+			String authId = authenticationService.getAuthenticationId();
+			
+			HttpRequest<Void> request = new HttpRequest<Void>(Void.class);
+			HttpResponse<Void> response = request.setCookie("auth", authId).doGet(new URI(Urls.URL_REST_LOGOUT));
+			
+			if (response.getStatusCode() == HttpStatus.SC_OK) {
+				return;
 			}
 			
 			throw new HttpException(response.getStatusCode());

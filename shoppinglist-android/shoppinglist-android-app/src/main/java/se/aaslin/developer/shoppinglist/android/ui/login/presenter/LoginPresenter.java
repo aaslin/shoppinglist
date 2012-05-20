@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -75,5 +76,12 @@ public class LoginPresenter extends Presenter {
 				});
 			}
 		});
+	}
+
+	@Override
+	protected void onCreate() {
+		display.getUsername().requestFocus();
+		InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(display.getUsername(), InputMethodManager.SHOW_IMPLICIT);
 	}
 }

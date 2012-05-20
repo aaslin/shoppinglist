@@ -25,6 +25,7 @@ import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
 
 import com.sun.jersey.api.core.InjectParam;
 
@@ -54,6 +55,8 @@ public class ShoppingItemWs extends GenericWs {
 			return Response.ok(entity).build();
 		} catch (NotAuthorizedException e) {
 			return Response.status(Status.UNAUTHORIZED).build();
+		} catch (NotFoundException e) {
+			return Response.status(Status.NOT_FOUND).build();
 		}
 	}
 	
@@ -72,6 +75,8 @@ public class ShoppingItemWs extends GenericWs {
 			return Response.ok().build();
 		} catch (NotAuthorizedException e) {
 			return Response.status(Status.UNAUTHORIZED).build();
+		} catch (NotFoundException e) {
+			return Response.status(Status.NOT_FOUND).build();
 		}
 	}
 	

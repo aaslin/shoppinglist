@@ -6,6 +6,8 @@ import se.aaslin.developer.shoppinglist.android.back.dao.PropertyDAO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.entity.Property;
 
+import android.util.Log;
+
 import com.google.inject.Inject;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -20,6 +22,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		storeProperty(AUTH_KEY, uuid);
 	}
 	
+	@Override
+	public void removeAuthenticationId() {
+		try {
+			removeProperty(AUTH_KEY);
+		} catch (SQLException e) {
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+		}
+	}
+
 	@Override
 	public String getAuthenticationId() {
 		return getProperty(AUTH_KEY);
@@ -61,5 +72,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	private void removeProperty(String key) throws SQLException {
+		propertyDAO.removeProperty(key);
 	}
 }

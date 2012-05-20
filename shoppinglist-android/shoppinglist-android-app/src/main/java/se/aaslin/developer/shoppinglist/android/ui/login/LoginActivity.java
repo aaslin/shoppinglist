@@ -8,6 +8,7 @@ import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.login.presenter.LoginPresenter;
 import se.aaslin.developer.shoppinglist.android.ui.login.view.LoginView;
+import android.app.ActionBar;
 import android.os.Bundle;
 
 public class LoginActivity extends ActivityPlace<LoginPlace> {
@@ -17,6 +18,7 @@ public class LoginActivity extends ActivityPlace<LoginPlace> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setupActionbar();
 		setContentView(R.layout.login);
 		
 		LoginPresenter.ViewDisplay display = new LoginView();
@@ -26,5 +28,11 @@ public class LoginActivity extends ActivityPlace<LoginPlace> {
 		loginPresenter = new LoginPresenter(display, srv, this);
 		InjectionUtils.injectMembers(loginPresenter, this);
 		loginPresenter.bind();
+		loginPresenter.create();
+	}
+	
+	private void setupActionbar() {
+		ActionBar actionbar = getActionBar();
+		actionbar.setTitle(getResources().getString(R.string.login));
 	}
 }

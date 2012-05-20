@@ -14,6 +14,7 @@ import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.entity.User;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
 
 @Service
 public class ShoppingItemServiceImpl implements ShoppingItemService{
@@ -30,8 +31,11 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 	}
 	
 	@Override
-	public void update(ShoppingItem item, String username) throws NotAuthorizedException {
+	public void update(ShoppingItem item, String username) throws NotAuthorizedException, NotFoundException {
 		ShoppingItem managedItem = shoppingItemDAO.findById(item.getId());
+		if (managedItem == null) {
+			throw new NotFoundException();
+		}
 		managedItem = validateAccess(managedItem, username);
 		
 		managedItem.setName(item.getName());

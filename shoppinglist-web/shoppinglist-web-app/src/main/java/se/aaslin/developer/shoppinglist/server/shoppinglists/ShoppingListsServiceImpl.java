@@ -21,6 +21,7 @@ import se.aaslin.developer.shoppinglist.service.UserService;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.shared.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
+import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
 
 @Service
 @Scope("request")
@@ -49,13 +50,13 @@ public class ShoppingListsServiceImpl implements ShoppingListsService {
 	}
 
 	@Override
-	public List<ShoppingItemDTO> getShoppingItems(int shoppingListId) throws NotAuthorizedException {
+	public List<ShoppingItemDTO> getShoppingItems(int shoppingListId) throws NotAuthorizedException, NotFoundException {
 		ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, userSession.getCurrentSessionsUsername());
 		return createShoppingItemDTOs(shoppingListId, list.getItems()); 
 	}
 
 	@Override
-	public List<ShoppingListDTO> saveShoppingList(ShoppingListDTO dto) throws NotAuthorizedException {
+	public List<ShoppingListDTO> saveShoppingList(ShoppingListDTO dto) throws NotAuthorizedException, NotFoundException {
 		ShoppingList list = extractShoppingList(dto);
 		String username = userSession.getCurrentSessionsUsername();
 		List<String> members = dto.getMembers();
@@ -69,7 +70,7 @@ public class ShoppingListsServiceImpl implements ShoppingListsService {
 	}
 
 	@Override
-	public List<ShoppingItemDTO> saveShoppingItems(int shoppingListId, List<ShoppingItemDTO> itemDTOs) throws NotAuthorizedException {
+	public List<ShoppingItemDTO> saveShoppingItems(int shoppingListId, List<ShoppingItemDTO> itemDTOs) throws NotAuthorizedException, NotFoundException {
 		for (ShoppingItemDTO dto : itemDTOs) {
 			ShoppingItem item = extractShoppingItem(dto);
 			if (dto.isFromDB() && dto.getId() != 0) {
@@ -91,7 +92,7 @@ public class ShoppingListsServiceImpl implements ShoppingListsService {
 	}
 
 	@Override
-	public List<ShoppingItemDTO> removeShoppingItem(ShoppingItemDTO itemDTO) throws NotAuthorizedException {
+	public List<ShoppingItemDTO> removeShoppingItem(ShoppingItemDTO itemDTO) throws NotAuthorizedException, NotFoundException {
 		ShoppingItem item = extractShoppingItem(itemDTO);
 		shoppingItemService.remove(item, userSession.getCurrentSessionsUsername());
 		
@@ -104,13 +105,13 @@ public class ShoppingListsServiceImpl implements ShoppingListsService {
 	}
 
 	@Override
-	public ShoppingListDTO getShoppingList(int shoppingListId) throws NotAuthorizedException {
+	public ShoppingListDTO getShoppingList(int shoppingListId) throws NotAuthorizedException, NotFoundException {
 		ShoppingList list = shoppingListService.findShoppingListById(shoppingListId, userSession.getCurrentSessionsUsername());
 		return createShoppingListDTO(list);
 	}
 
 	@Override
-	public ShoppingListDTO updateShoppingList(ShoppingListDTO dto) throws NotAuthorizedException {
+	public ShoppingListDTO updateShoppingList(ShoppingListDTO dto) throws NotAuthorizedException, NotFoundException {
 		ShoppingList list = extractShoppingList(dto);
 		String username = userSession.getCurrentSessionsUsername();
 		List<String> members = dto.getMembers();

@@ -9,6 +9,7 @@ import se.aaslin.developer.shoppinglist.android.entity.meta.Property_;
 
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 public class PropertyDAOImpl extends AbstractDAO<Property, Integer> implements PropertyDAO {
@@ -40,5 +41,12 @@ public class PropertyDAOImpl extends AbstractDAO<Property, Integer> implements P
 			property.setValue(value);
 			dao.create(property);
 		}
+	}
+
+	@Override
+	public void removeProperty(String key) throws SQLException {
+		DeleteBuilder<Property, Integer> deleteBuilder = dao.deleteBuilder();
+		deleteBuilder.where().eq(Property_.key, key);
+		dao.delete(deleteBuilder.prepare());
 	}
 }

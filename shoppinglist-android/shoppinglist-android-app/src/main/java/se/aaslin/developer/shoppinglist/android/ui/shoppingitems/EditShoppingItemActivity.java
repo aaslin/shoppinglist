@@ -8,6 +8,7 @@ import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.event.RemoveShoppingItemEvent;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.event.SaveShoppingItemEvent;
@@ -19,6 +20,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.google.inject.Inject;
 
 public class EditShoppingItemActivity extends ActivityPlace<EditShoppingItemPlace> {
 	public class EditShoppingItemModel implements EditShoppingItemPresenter.Model {
@@ -45,6 +48,8 @@ public class EditShoppingItemActivity extends ActivityPlace<EditShoppingItemPlac
 	Presenter presenter;
 	RoboEventBus eventBus;
 
+	@Inject AuthenticationService authenticationService;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,7 +107,7 @@ public class EditShoppingItemActivity extends ActivityPlace<EditShoppingItemPlac
 		if (getPlace().getShoppingItem().isFromDB()) {
 			actionbar.setTitle(getPlace().getShoppingItem().getName());
 		} else {
-			actionbar.setTitle(getResources().getString(R.string.newList));
+			actionbar.setTitle(getResources().getString(R.string.newItem));
 		}
 	}
 }
