@@ -77,6 +77,24 @@ public class ShoppingListWsTest extends BaseWsTest {
 		Cookie cookie = new Cookie("auth", uuid);
 		response = service.path("rest").path("shoppinglist").cookie(cookie).accept(MediaType.APPLICATION_XML).post(ClientResponse.class, shoppingListDTO);
 		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+		
+		response = service.path("rest").path("shoppinglist").cookie(cookie).accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+		Assert.assertTrue(ClientResponse.Status.fromStatusCode(response.getStatus()) == ClientResponse.Status.OK);
+		
+		GenericType<List<ShoppingListDTO>> type = new GenericType<List<ShoppingListDTO>>() {};
+		List<ShoppingListDTO> dtos = response.getEntity(type);
+		Assert.assertNotNull(dtos);
+		
+		for (ShoppingListDTO dto : dtos) {
+			if (dto.getName().equals("test")) {
+				Assert.assertNotNull(dto.getMembers());
+				Assert.assertEquals(1, dto.getMembers().size());
+				Assert.assertEquals("Linda", dto.getMembers().get(0));
+				return;
+			}
+		}
+		
+		Assert.fail();
 	}
 	
 	@Test

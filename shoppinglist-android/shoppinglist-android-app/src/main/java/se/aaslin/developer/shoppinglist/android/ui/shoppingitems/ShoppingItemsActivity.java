@@ -53,6 +53,7 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		eventBus = RoboEventBus.getInstance();
+		setupActionbar();
 		
 		ShoppingItemsPresenter.View view = new ShoppingItemsView();
 		view.initView(this);
@@ -65,8 +66,6 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 
 		presenter.bind();
 		presenter.create();
-		
-		setupActionbar();
 	}
 
 	@Override
@@ -100,5 +99,6 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 	private void setupActionbar() {
 		ActionBar actionbar = getActionBar();
 		actionbar.setDisplayHomeAsUpEnabled(true);
+		actionbar.setTitle(getPlace().getShoppingListDTO().getName());
 	}
 }

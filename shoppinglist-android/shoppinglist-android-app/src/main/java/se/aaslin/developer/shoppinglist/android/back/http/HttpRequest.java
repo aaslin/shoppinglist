@@ -32,7 +32,9 @@ import android.net.Proxy;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.converters.collections.CollectionConverter;
 import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
+import com.thoughtworks.xstream.mapper.ClassAliasingMapper;
 
 public class HttpRequest<T> {
 	public static class Alias {
@@ -139,6 +141,7 @@ public class HttpRequest<T> {
 			for (Alias a : aliases) {
 				stream.alias(a.getAlias(), a.getClazz());
 			}
+//			stream.processAnnotations(clazz);
 			XStreamAlias clazzAlias = clazz.getAnnotation(XStreamAlias.class);
 			String alias = clazzAlias.value();
 			stream.alias(alias, clazz);
@@ -220,8 +223,6 @@ public class HttpRequest<T> {
 			sb.append(cookie.getKey()).append("=").append(cookie.getValue()).append(";"); 		
 		}
 		if (sb.length() > 0) {
-			String ove = sb.substring(0, sb.length() - 1).toString();
-			
 			Header header = new BasicHeader("Cookie", sb.substring(0, sb.length() - 1).toString());
 			httpRequest.addHeader(header);
 		}
@@ -230,9 +231,17 @@ public class HttpRequest<T> {
 	private String marshall(Object request) {
 		XStream stream = getDefaultXStream();
 		if (request.getClass().isAnnotationPresent(XStreamAlias.class)) {
-			XStreamAlias clazzAlias = request.getClass().getAnnotation(XStreamAlias.class);
-			String alias = clazzAlias.value();
-			stream.alias(alias, request.getClass());
+//			XStreamAlias clazzAlias = request.getClass().getAnnotation(XStreamAlias.class);
+//			String alias = clazzAlias.value();
+//			stream.alias(alias, request.getClass());
+			ClassAliasingMapper mapper = new ClassAliasingMapper(stream.getMapper());
+			mapper.addClassAlias("member", String.class);
+			stream.registerLocalConverter(
+			    ShoppingListDTO.class,
+			    "members",
+			    new CollectionConverter(mapper)
+			);
+			stream.processAnnotations(request.getClass());
 		}
 		
 		return stream.toXML(request);

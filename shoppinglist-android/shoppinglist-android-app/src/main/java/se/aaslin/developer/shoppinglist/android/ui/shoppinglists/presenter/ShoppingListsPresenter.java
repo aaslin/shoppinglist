@@ -102,7 +102,7 @@ public class ShoppingListsPresenter extends Presenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				view.disableLoadingSpinner();
-				Log.e(ShoppingListsPresenter.class.getCanonicalName(), caught.getLocalizedMessage());
+				Log.e(ShoppingListsPresenter.class.getCanonicalName(), caught.getLocalizedMessage(), caught);
 				Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		});

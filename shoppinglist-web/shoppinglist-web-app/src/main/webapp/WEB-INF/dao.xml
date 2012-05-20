@@ -21,6 +21,8 @@
 		<property name="url" value="jdbc:mysql://localhost:3306/shoppinglist" />
 		<property name="username" value="root" />
 		<property name="password" value="abc123" />
+		<property name="validationQuery" value="SELECT 1"/>
+		<property name="testOnBorrow" value="true"/>
 	</bean>
 	
 	<bean id="myEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

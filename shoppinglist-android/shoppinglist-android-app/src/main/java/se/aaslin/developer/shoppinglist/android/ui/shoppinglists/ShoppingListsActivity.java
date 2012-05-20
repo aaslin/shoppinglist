@@ -27,6 +27,8 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setupActionbar();
+		
 		ShoppingListsPresenter.View view = new ShoppingListsView();
 		view.initView(this);
 		setContentView(view.getView());
@@ -40,8 +42,6 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 
 		presenter.create();
 		presenter.bind();
-		
-		setupActionbar();
 	}
 
 	@Override
@@ -74,6 +74,7 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 
 	private ShoppingListDTO initEmptyShoppingList() {
 		ShoppingListDTO list = new ShoppingListDTO();
+		list.setName("");
 		list.setFromDB(false);
 		list.setChanged(true);
 		list.setMembers(new ArrayList<String>());

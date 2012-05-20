@@ -50,6 +50,7 @@ public class EditShoppingItemActivity extends ActivityPlace<EditShoppingItemPlac
 		super.onCreate(savedInstanceState);
 		 
 		eventBus = RoboEventBus.getInstance();
+		setupActionbar();
 		
 		final ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 		
@@ -63,8 +64,6 @@ public class EditShoppingItemActivity extends ActivityPlace<EditShoppingItemPlac
 		InjectionUtils.injectMembers(presenter, this);
 		presenter.bind();
 		presenter.create();
-		
-		setupActionbar();
 	}
 	
 	@Override

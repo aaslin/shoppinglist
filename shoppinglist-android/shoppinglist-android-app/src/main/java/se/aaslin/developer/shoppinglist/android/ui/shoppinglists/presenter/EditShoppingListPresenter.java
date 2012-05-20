@@ -103,6 +103,7 @@ public class EditShoppingListPresenter extends Presenter {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				model.getShoppingListDTO().setChanged(true);
 				model.getShoppingListDTO().setName(s.toString());
 			}
 
@@ -181,7 +182,7 @@ public class EditShoppingListPresenter extends Presenter {
 				@Override
 				public void onSuccess(Void result) {
 					view.disableLoadingSpinner();
-					new ShoppingListsPlace().moveTo(activity);
+					new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
 				@Override
@@ -191,6 +192,8 @@ public class EditShoppingListPresenter extends Presenter {
 					Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
 				}
 			});
+		} else {
+			new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		}
 	}
 
@@ -279,6 +282,7 @@ public class EditShoppingListPresenter extends Presenter {
 			public void onClick(DialogInterface dialog, int which) {
 				String user = model.getAvailableUsers().remove(which);
 				model.getShoppingListDTO().getMembers().add(user);
+				model.getShoppingListDTO().setChanged(true);
 				view.addMember(user);
 				if (model.getAvailableUsers().size() == 0) {
 					view.getAddMemberButton().setEnabled(false);

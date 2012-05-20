@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("shoppingListDTO")
 public class ShoppingListDTO implements Serializable {

@@ -61,6 +61,7 @@ public class EditShoppingListActivity extends ActivityPlace<EditShoppingListPlac
 		super.onCreate(savedInstanceState);
 		
 		eventBus = RoboEventBus.getInstance();
+		setupActionbar();
 		
 		final ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 		srv.getAllUsers(new AsyncCallback<List<UserDTO>>() {
@@ -82,8 +83,6 @@ public class EditShoppingListActivity extends ActivityPlace<EditShoppingListPlac
 				InjectionUtils.injectMembers(presenter, EditShoppingListActivity.this);
 				presenter.bind();
 				presenter.create();
-				
-				setupActionbar();
 			}
 
 			@Override
