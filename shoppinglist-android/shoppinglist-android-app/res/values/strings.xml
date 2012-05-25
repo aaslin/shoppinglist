@@ -41,6 +41,10 @@
     <string name="disposeItem">Dispose item?</string>
     <string name="ownedBy">Owned by</string>
     
+    <string name="addedBy">added by</string>
+    <string name="updatedBy">upated by</string>
+    <string name="removedBy">removed by</string>
+    
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">Close</string>

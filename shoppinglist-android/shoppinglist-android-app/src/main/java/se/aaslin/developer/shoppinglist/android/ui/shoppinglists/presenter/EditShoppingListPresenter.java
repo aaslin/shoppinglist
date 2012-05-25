@@ -13,6 +13,8 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Type;
 import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.ShoppingListsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.event.RemoveShoppingListEvent;
@@ -26,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -184,7 +187,11 @@ public class EditShoppingListPresenter extends Presenter {
 				@Override
 				public void onSuccess(Void result) {
 					view.disableLoadingSpinner();
-					new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					Type type = model.getShoppingListDTO().isFromDB() ? Type.UPDATED : Type.ADDED;
+					String name = model.getShoppingListDTO().getName();
+					String username = authenticationService.getUsername();
+					Notification notification = new Notification(type, name, username);
+					new ShoppingListsPlace(notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
 				@Override
@@ -290,7 +297,11 @@ public class EditShoppingListPresenter extends Presenter {
 			@Override
 			public void onSuccess(Void result) {
 				view.disableLoadingSpinner();
-				new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				Type type = Type.REMOVED;
+				String name = model.getShoppingListDTO().getName();
+				String username = authenticationService.getUsername();
+				Notification notification = new Notification(type, name, username);
+				new ShoppingListsPlace(notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			}
 
 			@Override
@@ -321,6 +332,9 @@ public class EditShoppingListPresenter extends Presenter {
 					new ShoppingListsPlace().moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 			});
+		} else {
+			Log.e(EditShoppingListPresenter.this.getClass().getCanonicalName(), caught.getMessage(), caught);
+			Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
 }

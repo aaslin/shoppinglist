@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_green_light"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" 
+    android:visibility="gone">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/notificationItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Matlista"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/notificationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="added by Lars" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/notificationRemove"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@android:drawable/ic_delete" 
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

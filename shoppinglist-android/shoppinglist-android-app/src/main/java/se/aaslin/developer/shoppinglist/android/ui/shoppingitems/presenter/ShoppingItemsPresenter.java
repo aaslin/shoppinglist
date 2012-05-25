@@ -9,7 +9,10 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.IsView;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Type;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.EditShoppingItemPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.view.ShoppingItemsListElementView;
 import android.app.Activity;
@@ -17,12 +20,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 public class ShoppingItemsPresenter extends Presenter {
 	public interface View extends IsView {
@@ -36,6 +40,12 @@ public class ShoppingItemsPresenter extends Presenter {
 		void showLoadingSpinner();
 		
 		void disableLoadingSpinner();
+
+		void showNotification(String item, String string, int color);
+
+		android.view.View getRemoveNotificationButton();
+
+		void hideNotification();
 	}
 	
 	public interface ListElement extends Display {
@@ -56,7 +66,11 @@ public class ShoppingItemsPresenter extends Presenter {
 		ShoppingListDTO getShoppingList();
 		
 		List<ShoppingItemDTO> getShoppingItems();
+		
+		Notification getNotification();
 	}
+	
+	@Inject AuthenticationService authenticationService;
 	
 	View view;
 	Model model;
@@ -86,6 +100,14 @@ public class ShoppingItemsPresenter extends Presenter {
 				return createShoppingItemElement(position, convertView, getItem(position));
 			}
 		});
+		
+		view.getRemoveNotificationButton().setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(android.view.View v) {
+				view.hideNotification();
+			}
+		});
 	}
 
 	private void fetchShoppingItems() {
@@ -98,6 +120,8 @@ public class ShoppingItemsPresenter extends Presenter {
 				model.getShoppingItems().addAll(result);
 				updateItems();
 				view.disableLoadingSpinner();
+				
+				showNotificationIfAny();
 			}
 
 			@Override
@@ -179,7 +203,12 @@ public class ShoppingItemsPresenter extends Presenter {
 			@Override
 			public void onSuccess(Void result) {
 				view.removeList(item);
+				model.getNotification().setType(Type.REMOVED);
+				model.getNotification().setWhat(item.getName());
+				model.getNotification().setUsername(authenticationService.getUsername());
+				
 				model.getShoppingItems().remove(item);
+				showNotificationIfAny();
 			}
 			
 			@Override
@@ -189,5 +218,33 @@ public class ShoppingItemsPresenter extends Presenter {
 				Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
 			}
 		});
+	}
+	
+	private void showNotificationIfAny() {
+		if (model.getNotification() == null) {
+			return;
+		}
+		
+		String item = model.getNotification().getWhat();
+		
+		StringBuilder text = new StringBuilder();
+		int color = 0;
+		switch (model.getNotification().getType()) {
+		case ADDED:
+			text.append(activity.getResources().getString(R.string.addedBy));
+			color = activity.getResources().getColor(android.R.color.holo_green_light);
+			break;
+		case UPDATED:
+			text.append(activity.getResources().getString(R.string.updatedBy));
+			color = activity.getResources().getColor(android.R.color.holo_orange_light);
+			break;
+		case REMOVED:
+			text.append(activity.getResources().getString(R.string.removedBy));
+			color = activity.getResources().getColor(android.R.color.holo_red_light);
+			break;
+		}
+		text.append(" ").append(model.getNotification().getUsername());
+		
+		view.showNotification(item, text.toString(), color);
 	}
 }

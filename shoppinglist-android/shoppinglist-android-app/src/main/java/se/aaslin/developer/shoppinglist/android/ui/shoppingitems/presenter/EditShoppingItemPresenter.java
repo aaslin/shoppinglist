@@ -1,5 +1,7 @@
 package se.aaslin.developer.shoppinglist.android.ui.shoppingitems.presenter;
 
+import com.google.inject.Inject;
+
 import se.aaslin.developer.roboeventbus.RoboEventBus;
 import se.aaslin.developer.roboeventbus.RoboRegistration;
 import se.aaslin.developer.shoppinglist.R;
@@ -9,7 +11,10 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.IsView;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingItemDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
+import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Type;
 import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.event.RemoveShoppingItemEvent;
@@ -45,6 +50,8 @@ public class EditShoppingItemPresenter extends Presenter {
 		
 		ShoppingItemDTO getShoppingItemDTO();
 	}
+	
+	@Inject AuthenticationService authenticationService;
 	
 	View view;
 	Model model;
@@ -167,7 +174,11 @@ public class EditShoppingItemPresenter extends Presenter {
 						@Override
 						public void onSuccess(Void result) {
 							view.disableLoadingSpinner();
-							new ShoppingItemsPlace(model.getShoppingListDTO()).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							Type type = Type.REMOVED;
+							String name = model.getShoppingItemDTO().getName();
+							String username = authenticationService.getUsername();
+							Notification notification = new Notification(type, name, username);
+							new ShoppingItemsPlace(model.getShoppingListDTO(), notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						}
 						
 						@Override
@@ -206,7 +217,11 @@ public class EditShoppingItemPresenter extends Presenter {
 				@Override
 				public void onSuccess(Void result) {
 					view.disableLoadingSpinner();
-					new ShoppingItemsPlace(model.getShoppingListDTO()).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					Type type = model.getShoppingItemDTO().isFromDB() ? Type.UPDATED : Type.ADDED;
+					String name = model.getShoppingItemDTO().getName();
+					String username = authenticationService.getUsername();
+					Notification notification = new Notification(type, name, username);
+					new ShoppingItemsPlace(model.getShoppingListDTO(), notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
 				@Override

@@ -1,6 +1,7 @@
 package se.aaslin.developer.shoppinglist.android.ui.shoppinglists;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.mvp.ActivityPlace;
@@ -12,6 +13,7 @@ import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.dashboard.DashboardPlace;
 import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter.ShoppingListsPresenter;
@@ -28,7 +30,26 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 
 public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
+	public class Model implements ShoppingListsPresenter.Model {
 
+		private final List<ShoppingListDTO> shoppingLists = new ArrayList<ShoppingListDTO>();
+		private final Notification notification;
+		
+		public Model(Notification notification) {
+			this.notification = notification;
+		}
+
+		@Override
+		public List<ShoppingListDTO> getShoppingLists() {
+			return shoppingLists;
+		}
+
+		@Override
+		public Notification getNotification() {
+			return notification;
+		}
+	}
+	
 	Presenter presenter;
 
 	@Inject AuthenticationService authenticationService;
@@ -45,7 +66,7 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 		view.initView(this);
 		setContentView(view.getView());
 		
-		ShoppingListsPresenter.Model model = getPlace().getModel();
+		ShoppingListsPresenter.Model model = new Model(getPlace().getNotification());
 
 		ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 

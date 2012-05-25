@@ -2,8 +2,8 @@ package se.aaslin.developer.shoppinglist.android.app.conf;
 
 public class Urls {
 	
-//	public static String DOMAIN = "http://192.168.0.15:8080";
-	public static String DOMAIN = "http://ll.homenet.org:8080";
+	public static String DOMAIN = "http://192.168.0.15:8080";
+//	public static String DOMAIN = "http://ll.homenet.org:8080";
 	public static String PATH = "/shoppinglist";
 	public static String URL = String.format("%s%s/gwt.shoppinglist/", DOMAIN, PATH);
 	public static String LOGIN_URL = String.format("%s%s/gwt.login/", DOMAIN, PATH);
@@ -13,4 +13,6 @@ public class Urls {
 	public static String URL_REST_SHOPPINGLIST = String.format("%s/shoppinglist", URL_REST);
 	public static String URL_REST_SHOPPINGITEM = String.format("%s/shoppingitem", URL_REST);
 	public static String URL_REST_USER = String.format("%s/user", URL_REST);
+	
+	public static String C2DM_EMAIL = "listyourlife@gmail.com";
 }

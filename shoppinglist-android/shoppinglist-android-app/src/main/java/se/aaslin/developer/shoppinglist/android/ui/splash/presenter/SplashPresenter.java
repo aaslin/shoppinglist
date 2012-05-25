@@ -1,6 +1,7 @@
 package se.aaslin.developer.shoppinglist.android.ui.splash.presenter;
 
 import se.aaslin.developer.shoppinglist.R;
+import se.aaslin.developer.shoppinglist.android.app.conf.Urls;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
@@ -10,6 +11,8 @@ import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.dashboard.DashboardPlace;
 import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,8 +50,9 @@ public class SplashPresenter extends Presenter {
 			@Override
 			public void onSuccess(Void result) {
 				authenticate();
+				registerForC2DM();
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				display.stopLoading();
@@ -78,4 +82,12 @@ public class SplashPresenter extends Presenter {
 			}
 		});
 	}
+	
+	private void registerForC2DM() {
+		Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+		registrationIntent.putExtra("app", PendingIntent.getBroadcast(activity, 0, new Intent(), 0)); // boilerplate
+		registrationIntent.putExtra("sender", Urls.C2DM_EMAIL);
+		activity.startService(registrationIntent);
+	}
+
 }

@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +24,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
-import se.aaslin.developer.shoppinglist.android.back.http.HttpRequest.Alias;
-
-import android.net.Proxy;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -191,7 +186,7 @@ public class HttpRequest<T> {
 		httpRequest.setHeader("Accept", "application/xml");
 		addCookies(httpRequest);
 		
-		HttpEntity httpEntity = new StringEntity(request);
+		HttpEntity httpEntity = new StringEntity(request, "UTF-8");
 		httpRequest.setEntity(httpEntity);
 		
 		return client.execute(httpRequest);

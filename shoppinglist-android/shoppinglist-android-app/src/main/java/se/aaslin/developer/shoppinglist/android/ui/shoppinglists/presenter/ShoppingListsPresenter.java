@@ -10,12 +10,15 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.EditShoppingListPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.view.ShoppingListsListElementView;
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -36,6 +39,12 @@ public class ShoppingListsPresenter extends Presenter {
 		void showLoadingSpinner();
 
 		void disableLoadingSpinner();
+		
+		ImageButton getRemoveNotificationButton();
+		
+		void showNotification(String item, String text, int color);
+		
+		void hideNotification();
 	}
 
 	public interface ListElement extends Display {
@@ -52,6 +61,8 @@ public class ShoppingListsPresenter extends Presenter {
 	public interface Model {
 
 		List<ShoppingListDTO> getShoppingLists();
+		
+		Notification getNotification();
 	}
 
 	@Inject
@@ -85,6 +96,14 @@ public class ShoppingListsPresenter extends Presenter {
 				return createShoppingListElement(position, convertView, getItem(position));
 			}
 		});
+		
+		view.getRemoveNotificationButton().setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(android.view.View v) {
+				view.hideNotification();
+			}
+		});
 	}
 
 	private void fetchShoppingLists() {
@@ -97,6 +116,8 @@ public class ShoppingListsPresenter extends Presenter {
 				model.getShoppingLists().addAll(result);
 				updateShoppinglists();
 				view.disableLoadingSpinner();
+
+				showNotificationIfAny();
 			}
 
 			@Override
@@ -150,7 +171,35 @@ public class ShoppingListsPresenter extends Presenter {
 		return convertView;
 	}
 
-	private Object getCurrentUsername() {
+	private String getCurrentUsername() {
 		return authenticationService.getUsername();
+	}
+	
+	private void showNotificationIfAny() {
+		if (model.getNotification() == null) {
+			return;
+		}
+		
+		String item = model.getNotification().getWhat();
+		
+		StringBuilder text = new StringBuilder();
+		int color = 0;
+		switch (model.getNotification().getType()) {
+		case ADDED:
+			text.append(activity.getResources().getString(R.string.addedBy));
+			color = activity.getResources().getColor(android.R.color.holo_green_light);
+			break;
+		case UPDATED:
+			text.append(activity.getResources().getString(R.string.updatedBy));
+			color = activity.getResources().getColor(android.R.color.holo_orange_light);
+			break;
+		case REMOVED:
+			text.append(activity.getResources().getString(R.string.removedBy));
+			color = activity.getResources().getColor(android.R.color.holo_red_light);
+			break;
+		}
+		text.append(" ").append(getCurrentUsername());
+		
+		view.showNotification(item, text.toString(), color);
 	}
 }

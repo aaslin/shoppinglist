@@ -16,6 +16,7 @@ import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.login.LoginPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.presenter.ShoppingItemsPresenter;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.view.ShoppingItemsView;
@@ -38,9 +39,11 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		
 		private final ShoppingListDTO shoppingListDTO;
 		private final List<ShoppingItemDTO> shoppingItemDTOs = new ArrayList<ShoppingItemDTO>();
-		
-		public ShoppingItemsModel(ShoppingListDTO shoppingListDTO) {
+		private final Notification notification;
+
+		public ShoppingItemsModel(ShoppingListDTO shoppingListDTO, Notification notification) {
 			this.shoppingListDTO = shoppingListDTO;
+			this.notification = notification;
 		}
 
 		@Override
@@ -51,6 +54,11 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		@Override
 		public List<ShoppingItemDTO> getShoppingItems() {
 			return shoppingItemDTOs;
+		}
+
+		@Override
+		public Notification getNotification() {
+			return notification;
 		}
 		
 	}
@@ -72,11 +80,12 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		view.initView(this);
 		setContentView(view.getView());
 		
-		ShoppingItemsPresenter.Model model = new ShoppingItemsModel(getPlace().getShoppingListDTO());
+		ShoppingItemsPresenter.Model model = new ShoppingItemsModel(getPlace().getShoppingListDTO(), getPlace().getNotification());
 		ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
 		
 		presenter = new ShoppingItemsPresenter(view, model, srv, this);
-
+		InjectionUtils.injectMembers(presenter, this);
+			
 		presenter.bind();
 		presenter.create();
 	}

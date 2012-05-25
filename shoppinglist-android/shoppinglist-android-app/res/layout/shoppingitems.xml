@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:weightSum="1.0">
-
+	
+    <include layout="@layout/notification"/>
+    
     <RelativeLayout
         android:id="@+id/progressBarPanel"
         android:layout_width="match_parent"
