@@ -8,4 +8,6 @@ public interface UserService {
 	void changePassword(String username, String newPassword);
 	
 	List<String> getAllUsers(String currentUsername);
+
+	void register(String username, String registration);
 }

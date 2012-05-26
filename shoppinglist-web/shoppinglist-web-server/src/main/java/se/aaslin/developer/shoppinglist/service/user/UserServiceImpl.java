@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService {
 		
 		return result;
 	}
+
+	@Override
+	public void register(String username, String registration) {
+		userDAO.register(username, registration);
+	}
 }

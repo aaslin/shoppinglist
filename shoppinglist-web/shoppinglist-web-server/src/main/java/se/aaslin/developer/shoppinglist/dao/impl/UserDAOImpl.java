@@ -56,4 +56,10 @@ public class UserDAOImpl extends GenericDAOImpl<Integer, User> implements UserDA
 		
 		return new HashSet<User>(em.createQuery(query).getResultList());
 	}
+
+	@Override
+	public void register(String username, String registration) {
+		User user = findByUsername(username);
+		user.setRegistration(registration);
+	}
 }

@@ -15,6 +15,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private static final String PASSWORD_KEY = "password";
 	private static final String USERNAME_KEY = "username";
 	private static final String AUTH_KEY = "auth";
+	private static final String REGISTRATION_KEY = "c2dmPref";
+	
 	@Inject PropertyDAO propertyDAO;
 
 	@Override
@@ -55,6 +57,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	public String getPassword() {
 		return getProperty(PASSWORD_KEY);
 	}	
+	
+	@Override
+	public void storeRegistration(String registration) {
+		storeProperty(REGISTRATION_KEY, registration);
+	}
+
+	@Override
+	public String getRegistration() {
+		return getProperty(REGISTRATION_KEY);
+	}
 	
 	private void storeProperty(String key, String value) {
 		try {

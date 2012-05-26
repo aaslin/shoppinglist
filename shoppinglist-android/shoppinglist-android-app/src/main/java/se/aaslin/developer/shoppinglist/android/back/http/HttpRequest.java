@@ -228,11 +228,8 @@ public class HttpRequest<T> {
 	}
 	
 	private String marshall(Object request) {
-		XStream stream = getDefaultXStream();
 		if (request.getClass().isAnnotationPresent(XStreamAlias.class)) {
-//			XStreamAlias clazzAlias = request.getClass().getAnnotation(XStreamAlias.class);
-//			String alias = clazzAlias.value();
-//			stream.alias(alias, request.getClass());
+			XStream stream = getDefaultXStream();
 			ClassAliasingMapper mapper = new ClassAliasingMapper(stream.getMapper());
 			mapper.addClassAlias("member", String.class);
 			stream.registerLocalConverter(
@@ -241,8 +238,10 @@ public class HttpRequest<T> {
 			    new CollectionConverter(mapper)
 			);
 			stream.processAnnotations(request.getClass());
+
+			return stream.toXML(request);
+		} else {
+			return (String) request;
 		}
-		
-		return stream.toXML(request);
 	}
 }

@@ -16,4 +16,8 @@ public interface AuthenticationService {
 	void storePassword(String password);
 	
 	String getPassword();
+	
+	void storeRegistration(String registration);
+	
+	String getRegistration();
 }
