@@ -33,8 +33,12 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 	public class Model implements ShoppingListsPresenter.Model {
 
 		private final List<ShoppingListDTO> shoppingLists = new ArrayList<ShoppingListDTO>();
-		private final Notification notification;
+		private Notification notification;
 		
+		public Model() {
+			this(null);
+		}
+
 		public Model(Notification notification) {
 			this.notification = notification;
 		}
@@ -47,6 +51,11 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 		@Override
 		public Notification getNotification() {
 			return notification;
+		}
+
+		@Override
+		public void setNotifcation(Notification notification) {
+			this.notification = notification;
 		}
 	}
 	
@@ -75,6 +84,12 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 
 		presenter.create();
 		presenter.bind();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		presenter.destroy();
 	}
 
 	@Override

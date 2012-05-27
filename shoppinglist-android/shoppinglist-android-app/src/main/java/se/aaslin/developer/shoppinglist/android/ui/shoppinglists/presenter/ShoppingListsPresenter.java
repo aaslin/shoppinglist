@@ -2,6 +2,8 @@ package se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter;
 
 import java.util.List;
 
+import se.aaslin.developer.roboeventbus.RoboEventBus;
+import se.aaslin.developer.roboeventbus.RoboRegistration;
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
@@ -11,14 +13,14 @@ import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
+import se.aaslin.developer.shoppinglist.android.ui.common.event.NotificationEvent;
+import se.aaslin.developer.shoppinglist.android.ui.common.event.NotificationEventHandler;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.ShoppingItemsPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.EditShoppingListPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.view.ShoppingListsListElementView;
 import android.app.Activity;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -63,6 +65,8 @@ public class ShoppingListsPresenter extends Presenter {
 		List<ShoppingListDTO> getShoppingLists();
 		
 		Notification getNotification();
+		
+		void setNotifcation(Notification notification);
 	}
 
 	@Inject
@@ -73,6 +77,9 @@ public class ShoppingListsPresenter extends Presenter {
 	Model model;
 	Activity activity;
 	LayoutInflater inflater;
+	RoboEventBus eventBus = RoboEventBus.getInstance();
+
+	RoboRegistration notificationRegistration;
 
 	public ShoppingListsPresenter(View display, ShoppingListServiceAsync srv, Model model, Activity activity) {
 		this.view = display;
@@ -85,6 +92,11 @@ public class ShoppingListsPresenter extends Presenter {
 	@Override
 	protected void onCreate() {
 		fetchShoppingLists();
+	}
+
+	@Override
+	protected void onDestroy() {
+		notificationRegistration.removeHandler();
 	}
 
 	@Override
@@ -102,6 +114,15 @@ public class ShoppingListsPresenter extends Presenter {
 			@Override
 			public void onClick(android.view.View v) {
 				view.hideNotification();
+			}
+		});
+		
+		notificationRegistration = eventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
+			
+			@Override
+			public void onNotificationReceived(Notification notification) {
+				model.setNotifcation(notification);
+				showNotificationIfAny();
 			}
 		});
 	}
@@ -201,5 +222,6 @@ public class ShoppingListsPresenter extends Presenter {
 		text.append(" ").append(getCurrentUsername());
 		
 		view.showNotification(item, text.toString(), color);
+		model.setNotifcation(null);
 	}
 }

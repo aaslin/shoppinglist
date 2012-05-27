@@ -15,6 +15,8 @@ import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.entity.User;
+import se.aaslin.developer.shoppinglist.entity.Notification.Type;
+import se.aaslin.developer.shoppinglist.service.NotificationService;
 import se.aaslin.developer.shoppinglist.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
@@ -25,6 +27,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	@Autowired UserDAO userDAO;
 	@Autowired ShoppingListDAO shoppingListDAO;
 	@Autowired ShoppingItemDAO shoppingItemDAO;
+	@Autowired NotificationService notificationService;
 	
 	@Override
 	public List<ShoppingList> getAllShoppingListsForUser(String username) {
@@ -61,6 +64,8 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 		timeStamp.setModified(date);
 		
 		shoppingListDAO.create(list);
+		
+		notificationService.addNotification(Type.ADDED, list, username);
 	}
 
 	@Override
@@ -77,12 +82,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 		Date date = Calendar.getInstance().getTime();
 		TimeStamp timeStamp = managedList.getTimeStamp();
 		timeStamp.setModified(date);
+		
+		notificationService.addNotification(Type.UPDATED, managedList, username);
 	}
 	
 	@Override
-	public void remove(ShoppingList list, String currentSessionsUsername) throws NotAuthorizedException {
+	public void remove(ShoppingList list, String username) throws NotAuthorizedException {
 		ShoppingList managedList = shoppingListDAO.findById(list.getID());
-		managedList = validateAccessOwnerOnly(managedList, currentSessionsUsername);
+		managedList = validateAccessOwnerOnly(managedList, username);
 		
 		if(managedList != null){
 			List<ShoppingItem> items = managedList.getItems();
@@ -91,6 +98,8 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 			}
 			shoppingListDAO.delete(managedList);
 		}
+		
+		notificationService.addNotification(Type.UPDATED, managedList, username);
 	}
 
 	private ShoppingList validateAccess(ShoppingList list, String username) throws NotAuthorizedException {

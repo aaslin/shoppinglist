@@ -10,7 +10,12 @@ public class Notification implements Serializable {
 		ADDED, UPDATED, REMOVED
 	}
 	
+	public enum Item {
+		LIST, ITEM;
+	}
+	
 	private Type type;
+	private Item item;
 	private String what;
 	private String username;
 	
@@ -26,6 +31,14 @@ public class Notification implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public String getWhat() {

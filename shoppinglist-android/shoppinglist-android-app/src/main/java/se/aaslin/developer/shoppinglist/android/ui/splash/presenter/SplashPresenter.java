@@ -88,6 +88,7 @@ public class SplashPresenter extends Presenter {
 		registrationIntent.putExtra("app", PendingIntent.getBroadcast(activity, 0, new Intent(), 0)); // boilerplate
 		registrationIntent.putExtra("sender", Urls.C2DM_EMAIL);
 		
+		Log.d(this.getClass().getCanonicalName(), "Requested registration");
 		activity.startService(registrationIntent);
 	}
 }

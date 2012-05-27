@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import se.aaslin.developer.shoppinglist.dao.ShoppingItemDAO;
 import se.aaslin.developer.shoppinglist.dao.ShoppingListDAO;
+import se.aaslin.developer.shoppinglist.entity.Notification.Type;
 import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.entity.User;
+import se.aaslin.developer.shoppinglist.service.NotificationService;
 import se.aaslin.developer.shoppinglist.service.ShoppingItemService;
 import se.aaslin.developer.shoppinglist.shared.exception.NotAuthorizedException;
 import se.aaslin.developer.shoppinglist.shared.exception.NotFoundException;
@@ -21,13 +23,16 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 
 	@Autowired ShoppingListDAO shoppingListDAO;
 	@Autowired ShoppingItemDAO shoppingItemDAO;
+	@Autowired NotificationService notificationService;
 
 	@Override
 	public void remove(ShoppingItem item, String username) throws NotAuthorizedException {
-		item = validateAccess(shoppingItemDAO.findById(item.getId()), username);
+		ShoppingItem managedItem = validateAccess(shoppingItemDAO.findById(item.getId()), username);
 		
-		item.getShoppingList().getItems().remove(item);
-		shoppingItemDAO.delete(item);
+		managedItem.getShoppingList().getItems().remove(managedItem);
+		shoppingItemDAO.delete(managedItem);
+		
+		notificationService.addNotification(Type.REMOVED, managedItem, username);
 	}
 	
 	@Override
@@ -45,6 +50,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 		Date date = Calendar.getInstance().getTime();
 		TimeStamp timeStamp = managedItem.getTimeStamp();
 		timeStamp.setModified(date);
+		
+		notificationService.addNotification(Type.UPDATED, managedItem, username);
 	}
 
 	@Override
@@ -64,6 +71,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService{
 		item.setTimeStamp(timeStamp);
 
 		shoppingItemDAO.create(item);
+		
+		notificationService.addNotification(Type.ADDED, item, username);
 	}
 	
 	private ShoppingItem validateAccess(ShoppingItem item, String username) throws NotAuthorizedException {
