@@ -190,7 +190,7 @@ public class EditShoppingListPresenter extends Presenter {
 					Type type = model.getShoppingListDTO().isFromDB() ? Type.UPDATED : Type.ADDED;
 					String name = model.getShoppingListDTO().getName();
 					String username = authenticationService.getUsername();
-					Notification notification = new Notification(type, name, username);
+					Notification notification = new Notification(type, Notification.Item.LIST, name, username);
 					new ShoppingListsPlace(notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
@@ -300,7 +300,7 @@ public class EditShoppingListPresenter extends Presenter {
 				Type type = Type.REMOVED;
 				String name = model.getShoppingListDTO().getName();
 				String username = authenticationService.getUsername();
-				Notification notification = new Notification(type, name, username);
+				Notification notification = new Notification(type, Notification.Item.LIST, name, username);
 				new ShoppingListsPlace(notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			}
 

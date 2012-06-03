@@ -67,9 +67,9 @@ public class NotificationWs extends GenericWs {
 	private NotificationDTO createNotificationDTO(Notification notification) {
 		NotificationDTO dto = new NotificationDTO();
 		dto.setWhat(notification.getWhat());
-		dto.setWhat(notification.getType().toString());
-		dto.setWhat(notification.getCreator().getUsername());
-		dto.setWhat(notification.getItem().toString());
+		dto.setType(notification.getType().toString());
+		dto.setUser(notification.getCreator().getUsername());
+		dto.setItem(notification.getItem().toString());
 		
 		return dto;
 	}

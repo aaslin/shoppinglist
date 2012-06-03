@@ -17,14 +17,15 @@ import se.aaslin.developer.shoppinglist.entity.ShoppingItem;
 import se.aaslin.developer.shoppinglist.entity.ShoppingList;
 import se.aaslin.developer.shoppinglist.entity.TimeStamp;
 import se.aaslin.developer.shoppinglist.entity.User;
+import se.aaslin.developer.shoppinglist.service.C2DMService;
 import se.aaslin.developer.shoppinglist.service.NotificationService;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
 	@Autowired NotificationDAO notificationDAO;
-	
 	@Autowired UserDAO userDAO;
+	@Autowired C2DMService c2dmService;
 	
 	@Override
 	public List<Notification> getNotifications(String username) {
@@ -54,6 +55,7 @@ public class NotificationServiceImpl implements NotificationService {
 			notification.setWhat(managedItem.getName());
 			
 			notificationDAO.create(notification);
+			c2dmService.sendMessage(user.getRegistration(), "tickle");
 		}
 	}
 
@@ -75,6 +77,7 @@ public class NotificationServiceImpl implements NotificationService {
 			notification.setWhat(shoppingList.getName());
 			
 			notificationDAO.create(notification);
+			c2dmService.sendMessage(user.getRegistration(), "tickle");
 		}
 	}
 	

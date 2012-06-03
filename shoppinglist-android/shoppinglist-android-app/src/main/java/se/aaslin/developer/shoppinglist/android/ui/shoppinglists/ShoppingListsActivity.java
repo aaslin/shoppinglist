@@ -12,6 +12,7 @@ import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
+import se.aaslin.developer.shoppinglist.android.back.service.NotificationServiceAsync;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.dashboard.DashboardPlace;
@@ -77,9 +78,10 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 		
 		ShoppingListsPresenter.Model model = new Model(getPlace().getNotification());
 
-		ShoppingListServiceAsync srv = RPCUtils.create(ShoppingListServiceAsync.class, this);
-
-		presenter = new ShoppingListsPresenter(view, srv, model, this);
+		ShoppingListServiceAsync shoppingListService = RPCUtils.create(ShoppingListServiceAsync.class, this);
+		NotificationServiceAsync notificationService = RPCUtils.create(NotificationServiceAsync.class, this);
+		
+		presenter = new ShoppingListsPresenter(view, shoppingListService, notificationService, model, this);
 		InjectionUtils.injectMembers(presenter, this);
 
 		presenter.create();
@@ -87,9 +89,15 @@ public class ShoppingListsActivity extends ActivityPlace<ShoppingListsPlace> {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		presenter.destroy();
+	protected void onStart() {
+		super.onStart();
+		presenter.start();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		presenter.stop();
 	}
 
 	@Override

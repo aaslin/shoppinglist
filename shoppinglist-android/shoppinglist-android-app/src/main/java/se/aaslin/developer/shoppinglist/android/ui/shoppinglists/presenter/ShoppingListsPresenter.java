@@ -9,8 +9,10 @@ import se.aaslin.developer.shoppinglist.android.app.mvp.AsyncCallback;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Display;
 import se.aaslin.developer.shoppinglist.android.app.mvp.IsView;
 import se.aaslin.developer.shoppinglist.android.app.mvp.Presenter;
+import se.aaslin.developer.shoppinglist.android.back.dto.NotificationDTO;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
+import se.aaslin.developer.shoppinglist.android.back.service.NotificationServiceAsync;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.common.event.NotificationEvent;
@@ -35,17 +37,19 @@ public class ShoppingListsPresenter extends Presenter {
 		void bindListAdapter(ArrayAdapter<ShoppingListDTO> adapter);
 
 		void addList(ShoppingListDTO list);
+		
+		void clearAll();
 
 		void removeList(ShoppingListDTO list);
 
 		void showLoadingSpinner();
 
 		void disableLoadingSpinner();
-		
+
 		ImageButton getRemoveNotificationButton();
-		
+
 		void showNotification(String item, String text, int color);
-		
+
 		void hideNotification();
 	}
 
@@ -63,9 +67,9 @@ public class ShoppingListsPresenter extends Presenter {
 	public interface Model {
 
 		List<ShoppingListDTO> getShoppingLists();
-		
+
 		Notification getNotification();
-		
+
 		void setNotifcation(Notification notification);
 	}
 
@@ -73,7 +77,8 @@ public class ShoppingListsPresenter extends Presenter {
 	AuthenticationService authenticationService;
 
 	View view;
-	ShoppingListServiceAsync srv;
+	ShoppingListServiceAsync shoppingListService;
+	NotificationServiceAsync notificationService;
 	Model model;
 	Activity activity;
 	LayoutInflater inflater;
@@ -81,9 +86,11 @@ public class ShoppingListsPresenter extends Presenter {
 
 	RoboRegistration notificationRegistration;
 
-	public ShoppingListsPresenter(View display, ShoppingListServiceAsync srv, Model model, Activity activity) {
+	public ShoppingListsPresenter(View display, ShoppingListServiceAsync shoppingListService, NotificationServiceAsync notificationService, Model model,
+			Activity activity) {
 		this.view = display;
-		this.srv = srv;
+		this.shoppingListService = shoppingListService;
+		this.notificationService = notificationService;
 		this.model = model;
 		this.activity = activity;
 		inflater = LayoutInflater.from(activity);
@@ -95,7 +102,18 @@ public class ShoppingListsPresenter extends Presenter {
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onStart() {
+		notificationRegistration = eventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
+
+			@Override
+			public void onNotificationReceived() {
+				getNotifications();
+			}
+		});
+	}
+
+	@Override
+	protected void onStop() {
 		notificationRegistration.removeHandler();
 	}
 
@@ -108,7 +126,7 @@ public class ShoppingListsPresenter extends Presenter {
 				return createShoppingListElement(position, convertView, getItem(position));
 			}
 		});
-		
+
 		view.getRemoveNotificationButton().setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -116,20 +134,11 @@ public class ShoppingListsPresenter extends Presenter {
 				view.hideNotification();
 			}
 		});
-		
-		notificationRegistration = eventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
-			
-			@Override
-			public void onNotificationReceived(Notification notification) {
-				model.setNotifcation(notification);
-				showNotificationIfAny();
-			}
-		});
 	}
 
 	private void fetchShoppingLists() {
 		view.showLoadingSpinner();
-		srv.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
+		shoppingListService.getShoppingLists(new AsyncCallback<List<ShoppingListDTO>>() {
 
 			@Override
 			public void onSuccess(List<ShoppingListDTO> result) {
@@ -151,6 +160,7 @@ public class ShoppingListsPresenter extends Presenter {
 	}
 
 	private void updateShoppinglists() {
+		view.clearAll();
 		for (ShoppingListDTO list : model.getShoppingLists()) {
 			view.addList(list);
 		}
@@ -195,14 +205,14 @@ public class ShoppingListsPresenter extends Presenter {
 	private String getCurrentUsername() {
 		return authenticationService.getUsername();
 	}
-	
+
 	private void showNotificationIfAny() {
 		if (model.getNotification() == null) {
 			return;
 		}
-		
+
 		String item = model.getNotification().getWhat();
-		
+
 		StringBuilder text = new StringBuilder();
 		int color = 0;
 		switch (model.getNotification().getType()) {
@@ -219,9 +229,29 @@ public class ShoppingListsPresenter extends Presenter {
 			color = activity.getResources().getColor(android.R.color.holo_red_light);
 			break;
 		}
-		text.append(" ").append(getCurrentUsername());
-		
+		text.append(" ").append(model.getNotification().getUsername());
+
 		view.showNotification(item, text.toString(), color);
 		model.setNotifcation(null);
+	}
+
+	private void getNotifications() {
+		notificationService.getNotifications(new AsyncCallback<List<NotificationDTO>>() {
+
+			@Override
+			public void onSuccess(List<NotificationDTO> result) {
+				model.setNotifcation(Notification.convertDTO(result.get(0)));
+				showNotificationIfAny();
+				if (result != null && result.size() > 0) {
+					fetchShoppingLists();
+				}
+			} 
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.e(ShoppingListsPresenter.class.getCanonicalName(), caught.getMessage(), caught);
+				Toast.makeText(activity, caught.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 }

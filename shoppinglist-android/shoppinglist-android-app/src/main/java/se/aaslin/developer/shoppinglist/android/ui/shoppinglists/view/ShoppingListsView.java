@@ -7,7 +7,6 @@ import roboguice.inject.InjectView;
 import se.aaslin.developer.shoppinglist.R;
 import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
-import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
 import se.aaslin.developer.shoppinglist.android.ui.shoppinglists.presenter.ShoppingListsPresenter;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -69,6 +68,11 @@ public class ShoppingListsView implements ShoppingListsPresenter.View {
 	@Override
 	public void addList(ShoppingListDTO list) {
 		adapter.add(list);
+	}
+
+	@Override
+	public void clearAll() {
+		adapter.clear();
 	}
 
 	@Override

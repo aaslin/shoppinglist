@@ -6,8 +6,6 @@ import se.aaslin.developer.shoppinglist.android.app.util.InjectionUtils;
 import se.aaslin.developer.shoppinglist.android.app.util.RPCUtils;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginServiceAsync;
-import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
-import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Type;
 import se.aaslin.developer.shoppinglist.android.ui.common.event.NotificationEvent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -77,7 +75,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 
 	private void handleMessage(Context context, Intent intent) {
 		Log.d(this.getClass().getCanonicalName(), "Received c2dm message");
-		Notification notification = new Notification(Type.ADDED, "c2dm", "server");
-		RoboEventBus.getInstance().fireEvent(new NotificationEvent(notification));
+//		Notification notification = new Notification(Type.ADDED, "c2dm", "server");
+		RoboEventBus.getInstance().fireEvent(new NotificationEvent());
 	}
 }

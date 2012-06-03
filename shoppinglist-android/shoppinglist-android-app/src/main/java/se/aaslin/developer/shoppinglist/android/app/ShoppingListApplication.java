@@ -11,18 +11,19 @@ import se.aaslin.developer.shoppinglist.android.back.dao.impl.VersionDAOImpl;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.InstallerService;
 import se.aaslin.developer.shoppinglist.android.back.service.LoginService;
+import se.aaslin.developer.shoppinglist.android.back.service.NotificationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListService;
 import se.aaslin.developer.shoppinglist.android.back.service.VersionService;
 import se.aaslin.developer.shoppinglist.android.back.service.impl.AuthenticationServiceImpl;
 import se.aaslin.developer.shoppinglist.android.back.service.impl.InstallerServiceImpl;
 import se.aaslin.developer.shoppinglist.android.back.service.impl.LoginServiceImpl;
+import se.aaslin.developer.shoppinglist.android.back.service.impl.NotificationServiceImpl;
 import se.aaslin.developer.shoppinglist.android.back.service.impl.ShoppingListServiceImpl;
 import se.aaslin.developer.shoppinglist.android.back.service.impl.VersionServiceImpl;
 import se.aaslin.developer.shoppinglist.android.back.sqlhelper.ShoppinglistSqliteOpenHelper;
 import se.aaslin.developer.shoppinglist.android.back.xml.ingest.VersionIngester;
 import se.aaslin.developer.shoppinglist.android.entity.Property;
 import se.aaslin.developer.shoppinglist.android.entity.Version;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.inject.Binder;
@@ -81,6 +82,7 @@ public class ShoppingListApplication extends RoboApplication {
 				binder.bind(VersionService.class).to(VersionServiceImpl.class);
 				binder.bind(VersionIngester.class);
 				binder.bind(InstallerService.class).to(InstallerServiceImpl.class);
+				binder.bind(NotificationService.class).to(NotificationServiceImpl.class);
 			}
 		});
 	}

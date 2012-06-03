@@ -14,6 +14,7 @@ public class Urls {
 	public static final String URL_REST_SHOPPINGITEM = String.format("%s/shoppingitem", URL_REST);
 	public static final String URL_REST_USER = String.format("%s/user", URL_REST);
 	public static final String URL_REST_REGISTRATION = String.format("%s/registration", URL_REST);
+	public static final String URL_REST_NOTIFICATION = String.format("%s/notification", URL_REST);
 
 	public static String C2DM_EMAIL = "listyourlife@gmail.com";
 }

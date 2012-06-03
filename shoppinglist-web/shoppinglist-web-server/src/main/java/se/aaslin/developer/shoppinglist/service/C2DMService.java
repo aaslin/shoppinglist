@@ -1,0 +1,9 @@
+package se.aaslin.developer.shoppinglist.service;
+
+
+public interface C2DMService {
+	
+	String AUTH = "DQAAALsAAACYTD_pkBHq1BtmI6ICmJxNWkUaNUisqTso_l3i4X4mTDD3a5rQquAnf3BOl4Cz0RckLJOaJbb5y4O2d9AzrysF4aNngoHc4S66bmfFTsePqcVjUEhuBeDrprNwlWk8uUBpfXMH_jW0Unks8exlezz2P96fL2G4XsbrOPcz_TsK4iDePJAreUPflq15Rca3u1ckgGGeKsebzFRGz0BmnzzSnlPgWoXYaMd8kK64FP9u78KasKQhfj_--CJ8J_5rGBQ";
+	
+	public int sendMessage(String registrationIdusername, String message);
+}

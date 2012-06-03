@@ -12,6 +12,7 @@ import se.aaslin.developer.shoppinglist.android.back.dto.ShoppingListDTO;
 import se.aaslin.developer.shoppinglist.android.back.service.AuthenticationService;
 import se.aaslin.developer.shoppinglist.android.back.service.ShoppingListServiceAsync;
 import se.aaslin.developer.shoppinglist.android.ui.common.Notification;
+import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Item;
 import se.aaslin.developer.shoppinglist.android.ui.common.Notification.Type;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.EditShoppingItemPlace;
 import se.aaslin.developer.shoppinglist.android.ui.shoppingitems.view.ShoppingItemsListElementView;
@@ -68,6 +69,8 @@ public class ShoppingItemsPresenter extends Presenter {
 		List<ShoppingItemDTO> getShoppingItems();
 		
 		Notification getNotification();
+		
+		void setNotification(Notification notification);
 	}
 	
 	@Inject AuthenticationService authenticationService;
@@ -203,10 +206,8 @@ public class ShoppingItemsPresenter extends Presenter {
 			@Override
 			public void onSuccess(Void result) {
 				view.removeList(item);
-				model.getNotification().setType(Type.REMOVED);
-				model.getNotification().setWhat(item.getName());
-				model.getNotification().setUsername(authenticationService.getUsername());
-				
+				Notification notification = new Notification(Type.REMOVED, Item.ITEM, item.getName(), authenticationService.getUsername());
+				model.setNotification(notification);
 				model.getShoppingItems().remove(item);
 				showNotificationIfAny();
 			}

@@ -39,7 +39,7 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		
 		private final ShoppingListDTO shoppingListDTO;
 		private final List<ShoppingItemDTO> shoppingItemDTOs = new ArrayList<ShoppingItemDTO>();
-		private final Notification notification;
+		private Notification notification;
 
 		public ShoppingItemsModel(ShoppingListDTO shoppingListDTO, Notification notification) {
 			this.shoppingListDTO = shoppingListDTO;
@@ -60,7 +60,11 @@ public class ShoppingItemsActivity extends ActivityPlace<ShoppingItemsPlace> {
 		public Notification getNotification() {
 			return notification;
 		}
-		
+
+		@Override
+		public void setNotification(Notification notification) {
+			this.notification = notification;
+		}
 	}
 
 	Presenter presenter;

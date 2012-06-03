@@ -99,7 +99,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 			shoppingListDAO.delete(managedList);
 		}
 		
-		notificationService.addNotification(Type.UPDATED, managedList, username);
+		notificationService.addNotification(Type.REMOVED, managedList, username);
 	}
 
 	private ShoppingList validateAccess(ShoppingList list, String username) throws NotAuthorizedException {

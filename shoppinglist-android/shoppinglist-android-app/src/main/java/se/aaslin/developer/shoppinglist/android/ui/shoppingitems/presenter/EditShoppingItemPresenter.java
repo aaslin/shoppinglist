@@ -1,7 +1,5 @@
 package se.aaslin.developer.shoppinglist.android.ui.shoppingitems.presenter;
 
-import com.google.inject.Inject;
-
 import se.aaslin.developer.roboeventbus.RoboEventBus;
 import se.aaslin.developer.roboeventbus.RoboRegistration;
 import se.aaslin.developer.shoppinglist.R;
@@ -29,6 +27,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 public class EditShoppingItemPresenter extends Presenter {
 	public interface View extends IsView {
@@ -177,7 +177,7 @@ public class EditShoppingItemPresenter extends Presenter {
 							Type type = Type.REMOVED;
 							String name = model.getShoppingItemDTO().getName();
 							String username = authenticationService.getUsername();
-							Notification notification = new Notification(type, name, username);
+							Notification notification = new Notification(type, Notification.Item.ITEM, name, username);
 							new ShoppingItemsPlace(model.getShoppingListDTO(), notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						}
 						
@@ -220,7 +220,7 @@ public class EditShoppingItemPresenter extends Presenter {
 					Type type = model.getShoppingItemDTO().isFromDB() ? Type.UPDATED : Type.ADDED;
 					String name = model.getShoppingItemDTO().getName();
 					String username = authenticationService.getUsername();
-					Notification notification = new Notification(type, name, username);
+					Notification notification = new Notification(type, Notification.Item.ITEM, name, username);
 					new ShoppingItemsPlace(model.getShoppingListDTO(), notification).moveTo(activity, Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
